@@ -12,17 +12,8 @@ jobs:
         with:
           submodules: true
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.82.0'
-          extended: true
-
-      - name: Build
-        run: hugo --minify
-
       - name: Publish Site
-        uses: peaceiris/actions-gh-pages@v3
+        uses: chabad360/hugo-gh-pages@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          hugoVersion: extended_0.82.0
