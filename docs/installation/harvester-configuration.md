@@ -1,3 +1,6 @@
+---
+sidebar_position: 3
+---
 # Harvester Configuration
 
 Harvester configuration file can be provided during manual or automatic installation to configure various settings. The following is an configuration example:

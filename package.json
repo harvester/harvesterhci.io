@@ -1,6 +1,6 @@
 {
   "name": "harvesterhci",
-  "version": "0.0.0",
+  "version": "1.22.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -35,5 +35,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/harvester/harvester.github.io.git",
+  "author": "yzeng25 <yzeng25@wisc.edu>",
+  "license": "MIT"
 }
