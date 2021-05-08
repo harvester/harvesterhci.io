@@ -1,7 +1,7 @@
 ---
 sidebar_position: 9
 ---
-# Developer Mode Installation (Dev mode)
+# Developer Mode Installation
 
 Developer mode (dev mode) is intended to be used for testing and development purposes.
 

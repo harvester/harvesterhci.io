@@ -8,7 +8,7 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'harvester', // Usually your GitHub org/user name.
-  projectName: 'harvesterhci.io', // Usually your repo name.
+  projectName: 'harvester.github.io', // Usually your repo name.
   themeConfig: {
     colorMode: {
       // "light" | "dark"

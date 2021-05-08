@@ -1,15 +1,8 @@
 ---
-sidebar_position: 7
+sidebar_position: 40
 ---
-# Introduction of The Harvester network
 
-## Table of Contents
-  * [Summary](#summary)
-  * [Implementation](#implementation)
-    * [Management Network](#management-network)
-    * [VLAN](#vlan)
-  * [Enabling VLAN in the Harvester UI](#enabling-vlan-in-the-harvester-ui)
-
+# Harvester Network
 
 ## Summary
 [Harvester](https://github.com/harvester/harvester) is built on Kubernetes, which uses [CNI](https://github.com/containernetworking/cni) as an interface between network providers and Kubernetes pod networking. Naturally, we implement the Harvester network based on CNI. Moreover, the [Harvester UI](https://github.com/harvester/harvester-ui) integrates the Harvester network to provide a user-friendly way to configure networks for VMs.

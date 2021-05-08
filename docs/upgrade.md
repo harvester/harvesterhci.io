@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 30
 ---
 # Upgrading Harvester
 
@@ -7,14 +7,13 @@ sidebar_position: 3
 
 Harvester provides two ways to upgrade.
 
->:warning: Notes:
->- Upgrading from v0.1.0 is not supported.
->- Upgrading from/to any RC releases is not supported.
->- Due to pending OS changes in the roadmap, the upgradability to the GA release cannot be guaranteed at this moment.
->- Zero downtime upgrade is supported when the Harvester cluster includes 3 or more nodes. If the cluster has less than 3 nodes, you can still perform upgrades but there'll be downtime during the upgrade.
->- Upgrade nodes one by one.
-
-**NOTE: Due to pending OS changes in the roadmap, the upgradability to the GA release cannot be guaranteed at this moment.**
+:::note
+- Upgrading from v0.1.0 is not supported.
+- Upgrading from/to any RC releases is not supported.
+- Due to pending OS changes in the roadmap, the upgradability to the GA release cannot be guaranteed at this moment.
+- Zero downtime upgrade is supported when the Harvester cluster includes 3 or more nodes. If the cluster has less than 3 nodes, you can still perform upgrades but there'll be downtime during the upgrade.
+- Upgrade nodes one by one.
+:::
 
 ## Upgrade using the ISO image
 
