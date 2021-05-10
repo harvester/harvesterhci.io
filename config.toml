@@ -26,12 +26,12 @@ params = ["categories", "tags"]
 [params]
 # rename when the logo is updated, so we indirectly also invalidate caches
 logo = "images/logo_horizontal.svg"
-description= "The open-source hyperconverged infrastructure (HCI) solution for a cloud-native world"
-githubLink = "https://github.com/rancher/harvester"
-docsLink = "https://github.com/rancher/harvester/tree/master/docs"
+description= "An open-source hyperconverged infrastructure (HCI) software for a cloud-native world"
+githubLink = "https://github.com/harvester/harvester"
+docsLink = "https://github.com/harvester/harvester/tree/master/docs"
 css = ["css/custom.css", "styles-bundle-369.css"]
 favicon = "images/favicon.ico"
-  github = "https://github.com/rancher/harvester"
+  github = "https://github.com/harvester/harvester"
 
 [outputs]
   home = ["HTML", "RSS", "Algolia"]
@@ -47,6 +47,6 @@ favicon = "images/favicon.ico"
   [[menu.main]]
     identifier = "docs"
     name = "DOCS"
-    url = "https://github.com/rancher/harvester/tree/master/docs"
+    url = "https://github.com/harvester/harvester/tree/master/docs"
     weight = -110
     
