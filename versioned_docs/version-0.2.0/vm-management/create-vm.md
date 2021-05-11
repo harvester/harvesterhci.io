@@ -1,14 +1,6 @@
 ---
 sidebar_position: 1
-keywords:
-  - Harvester
-  - harvester
-  - Rancher
-  - rancher
-  - Creating a virtual machine in Harverster
-  - How to Create a VM
 ---
-
 # How to Create a VM
 
 Create one or more virtual machines from the **Virtual Machines** page.
@@ -59,7 +51,7 @@ You can also use the `Cloud Config Template` feature to include a pre-defined cl
 
 A management network represents the default vm eth0 interface configured by the cluster network solution that is present in each VM.
 
-By default, a VM can be accessed via the management network.
+By default, a VM can be accessed via the management network. 
 
 ##### Secondary Network
 

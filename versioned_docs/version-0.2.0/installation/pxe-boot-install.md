@@ -1,14 +1,5 @@
 ---
 sidebar_position: 2
-keywords:
-  - Harvester
-  - harvester
-  - Rancher
-  - rancher
-  - Install Harverster
-  - Installing Harverster
-  - Harverster Installation
-  - PXE Boot Install
 ---
 
 # PXE Boot Install
