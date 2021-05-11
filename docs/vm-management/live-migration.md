@@ -1,14 +1,24 @@
 ---
 sidebar_position: 4
+keywords:
+  - Harvester
+  - harvester
+  - Rancher
+  - rancher
+  - Rancher Harverster
+  - rancher harverster
+  - migrating hosts without down time
+  - Live Migration
 ---
+
 # Live Migration
 
 Live migration means moving a virtual machine to a different host without downtime.
 
-
->Notes:
->- Live migration is not allowed when the virtual machine is using a management network of bridge interface type.
->- To support live migration, 3 or more hosts in the Harvester cluster are required due to [a known issue](https://github.com/harvester/harvester/issues/798).
+> Notes:
+>
+> - Live migration is not allowed when the virtual machine is using a management network of bridge interface type.
+> - To support live migration, 3 or more hosts in the Harvester cluster are required due to [a known issue](https://github.com/harvester/harvester/issues/798).
 
 #### Starting a migration
 

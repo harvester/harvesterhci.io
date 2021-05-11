@@ -1,6 +1,16 @@
 ---
 sidebar_position: 30
+keywords:
+  - Harvester
+  - harvester
+  - Rancher
+  - rancher
+  - Rancher Harverster
+  - rancher harverster
+  - how to upgrade Harvester
+  - Harvester Upgrade
 ---
+
 # Upgrading Harvester
 
 > Available as of v0.2.0
@@ -8,12 +18,13 @@ sidebar_position: 30
 Harvester provides two ways to upgrade.
 
 :::note
+
 - Upgrading from v0.1.0 is not supported.
 - Upgrading from/to any RC releases is not supported.
 - Due to pending OS changes in the roadmap, the upgradability to the GA release cannot be guaranteed at this moment.
 - Zero downtime upgrade is supported when the Harvester cluster includes 3 or more nodes. If the cluster has less than 3 nodes, you can still perform upgrades but there'll be downtime during the upgrade.
 - Upgrade nodes one by one.
-:::
+  :::
 
 ## Upgrade using the ISO image
 
@@ -33,8 +44,8 @@ To get the Harvester ISO of a newer version, download it from the Github release
 
 ## Upgrade in the UI
 
->Prerequisites:
->Internet access is required to perform a live upgrade in the UI.
+> Prerequisites:
+> Internet access is required to perform a live upgrade in the UI.
 
 1. Go to the **Dashboard** page in Harvester UI.
 1. When newer versions are available, an upgrade button will be shown in the top-right corner. Click upgrade.

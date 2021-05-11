@@ -1,5 +1,16 @@
 ---
 sidebar_position: 2
+keywords:
+  - Harvester
+  - harvester
+  - Rancher
+  - rancher
+  - Rancher Harverster
+  - rancher harverster
+  - Install Harverster
+  - Installing Harverster
+  - Harverster Installation
+  - PXE Boot Install
 ---
 
 # PXE Boot Install
@@ -19,12 +30,13 @@ Let's assume an NGINX HTTP server's IP is `10.100.0.10`, and it serves `/usr/sha
 ## Preparing Boot Files
 
 - Download the required files from https://github.com/harvester/harvester/releases. Choose an appropriate version.
+
   - The ISO: `harvester-amd64.iso`
   - The kernel: `harvester-vmlinuz-amd64`
   - The initrd: `harvester-initrd-amd64`
 
 - Serve the files.
-  
+
   Copy or move the downloaded files to an appropriate location so they can be downloaded via the HTTP server. e.g.,
 
   ```
@@ -129,7 +141,7 @@ Let's assume the iPXE script is stored in `/usr/share/nginx/html/harvester/ipxe-
 
 ## DHCP server configuration
 
-Here is an example to configure the ISC DHCP server to offer iPXE scripts: 
+Here is an example to configure the ISC DHCP server to offer iPXE scripts:
 
 ```sh
 option architecture-type code 93 = unsigned integer 16;
@@ -196,7 +208,6 @@ For more information about Harvester configuration, please refer to the [Harvest
 
 Users can also provide configuration via kernel parameters. For example, to specify the `CREATE` install mode, the user can pass the `harvester.install.mode=create` kernel parameter when booting. Values passed through kernel parameters have higher priority than values specified in the config file.
 
-
 ## UEFI HTTP Boot support
 
 UEFI firmware supports loading a boot image from HTTP server. This section demonstrates how to use UEFI HTTP boot to load the iPXE program and perform the automatic installation.
@@ -214,7 +225,7 @@ The file now can be downloaded from http://10.100.0.10/harvester/ipxe.efi
 
 ### DHCP server configuration
 
-If the user plans to use the UEFI HTTP boot feature by getting a dynamic IP first, the DHCP server needs to provides the iPXE program URL when it sees such a request. Here is an updated ISC DHCP server group example: 
+If the user plans to use the UEFI HTTP boot feature by getting a dynamic IP first, the DHCP server needs to provides the iPXE program URL when it sees such a request. Here is an updated ISC DHCP server group example:
 
 ```sh
 group {

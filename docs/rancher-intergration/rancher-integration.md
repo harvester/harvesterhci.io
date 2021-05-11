@@ -1,9 +1,19 @@
 ---
 sidebar_position: 1
+keywords:
+  - Harvester
+  - harvester
+  - Rancher
+  - rancher
+  - Rancher Harverster
+  - rancher harverster
+  - Integrating with Rancher
+  - Rancher Integration
 ---
-#  Rancher Integration
 
->  Available as of v0.2.0
+# Rancher Integration
+
+> Available as of v0.2.0
 
 [Rancher](https://github.com/rancher/rancher) is an open source multi-cluster management platform. Harvester has integrated Rancher into its HCI mode installation by default.
 
@@ -17,8 +27,6 @@ Users can enable the Rancher dashboard by going to the Harvester `Settings` page
 1. Click the Rancher button, and it will open a new tab to navigate to the Rancher dashboard.
 
 For more detail about how to use the Rancher, you may refer to this [doc](https://rancher.com/docs/rancher/v2.5/en/).
-
-
 
 # Creating K8s Clusters using the Harvester Node Driver
 

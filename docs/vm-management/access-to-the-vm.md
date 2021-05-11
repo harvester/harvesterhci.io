@@ -1,6 +1,16 @@
 ---
 sidebar_position: 2
+keywords:
+  - Harvester
+  - harvester
+  - Rancher
+  - rancher
+  - Rancher Harverster
+  - rancher harverster
+  - Accessing VM through Harvester
+  - Access to the VM
 ---
+
 # Access to the VM
 
 Once the VM is up and running, it can be accessed using either VNC or the serial console from the Harvester UI.
