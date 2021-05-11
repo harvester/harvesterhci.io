@@ -1,6 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
-import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
     {
@@ -29,14 +27,14 @@ const FeatureList = [
     },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({ Svg, title, description }) {
     return (
-        <div className={clsx('col col--4')}>
-            <div className="text--center">
-            </div>
-            <div className="text--center padding-horiz--md">
-                <h3>{title}</h3>
-                <p>{description}</p>
+        <div className="col-md-4">
+            <div className="lc-block text-center">
+                <div>
+                    <h3>{title}</h3>
+                    <p className="font-weight-light">{description}</p>
+                </div>
             </div>
         </div>
     );
@@ -44,58 +42,154 @@ function Feature({Svg, title, description}) {
 
 export default function HomepageFeatures() {
     return (
-        <div className={styles.features}>
-            <div className="container">
-                <div className="">
-                    <h2 className="">Great For</h2>
-                    <div className="row">
-                        <div className="">On-Prem HCI</div>
-                        <div className="">Edge HCI</div>
-                        <div className="">Hybrid Cloud</div>
-                        <div className="">Containers and VMS in the Same Environment</div>
-                    </div>
-                </div>
-
-
-                <div className="">
-                    <h1 className="h1"> What is Harvester? </h1>
-                    <p className="row">
-                        Harvester is a modern Hyperconverged infrastructure (HCI) solution built for bare metal servers using enterprise-grade open source technologies including Kubernetes, Kubevirt and Longhorn.
-                        Designed for users looking for a cloud-native HCI solution, Harvester is a flexible and affordable offering capable of putting VM workloads on the edge,
-                        close to your IoT, and integrated into your cloud infrastructure.
-                    </p>
-                </div>
-
-                <div className="row">
-                    {FeatureList.map((props, idx) => (
-                        <Feature key={idx} {...props} />
-                    ))}
-                </div>
-
-                <div className="">
-                    <h2 className="">How it Works</h2>
-                    <div className=""><img src="../img/Harvester-Architecture-3.2-Outlines.svg"/></div>
-                </div>
-
-                <div className="">
-                    <h2 className="">Get Started</h2>
-                    <p>Want to try Harvester?</p>
-                    <p>Simply install it directly onto your bare-metal server to get started.</p>
-                </div>
-
-                <div className="row">
-                    <div>
-                        <h2 className="">Lear More</h2>
-                        <p>Find out more about Harvester</p>
-                    </div>
-                    <div>
-                        <div>Read the Docs</div>
-                        <div>Visit GitHub</div>
-                        <div>Join our Slack Community</div>
-                        <div>Watch the latest meetup</div>
-                    </div>
-                </div>
+        <main>
+            <div>
+                <main id="theme-main">
+                    <section className="bg-primary" style={{ paddingBottom: '150px' }}>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-8 pt-5">
+                                    <div className="lc-block text-light">
+                                        <div>
+                                            <h1 className="text-white">The open source hyperconverged infrastructure (HCI) solution for a cloud native world</h1>
+                                        </div>
+                                    </div>
+                                    <div className="lc-block">
+                                        <a className="btn btn-lg btn-secondary" href="/docs/intro" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
+                                    </div>
+                                    <div className="lc-block">
+                                        <a className="btn btn-outline-secondary" href="https://www.youtube.com/watch?v=wVBXkS1AgHg" role="button" target="_blank" rel="noopener">Watch Demo</a>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="lc-block"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="lc-block">
+                                        <div className="folder">
+                                            <h4>Great For</h4>
+                                            <div className="bg-light grid-dynamic text-center">
+                                                <h5>On-Prem HCI</h5>
+                                                <h5>Edge HCI</h5>
+                                                <h5>Hybrid Cloud</h5>
+                                                <h5>Containers and VMS in the Same Environment</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section className="pt-5">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="lc-block text-center mb-5">
+                                        <div>
+                                            <h2 className="h3 font-weight-bolder">What is Harvester?</h2>
+                                            <p className="font-weight-light">
+                                                Harvester is a modern Hyperconverged infrastructure (HCI) solution built for
+                                                bare metal servers using enterprise-grade open source technologies including Kubernetes, Kubevirt and
+                                                Longhorn. Designed for users looking for a cloud-native HCI solution, Harvester is a flexible and
+                                                affordable offering capable of putting VM workloads on the edge, close to your IoT, and integrated into your cloud infrastructure.<br />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="lc-block"><hr /></div>
+                                    <div className="lc-block text-center mt-5 mb-5">
+                                        <div>
+                                            <h2 className="font-weight-bolder">Why Harvester?</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <div className="container">
+                            <div className="row">
+                                {FeatureList.map((props, idx) => (
+                                    <Feature key={idx} {...props} />
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="lc-block"><hr /></div>
+                                    <div className="lc-block text-center mt-5" style={{ marginBottom: '-2rem' }}>
+                                        <div>
+                                            <h2 className="font-weight-bolder mb-0">How it Works<br /></h2>
+                                        </div>
+                                    </div>
+                                    <div className="lc-block mb-5"><img src="../img/Harvester-Architecture-3.2-Outlines.svg" alt="" /></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section className="pt-4 pb-4" style={{ marginBottom: '-170px' }}>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-md-1">
+                                    <div className="lc-block"></div>
+                                </div>
+                                <div className="col-md-10 shadow bg-white pt-4 pr-4 pb-4 pl-4">
+                                    <div className="lc-block text-center">
+                                        <div>
+                                            <h2 className="font-weight-bolder mb-0">Get Started</h2>
+                                            <p className="font-weight-light">Want to try Harvester?</p>
+                                            <p className="font-weight-light lead">Simply install it directly onto your bare-metal server to get started.</p>
+                                            <a className="btn btn-lg btn-secondary" href="https://github.com/harvester/harvester/releases" target="_blank" rel="noopener">Download Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-1">
+                                    <div className="lc-block"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section className="bg-primary" style={{paddingTop: '200px'}}>
+                        <div className="container pb-5">
+                            <div className="row">
+                                <div className="col-md-5 offset-md-1">
+                                    <div className="lc-block">
+                                        <div>
+                                            <h2 className="text-left text-white font-weight-bolder mb-1">Learn More</h2>
+                                            <h3 className="font-weight-light text-white">Find out more about Harvester</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-5">
+                                    <div className="lc-block learn-more-links" style={{ fontFamily: 'poppins,sans-serif' }}><div>
+                                        <p className="mb-2">
+                                            <a href="https://github.com/rancher/harvester/tree/master/docs" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
+                                        </p>
+                                        <p className="mb-2">
+                                            <a href="https://github.com/rancher/harvester" className="font-weight-bolder rfs-10 text-white">Visit GitHub</a>
+                                        </p>
+                                        <p className="mb-2">
+                                            <a href="https://rancher-users.slack.com/archives/C01GKHKAG0K" className="font-weight-bolder rfs-10 text-white">Join our Slack Community</a>
+                                        </p>
+                                        <p className="mb-2">
+                                            <a href="https://youtu.be/EKDtheJxQN4" className="font-weight-bolder rfs-10 text-white">Watch the latest meetup</a>
+                                        </p>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
             </div>
-        </div>
+        </main>
     );
 }
