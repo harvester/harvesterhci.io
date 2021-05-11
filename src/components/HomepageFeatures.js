@@ -43,6 +43,7 @@ function Feature({ Svg, title, description }) {
 export default function HomepageFeatures() {
     return (
         <main>
+            <link rel="stylesheet" type="text/css" href="../css/style-bundle.css" ></link>
             <div>
                 <main id="theme-main">
                     <section className="bg-primary" style={{ paddingBottom: '150px' }}>
@@ -171,7 +172,7 @@ export default function HomepageFeatures() {
                                 <div className="col-md-5">
                                     <div className="lc-block learn-more-links" style={{ fontFamily: 'poppins,sans-serif' }}><div>
                                         <p className="mb-2">
-                                            <a href="https://github.com/rancher/harvester/tree/master/docs" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
+                                            <a href="/docs/intro" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
                                         </p>
                                         <p className="mb-2">
                                             <a href="https://github.com/rancher/harvester" className="font-weight-bolder rfs-10 text-white">Visit GitHub</a>
