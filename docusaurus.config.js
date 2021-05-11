@@ -30,11 +30,13 @@ module.exports = {
           docId: 'intro',
           position: 'right',
           label: 'Docs',
+          className: 'navbar__docs'
         },
         {
           href: 'https://github.com/harvester/harvester',
           label: 'GitHub',
           position: 'right',
+          className: 'navbar__github btn btn-secondary icon-github'
         },
       ],
     },
@@ -43,6 +45,10 @@ module.exports = {
       links: [],
       copyright: `Copyright © ${new Date().getFullYear()} harvesterhci.io`,
     },
+  },
+  customFields: {
+    title: 'Harvester - Open-source hyperconverged infrastructure',
+    description: 'An open-source hyperconverged infrastructure (HCI) software for a cloud-native world'
   },
   presets: [
     [
@@ -61,7 +67,7 @@ module.exports = {
             'https://github.com/facebook/docusaurus/edit/master/website/blog/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: [require.resolve('./src/css/custom.css'), require.resolve('./src/css/style-bundle.css')],
         },
       },
     ],
