@@ -1,73 +1,75 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'The open source hyperconverged infrastructure (HCI) solution for a cloud native world',
-  tagline: '',
-  url: 'https://harvesterhci.io',
-  baseUrl: '/',
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  organizationName: 'harvester', // Usually your GitHub org/user name.
-  projectName: 'harvester.github.io', // Usually your repo name.
+  title:
+    "The open source hyperconverged infrastructure (HCI) solution for a cloud native world",
+  tagline: "",
+  url: "https://harvesterhci.io",
+  baseUrl: "/",
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
+  favicon: "img/favicon.ico",
+  organizationName: "harvester", // Usually your GitHub org/user name.
+  projectName: "harvester.github.io", // Usually your repo name.
   themeConfig: {
     colorMode: {
       // "light" | "dark"
-      defaultMode: 'light',
+      defaultMode: "light",
 
       // Hides the switch in the navbar
       // Useful if you want to support a single color mode
       disableSwitch: true,
     },
     navbar: {
-      title: '',
+      title: "",
       logo: {
-        alt: 'logo',
-        src: 'img/logo_horizontal.svg',
+        alt: "logo",
+        src: "img/logo_horizontal.svg",
       },
       items: [
         {
-          type: 'doc',
-          docId: 'intro',
-          position: 'right',
-          label: 'Docs',
-          className: 'navbar__docs'
+          type: "doc",
+          docId: "intro",
+          position: "right",
+          label: "Docs",
+          className: "navbar__docs",
         },
         {
-          href: 'https://github.com/harvester/harvester',
-          label: 'GitHub',
-          position: 'right',
-          className: 'navbar__github btn btn-secondary icon-github'
+          href: "https://github.com/harvester/harvester",
+          label: "GitHub",
+          position: "right",
+          className: "navbar__github btn btn-secondary icon-github",
         },
       ],
     },
     footer: {
-      style: 'dark',
+      style: "dark",
       links: [],
       copyright: `Copyright © ${new Date().getFullYear()} harvesterhci.io`,
     },
   },
   customFields: {
-    title: 'Harvester - Open-source hyperconverged infrastructure',
-    description: 'An open-source hyperconverged infrastructure (HCI) software for a cloud-native world'
+    title: "Harvester - Open-source hyperconverged infrastructure",
+    description:
+      "An open-source hyperconverged infrastructure (HCI) software for a cloud-native world",
   },
   presets: [
     [
-      '@docusaurus/preset-classic',
+      "@docusaurus/preset-classic",
       {
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            "https://github.com/facebook/docusaurus/edit/master/website/",
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            "https://github.com/facebook/docusaurus/edit/master/website/blog/",
         },
         theme: {
-          customCss: [require.resolve('./src/css/custom.css'),],
+          customCss: [require.resolve("./src/css/custom.css")],
         },
       },
     ],
