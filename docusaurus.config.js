@@ -30,11 +30,13 @@ module.exports = {
           docId: 'intro',
           position: 'right',
           label: 'Docs',
+          className: 'navbar__docs'
         },
         {
           href: 'https://github.com/harvester/harvester',
           label: 'GitHub',
           position: 'right',
+          className: 'navbar__github btn btn-secondary icon-github'
         },
       ],
     },

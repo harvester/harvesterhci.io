@@ -56,7 +56,7 @@ export default function HomepageFeatures() {
                                         </div>
                                     </div>
                                     <div className="lc-block">
-                                        <a className="btn btn-lg btn-secondary" href="/docs/intro" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
+                                        <a className="btn btn-lg btn-secondary header-docs" href="/docs/intro" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
                                     </div>
                                     <div className="lc-block">
                                         <a className="btn btn-outline-secondary" href="https://www.youtube.com/watch?v=wVBXkS1AgHg" role="button" target="_blank" rel="noopener">Watch Demo</a>
