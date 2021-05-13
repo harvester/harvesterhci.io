@@ -3,12 +3,15 @@ sidebar_position: 1
 ---
 
 # Harvester Intro
+
 Harvester is an open source [hyper-converged infrastructure](https://en.wikipedia.org/wiki/Hyper-converged_infrastructure) (HCI) software built on Kubernetes. It is an open source alternative to vSphere and Nutanix.
 
 ![harvester-ui](/img/harvester-ui.png)
 
 ## Overview
-Harvester implements HCI on bare metal servers. Here are some notable features of the Harvester:
+
+Harvester implements HCI on bare metal servers. Here are some notable features of Harvester:
+
 1. VM lifecycle management including SSH-Key injection, Cloud-init and, graphic and serial port console
 1. VM live migration support
 1. Supporting VM backup and restore
@@ -27,34 +30,42 @@ The following diagram gives a high-level architecture of Harvester:
 - [K3OS](https://k3os.io/) is a Linux distribution designed to remove as much OS maintenance as possible in a Kubernetes cluster.
 
 ## Hardware Requirements
+
 To get the Harvester server up and running the following minimum hardware is required:
 
-| Type | Requirements |
-|:---|:---|
-| CPU | x86_64 only. Hardware assisted virtualization required. 4 cores minimum, 16 cores or above preferred |
-| Memory | 8 GB minimum, 32 GB or above preferred |
-| Disk Capacity |  120 GB minimum, 500 GB or above preferred |
-| Disk Performance |  5,000+ random IOPS per disk(SSD/NVMe). Management nodes (first 3 nodes) must be [fast enough for Etcd](https://www.ibm.com/cloud/blog/using-fio-to-tell-whether-your-storage-is-fast-enough-for-etcd). |
-| Network Card | 1 Gbps Ethernet minimum, 10Gbps Ethernet recommended |
-| Network Switch | Trunking of ports required for VLAN support |
-
+| Type             | Requirements                                                                                                                                                                                           |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CPU              | x86_64 only. Hardware assisted virtualization required. 4 cores minimum, 16 cores or above preferred                                                                                                   |
+| Memory           | 8 GB minimum, 32 GB or above preferred                                                                                                                                                                 |
+| Disk Capacity    | 120 GB minimum, 500 GB or above preferred                                                                                                                                                              |
+| Disk Performance | 5,000+ random IOPS per disk(SSD/NVMe). Management nodes (first 3 nodes) must be [fast enough for Etcd](https://www.ibm.com/cloud/blog/using-fio-to-tell-whether-your-storage-is-fast-enough-for-etcd). |
+| Network Card     | 1 Gbps Ethernet minimum, 10Gbps Ethernet recommended                                                                                                                                                   |
+| Network Switch   | Trunking of ports required for VLAN support                                                                                                                                                            |
 
 ## Quick start
 
+You can install Harvester via ISO installation or PXE Boot Installation. Instructions are provided in sections below.
+
+### ISO Installation
+
 You can use the ISO to install Harvester directly on the bare-metal server to form a Harvester cluster. Users can add one or many compute nodes to join the existing cluster.
 
-To get the Harvester ISO, download it from the [Github releases.](https://github.com/harvester/harvester/releases)
+To get the Harvester ISO, download it from the [Github releases](https://github.com/harvester/harvester/releases).
 
 During the installation you can either choose to form a new cluster, or join the node to an existing cluster.
 
 Note: This [video](https://youtu.be/97ADieBX6bE) shows a quick overview of the ISO installation.
 
+<div class="text-center">
+<iframe width="950" height="475" src="https://www.youtube.com/embed/97ADieBX6bE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 1. Mount the Harvester ISO disk and boot the server by selecting the `Harvester Installer`.
-![iso-install.png](/img/iso-install.png)
+   ![iso-install.png](/img/iso-install.png)
 1. Choose the installation mode by either creating a new Harvester cluster, or by joining an existing one.
 1. Choose the installation device that the Harvester will be formatted to.
 1. Configure the hostname and select the network interface for the management network, the IP address can either be configured via DHCP or static method.
-![iso-installed.png](/img/iso-nic-config.png)
+   ![iso-installed.png](/img/iso-nic-config.png)
 1. Configure the `cluster token`. This token will be used for adding other nodes to the cluster.
 1. Configure the login password of the host. The default ssh user is `rancher`.
 1. (Optional) you can choose to import SSH keys from a remote URL server. Your GitHub public keys can be used with `https://github.com/<username>.keys`.
@@ -63,7 +74,10 @@ Note: This [video](https://youtu.be/97ADieBX6bE) shows a quick overview of the I
 1. Confirm the installation options and the Harvester will be installed to your host. The installation may take a few minutes to be complete.
 1. Once the installation is complete it will restart the host and a console UI with management URL and status will be displayed. <small>(You can Use F12 to switch between Harvester console and the Shell)</small>
 1. The default URL of the web interface is `https://your-host-ip:30443`.
-![iso-installed.png](/img/iso-installed.png)
+   ![iso-installed.png](/img/iso-installed.png)
 1. User will be prompted to set the password for the default `admin` user on the first-time login.
-![first-login.png](/img/first-log-in.png)
+   ![first-login.png](/img/first-log-in.png)
 
+### Other Installation Methods
+
+Starting from version `0.2.0`, Harvester can be installed in a mass manner, please refer to [PXE Boot Install](/docs/installation/pxe-boot-install) for detailed instructions.

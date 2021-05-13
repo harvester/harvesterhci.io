@@ -10,32 +10,32 @@ We recommend using [iPXE](https://ipxe.org/) to perform the network boot. It has
 
 To see sample iPXE scripts, please visit https://github.com/harvester/ipxe-examples.
 
-## Preparing HTTP Servers
+## Prepare HTTP Servers
 
 An HTTP server is required to serve boot files. Please ensure these servers are set up correctly before continuing.
 
 Let's assume an NGINX HTTP server's IP is `10.100.0.10`, and it serves `/usr/share/nginx/html/` folder at the path `http://10.100.0.10/`.
 
-## Preparing Boot Files
+## Prepare Boot Files
 
-- Download the required files from https://github.com/harvester/harvester/releases. Choose an appropriate version.
+1. Download the required files from https://github.com/harvester/harvester/releases. Choose an appropriate version.
 
-  - The ISO: `harvester-amd64.iso`
-  - The kernel: `harvester-vmlinuz-amd64`
-  - The initrd: `harvester-initrd-amd64`
+   - The ISO: `harvester-amd64.iso`
+   - The kernel: `harvester-vmlinuz-amd64`
+   - The initrd: `harvester-initrd-amd64`
 
-- Serve the files.
+1. Serve the files.
 
-  Copy or move the downloaded files to an appropriate location so they can be downloaded via the HTTP server. e.g.,
+   Copy or move the downloaded files to an appropriate location so they can be downloaded via the HTTP server, for example:
 
-  ```
-  sudo mkdir -p /usr/share/nginx/html/harvester/
-  sudo cp /path/to/harvester-amd64.iso /usr/share/nginx/html/harvester/
-  sudo cp /path/to/harvester-vmlinuz-amd64 /usr/share/nginx/html/harvester/
-  sudo cp /path/to/harvester-initrd-amd64 /usr/share/nginx/html/harvester/
-  ```
+   ```shell
+   sudo mkdir -p /usr/share/nginx/html/harvester/
+   sudo cp /path/to/harvester-amd64.iso /usr/share/nginx/html/harvester/
+   sudo cp /path/to/harvester-vmlinuz-amd64 /usr/share/nginx/html/harvester/
+   sudo cp /path/to/harvester-initrd-amd64 /usr/share/nginx/html/harvester/
+   ```
 
-## Preparing iPXE boot scripts
+## Prepare iPXE boot scripts
 
 When performing automatic installation, there are two modes:
 
@@ -48,7 +48,10 @@ Nodes need to have at least **8G** of RAM because the full ISO file is loaded in
 
 ### CREATE mode
 
-> :warning: **Security Risks**: The configuration file below contains credentials which should be kept secretly. Please do not make the configuration file publicly accessible at the moment.
+:::warning
+**Security Risks**: The configuration file contains credentials which should be kept secretly. Please do not make the
+configuration file publicly accessible at the moment.
+:::
 
 Create a [Harvester configuration file](./harvester-configuration.md) `config-create.yaml` for `CREATE` mode. Modify the values as needed:
 
@@ -68,7 +71,9 @@ install:
 
 ```
 
-For machines that needs to be installed as `CREATE` mode, the following is an iPXE script that boots the kernel with the above config:
+Let's assume the iPXE script is stored in `/usr/share/nginx/html/harvester/ipxe-create`.
+
+For machines that need to be installed as `CREATE` mode, the following is an iPXE script that boots the kernel with the above config:
 
 ```
 #!ipxe
@@ -77,11 +82,12 @@ initrd initrd
 boot
 ```
 
-Let's assume the iPXE script is stored in `/usr/share/nginx/html/harvester/ipxe-create`
-
 ### JOIN mode
 
-> :warning: **Security Risks**: The configuration file below contains credentials which should be kept secretly. Please do not make the configuration file publicly accessible at the moment.
+:::warning
+**Security Risks**: The configuration file contains credentials which should be kept secretly. Please do not make the
+configuration file publicly accessible at the moment.
+:::
 
 Create a [Harvester configuration file](./harvester-configuration.md) `config-join.yaml` for `JOIN` mode. Modify the values as needed:
 
@@ -106,6 +112,8 @@ install:
 
 Note that the `mode` is `join` and the `server_url` needs to be provided.
 
+Let's assume the iPXE script is stored in `/usr/share/nginx/html/harvester/ipxe-join`.
+
 For machines that needs to be installed in `JOIN` mode, the following is an iPXE script that boots the kernel with the above config:
 
 ```
@@ -115,11 +123,9 @@ initrd initrd
 boot
 ```
 
-Let's assume the iPXE script is stored in `/usr/share/nginx/html/harvester/ipxe-join`.
-
 **TROUBLESHOOTING**
 
-- Sometimes the installer might be not able to fetch the Harvester configuration file because the network stack is not ready yet. To work around this, please add a `boot_cmd` parameter to the iPXE script, e.g.,
+- Sometimes the installer might be unable to fetch the Harvester configuration file because the network stack is not ready yet. To work around this, please add a `boot_cmd` parameter to the iPXE script, for example:
 
   ```
   #!ipxe
@@ -128,7 +134,7 @@ Let's assume the iPXE script is stored in `/usr/share/nginx/html/harvester/ipxe-
   boot
   ```
 
-## DHCP server configuration
+## Configure DHCP server
 
 Here is an example to configure the ISC DHCP server to offer iPXE scripts:
 
@@ -189,9 +195,9 @@ group {
 }
 ```
 
-The config file declares a subnet and two groups. The first group is for hosts to boot with `CREATE` mode and the other one is for `JOIN` mode. By default, the iPXE path is chosen, but if it sees a PXE client, it also offers the iPXE image according to client architecture. Please prepare those images and a tftp server first.
+The config file declares a subnet and two groups. The first group is for hosts to boot with `CREATE` mode and the other one is for `JOIN` mode. By default, the iPXE path is chosen, but if it detects a PXE client, it also offers the iPXE image according to client architecture. Please prepare those images and a tftp server first.
 
-## Harvester configuration
+## Configure Harvester
 
 For more information about Harvester configuration, please refer to the [Harvester configuration](./harvester-configuration.md).
 
@@ -203,7 +209,7 @@ UEFI firmware supports loading a boot image from HTTP server. This section demon
 
 ### Serve the iPXE program
 
-Download the iPXE uefi program from http://boot.ipxe.org/ipxe.efi and make `ipxe.efi` can be downloaded from the HTTP server. e.g.:
+Download the iPXE uefi program from http://boot.ipxe.org/ipxe.efi and make `ipxe.efi` can be downloaded from the HTTP server, for example:
 
 ```bash
 cd /usr/share/nginx/html/harvester/
