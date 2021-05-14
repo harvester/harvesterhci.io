@@ -7,7 +7,7 @@ sidebar_position: 40
 ## Summary
 [Harvester](https://github.com/harvester/harvester) is built on Kubernetes, which uses [CNI](https://github.com/containernetworking/cni) as an interface between network providers and Kubernetes pod networking. Naturally, we implement the Harvester network based on CNI. Moreover, the [Harvester UI](https://github.com/harvester/harvester-ui) integrates the Harvester network to provide a user-friendly way to configure networks for VMs.
 
-By version 0.2, Harvester supports two kinds of networks: 
+As of version 0.2.0, Harvester supports two kinds of networks: 
 
 - management network
 - [VLAN](https://en.wikipedia.org/wiki/Virtual_LAN)
@@ -37,11 +37,13 @@ Enable VLAN via going to **Setting > vlan** to enable VLAN and input a valid def
 
 The first physical NIC name of each Harvester node always defaults to eth0. It is recommended to choose a separate NIC for the VLAN other than the one used for the management network (the one selected during the Harvester installation) for better network performance and isolation. 
 
-Note: Modifying the default VLAN network setting will not change the existing configured host networks.
+:::note
+Modifying the default VLAN network setting will not change the existing configured host networks.
+:::
 
   ![](/img/enable-vlan.png)
 
-- (optional) Users can always customize each node's VLAN network configuration via going to the **HOST > Network** tab.
+- (optional) Users can customize each node's VLAN network configuration via going to the **HOST > Network** tab.
 
   ![](/img/node-network-configuration.png)
   
@@ -51,7 +53,10 @@ Note: Modifying the default VLAN network setting will not change the existing co
 
 - The network is configured when the VM is created.
 
-  - Only the first network interface card will be enabled by default. Users can either choose to use a management network or VLAN network. Note: You will need to select the `Install guest agent` option in the `Advanced Options` tab to get the VLAN network IP address from the Harvester UI.
+  - Only the first network interface card will be enabled by default. Users can either choose to use a management network or VLAN network. 
+  :::note
+  You will need to select the `Install guest agent` option in the `Advanced Options` tab to get the VLAN network IP address from the Harvester UI.
+  :::
 
     ![](/img/vm-network-configuration.png)
 
