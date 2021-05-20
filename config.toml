@@ -28,7 +28,7 @@ params = ["categories", "tags"]
 logo = "images/logo_horizontal.svg"
 description= "An open-source hyperconverged infrastructure (HCI) software for a cloud-native world"
 githubLink = "https://github.com/harvester/harvester"
-docsLink = "https://github.com/harvester/harvester/tree/master/docs"
+docsLink = "https://docs.harvesterhci.io"
 css = ["css/custom.css", "styles-bundle-369.css"]
 favicon = "images/favicon.ico"
   github = "https://github.com/harvester/harvester"
@@ -47,6 +47,6 @@ favicon = "images/favicon.ico"
   [[menu.main]]
     identifier = "docs"
     name = "DOCS"
-    url = "https://github.com/harvester/harvester/tree/master/docs"
+    url = "https://docs.harvesterhci.io"
     weight = -110
     
