@@ -529,6 +529,17 @@ a.btn.no-bg {
   }
 }
 
+@media (max-width: 768px) {
+  #theme-main h1.adjust-text {
+    font-size: 2em !important;
+    line-height: 3rem !important;
+  }
+
+  #theme-main .header-docs {
+    margin-bottom: 20px;
+  }
+}
+
 :root {
   --primary-color: #ffb000;
   --secondary-color: #2e4945;
