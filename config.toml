@@ -8,6 +8,7 @@ enableRobotsTXT = true
 pygmentsCodeFences = true
 pygmentsCodeFencesGuessSyntax = true
 enableGitInfo = true
+googleAnalytics = 'UA-56382716-11'
 
 [blackfriday]
 fractions = false
