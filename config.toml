@@ -42,7 +42,9 @@ favicon = "images/favicon.ico"
     disable = false
     enableDNT = false
     simple = true
-
+  [privacy.googleAnalytics]
+    anonymizeIP = true
+    
 [menu]
 
   [[menu.main]]
