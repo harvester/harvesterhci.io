@@ -34,6 +34,12 @@ module.exports = {
           className: "navbar__docs",
         },
         {
+          to: "blog",
+          position: "right",
+          label: "Blog",
+          className: "navbar__blog",
+        },
+        {
           href: "https://github.com/harvester/harvester",
           label: "GitHub",
           position: "right",
@@ -60,13 +66,18 @@ module.exports = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/",
+            "https://github.com/harvester/harvester.github.io/edit/master/website/",
         },
         blog: {
+          path: 'blog',
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            "https://github.com/facebook/docusaurus/edit/master/website/blog/",
+            "https://github.com/harvester/harvester.github.io/edit/master/website/blog/",
+          blogTitle: 'Harvester HCI blog',
+          routeBasePath: 'blog',
+          include: ['**/*.{md,mdx}'],
+          postsPerPage: 10,
         },
         theme: {
           customCss: [require.resolve("./src/css/custom.css")],
