@@ -56,10 +56,10 @@ export default function HomepageFeatures() {
                                         </div>
                                     </div>
                                     <div className="lc-block">
-                                        <a className="btn btn-lg btn-secondary header-docs" href="/docs/intro" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
+                                        <a className="btn btn-lg btn-secondary header-docs" href="https://github.com/rancher/harvester#installation" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
                                     </div>
                                     <div className="lc-block">
-                                        <a className="btn btn-outline-secondary" href="https://www.youtube.com/watch?v=wVBXkS1AgHg" role="button" target="_blank" rel="noopener">Watch Demo</a>
+                                        <a className="btn btn-outline-secondary" href="https://www.youtube.com/watch?v=Ngsk7m6NYf4&amp;feature=youtu.be" role="button" target="_blank" rel="noopener">Watch Demo</a>
                                     </div>
                                 </div>
                                 <div className="col-md-4">
@@ -94,12 +94,12 @@ export default function HomepageFeatures() {
                                     <div className="lc-block text-center mb-5">
                                         <div>
                                             <h2 className="h3 font-weight-bolder">What is Harvester?</h2>
-                                            <p className="font-weight-light">
-                                                Harvester is a modern Hyperconverged infrastructure (HCI) solution built for
+                                            <p class="font-weight-light">Harvester is a modern Hyperconverged infrastructure (HCI) solution built for
                                                 bare metal servers using enterprise-grade open source technologies including Kubernetes, Kubevirt and
                                                 Longhorn. Designed for users looking for a cloud-native HCI solution, Harvester is a flexible and
-                                                affordable offering capable of putting VM workloads on the edge, close to your IoT, and integrated into your cloud infrastructure.<br />
-                                            </p>
+                                                affordable offering capable of putting VM workloads on the edge, close to your IoT, and integrated into
+                                                your cloud infrastructure.<br /></p>
+                                                <div class="lc-block mb-5"><iframe width="560" height="315" src="https://www.youtube.com/embed/MWejWLfuTRg" title="Introducing Harvester HCI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
                                         </div>
                                     </div>
                                     <div className="lc-block"><hr /></div>
@@ -172,7 +172,7 @@ export default function HomepageFeatures() {
                                 <div className="col-md-5">
                                     <div className="lc-block learn-more-links" style={{ fontFamily: 'poppins,sans-serif' }}><div>
                                         <p className="mb-2">
-                                            <a href="/docs/intro" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
+                                            <a href="https://docs.harvesterhci.io" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
                                         </p>
                                         <p className="mb-2">
                                             <a href="https://github.com/rancher/harvester" className="font-weight-bolder rfs-10 text-white">Visit GitHub</a>
@@ -181,7 +181,7 @@ export default function HomepageFeatures() {
                                             <a href="https://rancher-users.slack.com/archives/C01GKHKAG0K" className="font-weight-bolder rfs-10 text-white">Join our Slack Community</a>
                                         </p>
                                         <p className="mb-2">
-                                            <a href="https://youtu.be/EKDtheJxQN4" className="font-weight-bolder rfs-10 text-white">Watch the latest meetup</a>
+                                            <a href="https://youtu.be/ZFtOZXj_PZ8" className="font-weight-bolder rfs-10 text-white">Watch the latest meetup</a>
                                         </p>
                                     </div>
                                     </div>
