@@ -27,8 +27,7 @@ module.exports = {
       },
       items: [
         {
-          type: "doc",
-          docId: "intro",
+          href: "https://docs.harvesterhci.io/",
           position: "right",
           label: "Docs",
           className: "navbar__docs",
@@ -38,6 +37,12 @@ module.exports = {
           position: "right",
           label: "Blog",
           className: "navbar__blog",
+        },
+        {
+          to: "kb",
+          position: "right",
+          label: "Knowledge Base",
+          className: "navbar__kb",
         },
         {
           href: "https://github.com/harvester/harvester",
@@ -82,6 +87,26 @@ module.exports = {
         theme: {
           customCss: [require.resolve("./src/css/custom.css")],
         },
+      },
+    ],
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-blog',
+      {
+        /**
+         * Required for any multi-instance plugin
+         */
+        id: 'kb',
+        path: './kb',
+        showReadingTime: true,
+        // Please change this to your repo.
+        editUrl:
+          "https://github.com/harvester/harvester.github.io/edit/master/website/kb/",
+        blogTitle: 'Harvester HCI knowledge base',
+        routeBasePath: 'kb',
+        include: ['**/*.{md,mdx}'],
+        postsPerPage: 10,
       },
     ],
   ],
