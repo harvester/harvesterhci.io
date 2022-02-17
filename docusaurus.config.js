@@ -73,17 +73,6 @@ module.exports = {
           editUrl:
             "https://github.com/harvester/harvester.github.io/edit/master/website/",
         },
-        blog: {
-          path: 'blog',
-          showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            "https://github.com/harvester/harvester.github.io/edit/master/website/blog/",
-          blogTitle: 'Harvester HCI blog',
-          routeBasePath: 'blog',
-          include: ['**/*.{md,mdx}'],
-          postsPerPage: 10,
-        },
         theme: {
           customCss: [require.resolve("./src/css/custom.css")],
         },
