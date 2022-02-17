@@ -33,7 +33,7 @@ module.exports = {
           className: "navbar__docs",
         },
         {
-          to: "blog",
+          href: "https://www.suse.com/c/?s=harvester",
           position: "right",
           label: "Blog",
           className: "navbar__blog",
