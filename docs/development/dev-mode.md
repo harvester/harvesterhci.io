@@ -29,7 +29,7 @@ Harvester can be installed on a Kubernetes cluster in the following ways:
 - Install with the [Helm](https://helm.sh/) CLI
 - Install as a Rancher catalog app, in which case the [harvester/harvester](https://github.com/harvester/harvester) repo is added to the Rancher Catalog as a Helm `v3` app
 
-Please refer to the Harvester [Helm chart](../deploy/charts/harvester) for more details on installing and configuring the Helm chart.
+Please refer to the Harvester Helm chart for more details on installing and configuring the Helm chart.
 
 ### Requirements
 

@@ -56,7 +56,7 @@ export default function HomepageFeatures() {
                                         </div>
                                     </div>
                                     <div className="lc-block">
-                                        <a className="btn btn-lg btn-secondary header-docs" href="https://github.com/rancher/harvester#installation" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
+                                        <a className="btn btn-lg btn-secondary header-docs" href="https://www.suse.com/products/harvester" role="button" style={{ textTransform: 'none', float: 'left', marginRight: '20px' }}>Get Started</a>
                                     </div>
                                     <div className="lc-block">
                                         <a className="btn btn-outline-secondary" href="https://www.youtube.com/watch?v=Ngsk7m6NYf4&amp;feature=youtu.be" role="button" target="_blank" rel="noopener">Watch Demo</a>
