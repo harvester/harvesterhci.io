@@ -4,14 +4,14 @@
         <title>The open source hyperconverged infrastructure (HCI) solution for a cloud native world Blog</title>
         <link>https://harvesterhci.io/kb</link>
         <description>The open source hyperconverged infrastructure (HCI) solution for a cloud native world Blog</description>
-        <lastBuildDate>Thu, 10 Mar 2022 07:27:25 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 10 Mar 2022 08:23:45 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
             <title><![CDATA[VM Scheduling]]></title>
             <link>https://harvesterhci.io/kb/vm-scheduling</link>
             <guid>vm-scheduling</guid>
-            <pubDate>Thu, 10 Mar 2022 07:27:25 GMT</pubDate>
+            <pubDate>Thu, 10 Mar 2022 08:23:45 GMT</pubDate>
             <description><![CDATA[How does Harvester schedule VMs?]]></description>
         </item>
     </channel>
