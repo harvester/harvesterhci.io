@@ -38,12 +38,12 @@ module.exports = {
           label: "Blog",
           className: "navbar__blog",
         },
-        // {
-        //   to: "kb",
-        //   position: "right",
-        //   label: "Knowledge Base",
-        //   className: "navbar__kb",
-        // },
+        {
+          to: "kb",
+          position: "right",
+          label: "Knowledge Base",
+          className: "navbar__kb",
+        },
         {
           href: "https://github.com/harvester/harvester",
           label: "GitHub",
