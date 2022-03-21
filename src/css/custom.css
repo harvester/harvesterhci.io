@@ -107,3 +107,6 @@ a.btn.navbar__github::before {
   padding: 0 var(--ifm-pre-padding);
 }
 
+.navbar__link > span > svg{
+  display: none !important;
+}

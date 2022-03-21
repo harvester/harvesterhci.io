@@ -1,5 +1,11 @@
+// @ts-check
+// Note: type annotations allow type checking and IDEs autocompletion
+
+const lightCodeTheme = require('prism-react-renderer/themes/github');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
-module.exports = {
+const config = {
   title:
     "The open source hyperconverged infrastructure (HCI) solution for a cloud native world",
   tagline: "",
@@ -9,20 +15,30 @@ module.exports = {
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
   organizationName: "harvester", // Usually your GitHub org/user name.
-  projectName: "harvester.github.io", // Usually your repo name.
-  themeConfig: {
-    colorMode: {
-      // "light" | "dark"
-      defaultMode: "light",
+  projectName: "harvesterhci.io", // Usually your repo name.
 
-      // Hides the switch in the navbar
-      // Useful if you want to support a single color mode
-      disableSwitch: true,
-    },
+  presets: [
+    [
+      'classic',
+      ({
+        docs: {
+          routeBasePath: '/',
+          sidebarPath: require.resolve("./sidebars.js"),
+          // Please change this to your repo.
+          editUrl:
+              "https://github.com/harvester/harvesterhci.io/edit/main/static/",
+        },
+        theme: {
+          customCss: require.resolve("./src/css/custom.css"),
+        },
+      }),
+    ],
+  ],
+
+  themeConfig: {
     navbar: {
-      title: "",
       logo: {
-        alt: "logo",
+        alt: "Harvester Logo",
         src: "img/logo_horizontal.svg",
       },
       items: [
@@ -52,10 +68,22 @@ module.exports = {
         },
       ],
     },
+    colorMode: {
+      // "light" | "dark"
+      defaultMode: "light",
+
+      // Hides the switch in the navbar
+      // Useful if you want to support a single color mode
+      disableSwitch: true,
+    },
     footer: {
       style: "dark",
       links: [],
       copyright: `Copyright © ${new Date().getFullYear()} harvesterhci.io`,
+    },
+    prism: {
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
     },
   },
   customFields: {
@@ -63,22 +91,6 @@ module.exports = {
     description:
       "An open-source hyperconverged infrastructure (HCI) software for a cloud-native world",
   },
-  presets: [
-    [
-      "@docusaurus/preset-classic",
-      {
-        docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          editUrl:
-            "https://github.com/harvester/harvester.github.io/edit/master/website/",
-        },
-        theme: {
-          customCss: [require.resolve("./src/css/custom.css")],
-        },
-      },
-    ],
-  ],
   plugins: [
     [
       '@docusaurus/plugin-content-blog',
@@ -91,7 +103,7 @@ module.exports = {
         showReadingTime: true,
         // Please change this to your repo.
         editUrl:
-          "https://github.com/harvester/harvester.github.io/edit/master/website/kb/",
+          "https://github.com/harvester/harvesterhci.io/edit/main/kb/",
         blogTitle: 'Harvester HCI knowledge base',
         routeBasePath: 'kb',
         include: ['**/*.{md,mdx}'],
@@ -100,3 +112,5 @@ module.exports = {
     ],
   ],
 };
+
+module.exports = config;
