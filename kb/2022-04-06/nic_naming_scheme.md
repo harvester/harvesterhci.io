@@ -19,7 +19,7 @@ hide_table_of_contents: false
 
 ## Effect Settings and Workaround
 
-### Startup Network Configutation
+### Startup Network Configuration
 
 NIC name changes will need to update the name in `/oem/99_custom.yaml`. You could use [migration script](https://github.com/harvester/upgrade-helpers/blob/main/hack/udev_v238_sle15-sp3.py) to change the NIC names which are associated with a PCI bridge.
 
