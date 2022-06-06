@@ -95,7 +95,7 @@ export default function HomepageFeatures() {
                                         <div>
                                             <h2 className="h3 font-weight-bolder">What is Harvester?</h2>
                                             <p class="font-weight-light">Harvester is a modern Hyperconverged infrastructure (HCI) solution built for
-                                                bare metal servers using enterprise-grade open source technologies including Kubernetes, Kubevirt and
+                                                bare metal servers using enterprise-grade open source technologies including Kubernetes, KubeVirt and
                                                 Longhorn. Designed for users looking for a cloud-native HCI solution, Harvester is a flexible and
                                                 affordable offering capable of putting VM workloads on the edge, close to your IoT, and integrated into
                                                 your cloud infrastructure.<br /></p>
