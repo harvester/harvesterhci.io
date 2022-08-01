@@ -1,5 +1,7 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
+sidebar_label: Access to the Virtual Machine
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -48,10 +50,11 @@ _Available as of v1.0.1_
 
 Harvester supports dynamically injecting public ssh keys at run time through the use of the [qemu guest agent](https://wiki.qemu.org/Features/GuestAgent). This is achieved through the `qemuGuestAgent` propagation method.
 
-!!! note
-    This method requires the qemu guest agent to be installed within the guest VM.
+:::note
+This method requires the qemu guest agent to be installed within the guest VM.
 
-    When using `qemuGuestAgent` propagation, the `/home/$USER/.ssh/authorized_keys` file will be owned by the guest agent. Changes to that file that are made outside of the qemu guest agent's control will get deleted.
+When using `qemuGuestAgent` propagation, the `/home/$USER/.ssh/authorized_keys` file will be owned by the guest agent. Changes to that file that are made outside of the qemu guest agent's control will get deleted.
+:::
 
 You can inject your access credentials via the Harvester dashboard as below:
 
@@ -59,8 +62,10 @@ You can inject your access credentials via the Harvester dashboard as below:
 2. Click the `Edit Config` button and go to the `Access Credentials` tab.
 3. Click to add either basic auth credentials or ssh keys, (e.g., add `opensuse` as the user and select your ssh keys if your guest OS is OpenSUSE).
 4. Make sure your qemu guest agent is already installed and the VM should be restarted after the credentials are added.
-!!! note
-    You need to enter the VM to edit password or remove SSH-Key after deleting the credentials from the UI.
+
+:::note
+You need to enter the VM to edit password or remove SSH-Key after deleting the credentials from the UI.
+:::
 
 ![](assets/vm-add-access-credentails.png)
 

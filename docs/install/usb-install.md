@@ -1,3 +1,12 @@
+---
+sidebar_position: 3
+sidebar_label: USB Installation
+title: ""
+keywords:
+- USB Installation
+Description: Outline Harvester USB Installation
+---
+
 # USB Installation
 
 ## Create a bootable USB flash drive
@@ -14,8 +23,9 @@ There are a couple of ways to create a USB installation flash drive.
 
 On Linux or other platforms that have the `dd` command, users can use `dd` to create a USB installation flash drive.
 
-!!!warning
-    Make sure you choose the correct device. The process erases data on the selected device.
+:::warning
+Make sure you choose the correct device. The process erases data on the selected device.
+:::
 
 ```
 # sudo dd if=<path_to_iso> of=<path_to_usb_device> bs=64k

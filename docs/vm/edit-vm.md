@@ -1,5 +1,7 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
+sidebar_label: Edit a Virtual Machine
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -17,8 +19,9 @@ Description: Edit Virtual Machines from the Harvester VM page.
 
 After creating a virtual machine, you can edit your virtual machine by clicking the `⋮` button and selecting the `Edit Configurations` button.
 
-!!! notes
-	In addition to editing the description, a restart of the virtual machine is required for configuration changes to take effect.
+:::note
+In addition to editing the description, a restart of the virtual machine is required for configuration changes to take effect.
+:::
 
 ### Basics
 

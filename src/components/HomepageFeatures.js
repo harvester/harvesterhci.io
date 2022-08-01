@@ -172,7 +172,7 @@ export default function HomepageFeatures() {
                                 <div className="col-md-5">
                                     <div className="lc-block learn-more-links" style={{ fontFamily: 'poppins,sans-serif' }}><div>
                                         <p className="mb-2">
-                                            <a href="https://docs.harvesterhci.io" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
+                                            <a href="intro" className="font-weight-bolder rfs-10 text-white">Read the Docs</a>
                                         </p>
                                         <p className="mb-2">
                                             <a href="https://github.com/rancher/harvester" className="font-weight-bolder rfs-10 text-white">Visit GitHub</a>

@@ -1,3 +1,9 @@
+---
+sidebar_position: 1
+sidebar_label: Monitoring
+title: ""
+---
+
 # Monitoring
 
 _Available as of v0.3.0_
@@ -9,16 +15,18 @@ From the `Dashboard` page, users can view the cluster metrics and top 10 most us
 Also, users can click the [Grafana](http://grafana.com/) dashboard link to view more dashboard on the Grafana UI.
 ![](./assets/monitoring-dashboard.png)
 
-!!! note
-    Only admin users are able to view the dashboard metrics.
+:::note
+Only admin users are able to view the dashboard metrics.
+:::
 
 
 ## VM Detail Metrics
 For each VM, users can view the VM metrics by clicking the VM details page.
 ![](./assets/vm-metrics.png)
 
-!!! note
-    The `Memory Usage` formula is `(1 - free/total) * 100%`, not `(used/total) * 100%`.
+:::note
+The `Memory Usage` formula is `(1 - free/total) * 100%`, not `(used/total) * 100%`.
+:::
 
 For example, in a Linux OS, the `free -h` command outputs the current memory statistics as following.
 
@@ -68,8 +76,9 @@ The most frequently used option is memory setting.
 
 Depending on the available hardware resources and system loads, you may change the settings accordingly.
 
-!!! note
-    If you have multiple management nodes with different hardware resources, please set the value based on the smaller one.
+:::note
+If you have multiple management nodes with different hardware resources, please set the value based on the smaller one.
+:::	
 
 #### From CLI
 
@@ -114,8 +123,9 @@ In v1.0.1 and later versions, the related path and default value are:
 
 In v1.0.0 and ealier versions, the related path and default value are not in the `managedchart rancher-monitoring`, you need to add them accordingly.
 
-!!! attention
-    When many VMs are deployed in one NODE, the OOM(out of memory)/abnormal restarting of prometheus-node-exporter POD(s) may be observed. In that case, you should change the `limits.memory` to a bigger value.
+:::note
+When many VMs are deployed in one NODE, the OOM(out of memory)/abnormal restarting of prometheus-node-exporter POD(s) may be observed. In that case, you should change the `limits.memory` to a bigger value.
+:::
 
 ### Troubleshooting
 

@@ -1,5 +1,7 @@
 ---
-sidebar_position: 2
+sidebar_position: 4
+sidebar_label: Harvester Cloud Provider
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -12,7 +14,7 @@ Description: The Harvester cloud provider used by the guest cluster in Harvester
 ---
 # Harvester Cloud Provider
 
-[RKE1](./rke1-cluster.md) and [RKE2](./rke2-cluster.md) clusters can be provisioned in Rancher using the built-in Harvester Node Driver. Harvester provides [load balancer](./cloud-provider.md#load-balancer-support) and [cluster Persistent Storage](./csi-driver.md) support to the guest Kubernetes cluster.
+[RKE1](./node/rke1-cluster.md) and [RKE2](./node/rke2-cluster.md) clusters can be provisioned in Rancher using the built-in Harvester Node Driver. Harvester provides [load balancer](./cloud-provider.md#load-balancer-support) and [cluster Persistent Storage](./csi-driver.md) support to the guest Kubernetes cluster.
 
 In this page we will learn:
 
@@ -36,8 +38,9 @@ When spinning up an RKE cluster using the Harvester node driver, you can perform
 
     ![](assets/install-harvester-cloud-provider.png)
   
-!!!note 
-    You should specify the `Cluster name`. The default value `kubernetes` will be set if no `Cluster name` is entered. The `Cluster name` is used to distinguish the ownership of the Harvester load balancers. 
+:::note 
+You should specify the `Cluster name`. The default value `kubernetes` will be set if no `Cluster name` is entered. The `Cluster name` is used to distinguish the ownership of the Harvester load balancers.
+:::
 
 - Install Harvester csi driver from the Rancher marketplace if needed.
 
@@ -167,8 +170,9 @@ Harvester's built-in load balancer supports both `pool` and `dhcp` modes. You ca
   
 - dhcp:  A DHCP server is required. The Harvester LoadBalancer controller will request an IP address from the DHCP server.
 
-!!!note
-    It is not allowed to modify the IPAM mode. You need to create a new service if you want to modify the IPAM mode.
+:::note
+It is not allowed to modify the IPAM mode. You need to create a new service if you want to modify the IPAM mode.
+:::
 
 ### Health Checks
 The Harvester load balancer supports TCP health checks. You can specify the parameters in the Rancher UI if you enable the `Health Check` option.

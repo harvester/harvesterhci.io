@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+sidebar_label: Requirements
+title: ""
 keywords:
 - Installation Requirements
 Description: Outline the Harvester installation requirements

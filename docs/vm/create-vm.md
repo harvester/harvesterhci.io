@@ -1,5 +1,7 @@
 ---
 sidebar_position: 1
+sidebar_label: Create a Virtual Machine
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -17,8 +19,9 @@ Description: Create one or more virtual machines from the Virtual Machines page.
 
 You can create one or more virtual machines from the **Virtual Machines** page.
 
-!!! note
-	Please refer to [this page](./create-windows-vm.md) for creating Windows virtual machines.
+:::note
+Please refer to [this page](./create-windows-vm.md) for creating Windows virtual machines.
+:::
 
 1. Choose the option to create either one or multiple VM instances.
 1. Select the namespace of your VMs, only the `harvester-public` namespace is visible to all users.
@@ -47,10 +50,11 @@ A disk can be made accessible via the following types:
 
 ![create-vm](assets/create-vm-volumes.png)
 
-!!! note "Container Disk"
-    `Container disks` are ephemeral storage devices that can be assigned to any number of VMs. This makes them an ideal tool for users who want to replicate a large number of VM workloads or inject machine drivers that do not require persistent data.
+:::note "Container Disk"
+`Container disks` are ephemeral storage devices that can be assigned to any number of VMs. This makes them an ideal tool for users who want to replicate a large number of VM workloads or inject machine drivers that do not require persistent data.
 
-    Note: Container disks are not a good solution for any workload that requires persistent root disks across VM restarts.
+Note: Container disks are not a good solution for any workload that requires persistent root disks across VM restarts.
+:::
 
 ## Networks
 
@@ -142,6 +146,7 @@ The QEMU guest agent is a daemon that runs on the virtual machine instance and p
 
 ![](assets/qga.png)
 
-!!! note
-	If your OS is openSUSE and the version is less than 15.3, please replace `qemu-guest-agent.service` with `qemu-ga.service`.
+:::note
+If your OS is openSUSE and the version is less than 15.3, please replace `qemu-guest-agent.service` with `qemu-ga.service`.
+:::
 

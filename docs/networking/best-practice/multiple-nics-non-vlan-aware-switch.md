@@ -1,5 +1,7 @@
 ---
-sidebar_position: 51
+sidebar_position: 3
+sidebar_label: Multiple NICs with Non VLAN-aware Switch
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -56,5 +58,6 @@ If you need a VM to connect to the subnet of the Harvester hosts, you have to cr
 
 Please refer to [this page](../harvester-network.md) for additional information on Harvester Networking.
 
-!!! note
+:::note
     If you create a VLAN Network different from `1`, the connection between VMs in different nodes will fail.
+:::

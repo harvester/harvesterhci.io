@@ -1,5 +1,7 @@
 ---
 sidebar_position: 2
+sidebar_label: ISO Installation
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -28,6 +30,7 @@ Note: This [video](https://youtu.be/X0VIGZ_lExQ) shows a quick overview of the I
       - Note: By default, Harvester uses [GPT](https://en.wikipedia.org/wiki/GUID_Partition_Table) partitioning schema for both UEFI and BIOS. If you use the BIOS boot, then you will have the option to select [MBR](https://en.wikipedia.org/wiki/Master_boot_record).
    ![iso-install-disk.png](./assets/iso-install-disk.png)
 1. Configure the hostname and select the network interface for the management network. By default, Harvester will create a bonded NIC named `harvester-mgmt`, and the IP address can be configured via DHCP or a static assigned one <small>(Note: The NODE IP can not change at the lifecycle of a Harvester cluster, in case the DHCP is used, user must make sure the DHCP server always offers the same IP for the same NODE. A changed NODE IP will cause the related NODE can not join the cluster, or even break the clusterP)</small>.
+
    ![iso-installed.png](./assets/iso-nic-config.gif)
 1. (Optional) Configure the DNS servers. Use commas as a delimiter.
 1. Configure the `Virtual IP` which you can use to access the cluster or join other nodes to the cluster <small>(Note: If your IP address is configured via DHCP, you will need to configure static MAC-to-IP address mapping on your DHCP server in order to have a persistent Virtual IP, VIP must be different than any NODE IP)</small>.

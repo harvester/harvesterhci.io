@@ -1,5 +1,7 @@
 ---
-sidebar_position: 51
+sidebar_position: 1
+sidebar_label: Overview
+title: ""
 keywords:
   - Harvester
   - harvester
@@ -16,8 +18,9 @@ Description: Harvester is built on top of Kubernetes, and uses the [CNI](https:/
 
 In a real production environment, we generally recommend that you have multiple NICs in your machine, one for node access and one for VM networking. If your machine has multiple NICs, please refer to [multiple NICs](multiple-nics-vlan-aware-switch.md) for best practices. Otherwise, please refer to [Single NIC](single-nic-vlan-aware-switch.md) best practice.
 
-!!! note
-    If you configure a `bond` interface with multiple NICs, please refer to the single NIC scenario, unless the Harvester node has multiple `bond` interfaces.
+:::note
+If you configure a `bond` interface with multiple NICs, please refer to the single NIC scenario, unless the Harvester node has multiple `bond` interfaces.
+:::	
 
 ## Best Practice
 

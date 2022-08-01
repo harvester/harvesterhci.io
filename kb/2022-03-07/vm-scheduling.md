@@ -101,8 +101,9 @@ AssumePodVolumes for pod "default/virt-launcher-vm-without-overcommit-75q9b", no
 
 With resources overcommit, Harvester modifies the resources request. By default, the `overcommit` configuration is `{"cpu": 1600, "memory": 150, "storage":  200}`. This means that if we request a VM with 1 CPU and 1G RAM, its `resources.requests.cpu` will become `62m`. 
 
-!!! note
-    The unit suffix `m` stands for "thousandth of a core."
+:::note
+The unit suffix `m` stands for "thousandth of a core."
+:::
 
 To explain it, let's take the case of CPU overcommit. The default value of 1 CPU is equal to 1000m CPU, and with the default overcommit configuration of `"cpu": 1600`, the CPU resource will be 16x smaller. Here is the calculation: `1000m * 100 / 1600 = 62m`.
 

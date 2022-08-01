@@ -1,5 +1,7 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
+sidebar_label: Resource Overcommit
+title: ""
 keywords:
   - Harvester
   - Overcommit
@@ -18,8 +20,9 @@ Harvester allows you to overcommit CPU and RAM on compute nodes. This allows you
 - RAM allocation ratio: 150%
 - Storage allocation ratio: 200%
 
-!!!note
-    Classic memory overcommitment or memory ballooning is not yet supported by this feature. In other words, memory used by a virtual machine instance cannot be returned once allocated.
+:::note
+Classic memory overcommitment or memory ballooning is not yet supported by this feature. In other words, memory used by a virtual machine instance cannot be returned once allocated.
+:::
 
 ## Configure the global setting [`overcommit-config`](../settings/settings.md#overcommit-config)
 

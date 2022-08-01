@@ -1,5 +1,7 @@
 ---
-sidebar_position: 20
+sidebar_position: 3
+sidebar_label: Air Gapped Environment
+title: ""
 keywords:
 - Harvester
 - offline
@@ -32,6 +34,7 @@ You can configure the HTTP(S) proxy in the settings page of the Harvester dashbo
 
 ![proxy-setting](./assets/proxy-setting.png)
 
-!!!note
-    Harvester appends necessary addresses to user configured `no-proxy` to ensure the internal traffic works.
-    i.e., `localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,longhorn-system,cattle-system,cattle-system.svc,.svc,.cluster.local`
+:::note
+Harvester appends necessary addresses to user configured `no-proxy` to ensure the internal traffic works.
+i.e., `localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,longhorn-system,cattle-system,cattle-system.svc,.svc,.cluster.local`
+:::
