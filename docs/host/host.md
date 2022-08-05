@@ -39,7 +39,7 @@ Deleting a node is done in two phases:
     - Login to the node as root
     - Run `rke2-uninstall.sh` to delete the whole RKE2 service.
 
-:::warning
+:::caution
 You will lose all data of the control plane node after deleing the RKE2 service.
 :::
 

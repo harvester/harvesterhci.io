@@ -21,7 +21,7 @@ keywords:
    - [Vagrant](https://rancher.com/docs/rancher/v2.6/en/quick-start-guide/deployment/quickstart-vagrant/)
    - [Equinix Metal](https://rancher.com/docs/rancher/v2.6/en/quick-start-guide/deployment/equinix-metal-qs/)
 
-:::warning
+:::caution
 **不要在生产环境中使用 Docker 来安装 Rancher**。否则，你的环境可能会损坏，而且集群可能无法恢复。在 Docker 中安装 Rancher 只适用于快速评估和测试场景。
 
 要使用 Docker 安装 Rancher：
@@ -93,6 +93,6 @@ $ sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 --privileged r
 
 ![delete-cluster](./assets/delete-harvester-cluster.png)
 
-:::warning
+:::caution
 不要运行 `kubectl delete -f ...` 命令来删除导入的 Harvester 集群，因为这将删除 Harvester 集群所需要的整个 `cattle-system` 命名空间。
 :::

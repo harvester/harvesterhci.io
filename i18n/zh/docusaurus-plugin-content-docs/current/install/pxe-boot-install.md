@@ -24,7 +24,7 @@ Description: 从 `0.2.0` 开始，Harvester 可以自动安装。本文提供使
 
 ## 前提
 
-:::important
+:::info
 Nodes need to have at least **8G** of RAM because the installer loads the full ISO file into tmpfs.
 :::
 
@@ -63,7 +63,7 @@ Nodes need to have at least **8G** of RAM because the installer loads the full I
 
 ### CREATE 模式
 
-:::warning
+:::caution
 **Security Risks**: The configuration file below contains credentials which should be kept secret. 请不要公开配置文件。
 :::
 
@@ -125,7 +125,7 @@ See [`man dracut.cmdline`](https://man7.org/linux/man-pages/man7/dracut.cmdline.
 
 ### JOIN 模式
 
-:::warning
+:::caution
 **Security Risks**: The configuration file below contains credentials which should be kept secret. 请不要公开配置文件。
 :::
 

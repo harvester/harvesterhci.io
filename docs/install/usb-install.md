@@ -23,7 +23,7 @@ There are a couple of ways to create a USB installation flash drive.
 
 On Linux or other platforms that have the `dd` command, users can use `dd` to create a USB installation flash drive.
 
-:::warning
+:::caution
 Make sure you choose the correct device. The process erases data on the selected device.
 :::
 

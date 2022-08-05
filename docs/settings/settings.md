@@ -23,7 +23,7 @@ SOME-CA-CERTIFICATES
 -----END CERTIFICATE-----
 ```
 
-:::warning
+:::caution
 Changing this setting might cause a short downtime for single-node clusters.
 :::
 
@@ -90,7 +90,7 @@ Harvester appends necessary addresses to user configured `no-proxy` to ensure th
 i.e., `localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,longhorn-system,cattle-system,cattle-system.svc,.svc,.cluster.local`
 :::
 
-:::warning
+:::caution
 Changing this setting might cause a short downtime for single-node clusters.
 :::
 
@@ -183,7 +183,7 @@ Default: `{}`
 }
 ```
 
-:::warning
+:::caution
 Changing this setting might cause a short downtime on single-node clusters.
 :::
 
@@ -275,7 +275,7 @@ https://your.upgrade.checker-url/v99/checkupgrade
 This setting allows Harvester to automatically add disks that match the given glob pattern as VM storage.
 It's possible to provide multiple patterns by separating them with a comma.
 
-:::warning
+:::caution
 - This setting is applied to **every Node** in the cluster.
 - All the data in these storage devices **will be destroyed**. Use at your own risk.
 :::

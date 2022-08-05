@@ -77,7 +77,7 @@ system_settings:
 
 Below is a reference of all configuration keys.
 
-:::warning
+:::caution
     **Security Risks**: The configuration file contains credentials which should be kept secret. Please do not make the configuration file publicly accessible.
 :::
 

@@ -44,7 +44,7 @@ Description: 从"虚拟机"页面创建一个或多个 Windows 虚拟机。
 如上所述，建议你使用 Windows 虚拟机模板。`卷`部分将描述 Windows 虚拟机模板自动创建的选项。
 :::
 
-:::warning
+:::caution
 `bootOrder` 值需要先使用安装镜像进行设置。如果你修改这些值，你的虚拟机可能无法启动到安装磁盘。
 :::
 
@@ -79,7 +79,7 @@ Description: 从"虚拟机"页面创建一个或多个 Windows 虚拟机。
 
 ![create-windows-vm-networks](assets/create-windows-vm-networks.png)
 
-:::warning
+:::caution
 更改`节点调度`设置可能会影响 Harvester 功能，例如禁用`热迁移`。
 :::
 

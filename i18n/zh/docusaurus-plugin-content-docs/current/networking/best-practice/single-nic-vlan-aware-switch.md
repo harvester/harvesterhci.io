@@ -72,7 +72,7 @@ switch# copy running-config startup-config
 
 ![vlan-aware-native-vlan.png](assets/vlan-aware-native-vlan.png)
 
-:::warning
+:::caution
 Do not create a VLAN Network with VLAN 100 and associate any VM to it. 连接性并不总是得到保证，并取决于外部交换机从数据包中添加/删除 VLAN 标记的操作。
 :::
 

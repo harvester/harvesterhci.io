@@ -97,7 +97,7 @@ DHCLIENT_SET_DEFAULT_ROUTE='yes'
 default        192.168.0.254  -        eth0
 ```
 
-:::warning
+:::caution
 Do not put other default route for your secondary NIC
 :::
     

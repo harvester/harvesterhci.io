@@ -21,7 +21,7 @@ For Harvester v0.3.0 and above, virtualization management with the multi-cluster
     - [Vagrant](https://rancher.com/docs/rancher/v2.6/en/quick-start-guide/deployment/quickstart-vagrant/)
     - [Equinix Metal](https://rancher.com/docs/rancher/v2.6/en/quick-start-guide/deployment/equinix-metal-qs/)
 
-:::warning
+:::caution
 **Do not install Rancher with Docker in production**. Otherwise, your environment may be damaged and your cluster may not be recovered. Installing Rancher in Docker should only be used for quick evaluation and testing purposes.
 
 To install Rancher with Docker:
@@ -93,6 +93,6 @@ Users can delete the imported Harvester cluster from the Rancher UI via **Virtua
 
 ![delete-cluster](assets/delete-harvester-cluster.png)
 
-:::warning
+:::caution
 Please do not run the `kubectl delete -f ...` command to delete the imported Harvester cluster as it will remove the entire `cattle-system` namespace which is required of the Harvester cluster.
 :::

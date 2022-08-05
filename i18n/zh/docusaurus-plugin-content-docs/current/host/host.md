@@ -39,7 +39,7 @@ Admin 用户可以点击**开启维护模式**来自动驱逐节点中所有的�
    - 作为 `root` 用户登录到节点。
    - 运行 `rke2-uninstall.sh` 删除整个 RKE2 服务。
 
-:::warning
+:::caution
 删除 RKE2 服务后，你将丢失 control plane 节点的所有数据。
 :::
 

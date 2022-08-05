@@ -75,6 +75,6 @@ Users can delete the imported Harvester cluster from the Rancher UI via **Virtua
 
 ![delete-cluster](assets/delete-harvester-cluster.png)
 
-:::warning
+:::caution
 Please do not run the `kubectl delete -f ...` command to delete the imported Harvester cluster as it will remove the entire `cattle-system` namespace which is required of the Harvester cluster.
 :::

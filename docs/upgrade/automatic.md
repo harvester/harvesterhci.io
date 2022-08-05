@@ -26,7 +26,7 @@ The following table shows the upgrade path of all supported versions.
 
 Note we are still working towards zero-downtime upgrade, due to some known issues please follow the steps below before you upgrade your Harvester cluster:
 
-:::warning
+:::caution
 - Before you upgrade your Harvester cluster, we highly recommend:
 	- Shutting down all your VMs (Harvester GUI -> Virtual Machines -> Select VMs -> Actions -> Stop).
 	- Back up your VMs.
@@ -35,7 +35,7 @@ Note we are still working towards zero-downtime upgrade, due to some known issue
 - Make sure each node has at least 25 GB of free space (`df -h /usr/local/`).
 :::
 
-:::warning
+:::caution
 - Make sure all nodes' times are in sync. Using an NTP server to synchronize time is recommended. If an NTP server is not configured during the installation, you can manually add an NTP server **on each node**:
 
     ```
@@ -54,7 +54,7 @@ Note we are still working towards zero-downtime upgrade, due to some known issue
     ```
 :::
 
-:::warning
+:::caution
 - NICs that connect to a PCI bridge might be renamed after an upgrade. Please check the [knowledge base article](https://harvesterhci.io/kb/nic-naming-scheme) for further information.
 :::
 
@@ -76,7 +76,7 @@ Note we are still working towards zero-downtime upgrade, due to some known issue
 
 ## Prepare an air-gapped upgrade
 
-:::warning
+:::caution
 Make sure to check [Upgrade support matrix](#upgrade-support-matrix) section first about upgradable versions.
 :::
 

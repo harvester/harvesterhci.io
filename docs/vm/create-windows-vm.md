@@ -44,7 +44,7 @@ For creating Linux virtual machines, please refer to [this page](./create-vm.md)
 As mentioned above, it is recommended that you use the Windows VM template. The `Volumes` section will describe the options which the Windows VM template created automatically.
 :::
 
-:::warning
+:::caution
 The `bootOrder` values need to be set with the installation image first. If you change it, your VM might not boot into the installation disk.
 :::
 
@@ -79,7 +79,7 @@ The `bootOrder` values need to be set with the installation image first. If you 
 
 ![create-windows-vm-networks](assets/create-windows-vm-networks.png)
 
-:::warning
+:::caution
 Changing the `Node Scheduling` settings can impact Harvester features, such as disabling `Live migration`.
 :::
 

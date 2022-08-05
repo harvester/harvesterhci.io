@@ -23,7 +23,7 @@ Description: Outline Harvester USB Installation
 
 在有 `dd` 命令的 Linux 或其他平台上，用户可以运行 `dd` 来创建一个 USB 安装启动盘：
 
-:::warning
+:::caution
 Make sure you choose the correct device. 因为所选设备上的数据会被清除。
 :::
 

@@ -25,7 +25,7 @@ node1:~ # blkid
 
 操作系统文件系统，就像容器镜像一样，是基于镜像并且不可变的（除了某些目录）。要临时启用读写模式，请按照以下步骤操作：
 
-:::warning
+:::caution
 Enabling read-write mode might break your system if files are modified. 请谨慎使用。
 :::
 

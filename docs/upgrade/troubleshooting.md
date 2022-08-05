@@ -105,7 +105,7 @@ $ kubectl logs -n harvester-system jobs/hvst-upgrade-9gmg2-post-drain-node2
 ...
 ```
 
-:::warning
+:::caution
 Please do not start over an upgrade if the upgrade fails at this phase.
 :::
 

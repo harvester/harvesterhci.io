@@ -44,7 +44,7 @@ Harvester v1.0.0 仅与 Rancher v2.6.3 或更高版本兼容。
 - [Vagrant](https://rancher.com/docs/rancher/v2.6/en/quick-start-guide/deployment/quickstart-vagrant/)
 - [Equinix Metal](https://rancher.com/docs/rancher/v2.6/en/quick-start-guide/deployment/equinix-metal-qs/)
 
-:::warning
+:::caution
 **不要在生产环境中使用 Docker 来安装 Rancher**。否则，你的环境可能会损坏，而且集群可能无法恢复。在 Docker 中安装 Rancher 只适用于快速评估和测试场景。
 
 要使用 Docker 安装 Rancher：

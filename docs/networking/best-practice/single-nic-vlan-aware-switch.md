@@ -72,7 +72,7 @@ The external switch will remove the VLAN 100 tag from the packet for egress and 
 
    ![vlan-aware-native-vlan.png](assets/vlan-aware-native-vlan.png)
 
-:::warning
+:::caution
 Do not create a VLAN Network with VLAN 100 and associate any VM to it. The connectivity will not always be ensured and depends on the external switch behavior to add/remove VLAN tag from packets.
 :::
 

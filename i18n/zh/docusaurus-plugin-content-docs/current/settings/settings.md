@@ -23,7 +23,7 @@ SOME-CA-CERTIFICATES
 -----END CERTIFICATE-----
 ```
 
-:::warning
+:::caution
 更改此设置可能会导致单节点集群的停机时间较短。
 :::
 
@@ -90,7 +90,7 @@ Harvester 在用户配置的 `no-proxy` 后附加必要的地址，来确保内�
 例如：`localhost,127.0.0.1,0.0.0.0,10.0.0.0/8,longhorn-system,cattle-system,cattle-system.svc,.svc,.cluster.local`
 :::
 
-:::warning
+:::caution
 更改此设置可能会导致单节点集群的停机时间较短。
 :::
 
@@ -181,7 +181,7 @@ v1.0.0-abcdef-head
 }
 ```
 
-:::warning
+:::caution
 更改此设置可能会导致单节点集群的停机时间较短。
 :::
 
@@ -271,7 +271,7 @@ https://your.upgrade.checker-url/v99/checkupgrade
 此设置允许 Harvester 自动添加符合给定 glob 模式的磁盘作为虚拟机存储。
 你可以使用逗号分隔来提供多个模式。
 
-:::warning
+:::caution
 - 此设置应用于集群中的**每个节点**。
 - 这些设备中的所有数据**都会被销毁**。请谨慎使用。
 :::

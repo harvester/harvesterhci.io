@@ -24,7 +24,7 @@ To see sample iPXE scripts, please visit [Harvester iPXE Examples](https://githu
 
 ## Prerequisite
 
-:::important
+:::info
 Nodes need to have at least **8G** of RAM because the installer loads the full ISO file into tmpfs.
 :::
 
@@ -63,7 +63,7 @@ When performing an automatic installation, there are two modes:
 
 ### CREATE Mode
 
-:::warning
+:::caution
 **Security Risks**: The configuration file below contains credentials which should be kept secret. Please do not make the configuration file publicly accessible.
 :::
 
@@ -125,7 +125,7 @@ Use `ip=` parameter to designate the booting interface only, as we only support 
 
 ### JOIN Mode
 
-:::warning
+:::caution
 **Security Risks**: The configuration file below contains credentials which should be kept secret. Please do not make the configuration file publicly accessible.
 :::
 

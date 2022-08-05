@@ -25,7 +25,7 @@ node1:~ # blkid
 
 The OS file system, like a container image, is image-based and immutable except in some directories. To temporarily enable the read-write mode, please use the following steps:
 
-:::warning
+:::caution
 Enabling read-write mode might break your system if files are modified. Please use it at your own risk.
 :::
 
