@@ -159,15 +159,15 @@
     "message": "版本：{versionLabel}"
   },
   "theme.docs.versions.unreleasedVersionLabel": {
-    "message": "此为 {siteTitle} {versionLabel} 版尚未发行的文档。",
+    "message": "此为 Harvester {versionLabel} 版尚未发行的文档。",
     "description": "The label used to tell the user that he's browsing an unreleased doc version"
   },
   "theme.docs.versions.unmaintainedVersionLabel": {
-    "message": "此为 {siteTitle} {versionLabel} 版的文档，现已不再积极维护。",
+    "message": "此为 Harvester {versionLabel} 版的文档，现已不再积极维护。",
     "description": "The label used to tell the user that he's browsing an unmaintained doc version"
   },
   "theme.docs.versions.latestVersionSuggestionLabel": {
-    "message": "最新的文档请参阅 {latestVersionLink} ({versionLabel})。",
+    "message": "最新的文档请参阅{latestVersionLink} ({versionLabel})。",
     "description": "The label used to tell the user to check the latest version"
   },
   "theme.docs.versions.latestVersionLinkLabel": {
@@ -221,5 +221,136 @@
   "theme.tags.tagsPageTitle": {
     "message": "标签",
     "description": "The title of the tag list page"
+  },
+  "Harvester is a modern Hyperconverged infrastructure (HCI) solution built for bare metal servers using enterprise-grade open source technologies including Kubernetes, Kubevirt and Longhorn. Designed for users looking for a cloud-native HCI solution, Harvester is a flexible and affordable offering capable of putting VM workloads on the edge, close to your IoT, and integrated into your cloud infrastructure.": {
+    "message": "Harvester 是一个为裸机服务器构建的超融合基础架构（HCI）软件，它采用了企业级开源技术（包括 Kubernetes、Kubevirt 和 Longhorn）。Harvester 是为寻找云原生 HCI 解决方案的用户设计的，它是一款灵活而经济的产品，能让你将虚拟机工作负载部署到边缘，靠近物联网，并集成到云基础设施中。",
+    "description": "Harvester description"
+  },
+  "Why Harvester?": {
+    "message": "为什么选择 Harvester?",
+    "description": "why Harvester"
+  },
+  "The open source hyperconverged infrastructure (HCI) solution for a cloud native world": {
+    "message": "实现云原生的开源超融合基础架构（HCI）软件",
+    "description": "Harvester title"
+  },
+  "Harvester uses some of the most proven and mature open source software (OSS) components to build virtualization instead of proprietary kernels that are kept hidden from view.": {
+    "message": "Harvester 使用成熟的开源软件（OSS）组件来构建虚拟化，而不是隐蔽的专有内核。",
+    "description": "Feature description 1"
+  },
+  "As 100% open source, Harvester is free from the costly license fees of other HCI solutions. Plus, with its foundation based on existing technology such as Linux & kernel- based virtual machines.": {
+    "message": "Harvester 100% 开源，能帮你节省 HCI 解决方案的昂贵的许可费。此外，Harvester 是基于现有的技术 （如 Linux 和基于内核的虚拟机）构建的。",
+    "description": "Feature description 2"
+  },
+  "Built with cloud native components at its core, Harvester is future-proof as the infrastructure industry shifts toward containers, edge and multi-cloud software engineering.": {
+    "message": "Harvester 以云原生组件为核心，随着基础设施行业逐渐向容器、边缘和多云软件工程的转移，Harvester 是面向未来的。",
+    "description": "Feature description 3"
+  },
+  "How it Works": {
+    "message": "工作原理",
+    "description": "How it works"
+  },
+  "Get Started": {
+    "message": "开始使用",
+    "description": "Get Started"
+  },
+  "Want to try Harvester?": {
+    "message": "想要使用 Harvester？",
+    "description": "Want to try Harvester?"
+  },
+  "Simply install it directly onto your bare-metal server to get started.": {
+    "message": "将 Harvester 直接安装到裸机服务器即可。",
+    "description": "Simply install it"
+  },
+  "Download Now": {
+    "message": "立即下载",
+    "description": "Download Now"
+  },
+  "Learn More": {
+    "message": "更多信息",
+    "description": "Learn More"
+  },
+  "Find out more about Harvester": {
+    "message": "想要进一步了解 Harvester？",
+    "description": "Find out about harvester"
+  },
+  "Read the Docs": {
+    "message": "阅读文档",
+    "description": "Read the docs"
+  },
+  "Visit GitHub": {
+    "message": "访问 GitHub 主页",
+    "description": "Visit github"
+  },
+  "Join our Slack Community": {
+    "message": "加入 Slack 社区",
+    "description": "Join Slack"
+  },
+  "Watch the latest meetup": {
+    "message": "观看最新一期 Meetup",
+    "description": "watch meetup"
+  },
+  "Watch Demo": {
+    "message": "观看 Demo",
+    "description": "watch demo"
+  },
+  "Great For": {
+    "message": "非常适合"
+  },
+  "On-Prem HCI": {
+    "message": "本地 HCI"
+  },
+  "Edge HCI": {
+    "message": "边缘 HCI"
+  },
+  "Hybrid Cloud": {
+    "message": "混合云"
+  },
+  "Containers and VMs in the Same Environment": {
+    "message": "同一环境中的容器和虚拟机"
+  },
+  "What is Harvester?": {
+    "message": "Harvester 是什么?"
+  },
+  "Sits on the shoulders of cloud native giants": {
+    "message": "站在云原生巨人的肩膀上"
+  },
+  "Lower Total Cost of Ownership (TCO)": {
+    "message": "更低的总体拥有成本（TCO）"
+  },
+  "Integrate and prepare for the future": {
+    "message": "为未来进行集成和准备"
+  },
+  "theme.admonition.note": {
+    "message": "注意",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.tip": {
+    "message": "提示",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.danger": {
+    "message": "危险",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.info": {
+    "message": "信息",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.caution": {
+    "message": "警告",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "主页面",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "页面路径",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "切换自动换行",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
   }
 }

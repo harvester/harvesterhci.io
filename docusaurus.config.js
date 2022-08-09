@@ -20,13 +20,23 @@ const config = {
   i18n: {
     defaultLocale: "en",
     locales: ["en", "zh"],
+    localeConfigs: {
+      en: {
+        label: "English",
+      },
+      zh: {
+        label: "简体中文",
+      },
+    },
   },
+
   presets: [
     [
       "classic",
       {
         docs: {
-          routeBasePath: "/",
+          routeBasePath: "docs",
+          path: "docs",
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
@@ -35,7 +45,7 @@ const config = {
           versions: {
             current: {
               label: "v1.0",
-              path: "/",
+              banner: "none",
             },
           },
         },
@@ -51,6 +61,11 @@ const config = {
   ],
 
   themeConfig: {
+    docs: {
+        sidebar: {
+          hideable: true,
+        },
+      },
     navbar: {
       logo: {
         alt: "Harvester Logo",
@@ -60,14 +75,14 @@ const config = {
         {
           type: "doc",
           docId: "intro",
-          position: "left",
+          position: "right",
           label: "Docs",
           className: "navbar__docs",
         },
         {
           type: "docsVersionDropdown",
-          position: "left",
-          dropdownActiveClassDisabled: false,
+          position: "right",
+          dropdownActiveClassDisabled: true,
         },
         {
           type: "localeDropdown",
