@@ -11,8 +11,8 @@ title: ""
 ![k3s-cluster](../assets/rke2-k3s-node-driver.png)
 
 :::note
-- Harvester K3s node driver is in tech preview.
-- [VLAN network](../../networking/harvester-network.md#创建-vlan-网络) is required for Harvester node driver.
+- Harvester K3s 主机驱动处于技术预览阶段。
+- Harvester 主机驱动需要 [VLAN 网络](../../networking/harvester-network.md#创建-vlan-网络)。
 :::
 
 ### 创建你的云凭证

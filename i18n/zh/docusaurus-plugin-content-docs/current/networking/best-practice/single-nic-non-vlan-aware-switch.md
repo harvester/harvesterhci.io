@@ -59,5 +59,5 @@ Description: Harvester 构建在 Kubernetes 之上，而 Kubernetes 使用 [CNI]
 有关 Harvester 网络的更多信息，请参阅[此页面](../harvester-network.md)。
 
 :::note
-If you create a VLAN Network different from `1`, the connection between VMs in different nodes will fail.
+如果创建 ID 不是 `1` 的 VLAN 网络，不同节点的 VM 之间的连接将失败。
 :::

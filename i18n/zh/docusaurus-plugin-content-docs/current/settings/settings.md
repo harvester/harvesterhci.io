@@ -136,7 +136,7 @@ debug
 
 ## `release-download-url`
 
-_Available as of v1.0.1_
+_从 v1.0.1 起可用_
 
 此设置用于配置`升级版本下载`的 URL 地址。Harvester 将从该 URL 托管的 (`${URL}/${VERSION}/version.yaml`) 文件中获取 ISO URL 和校验和值。
 

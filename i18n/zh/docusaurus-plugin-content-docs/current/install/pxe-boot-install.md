@@ -25,7 +25,7 @@ Description: 从 `0.2.0` 开始，Harvester 可以自动安装。本文提供使
 ## 前提
 
 :::info
-Nodes need to have at least **8G** of RAM because the installer loads the full ISO file into tmpfs.
+节点至少需要有 **8 GB** 的内存，来让安装程序将整个 ISO 文件加载到 tmpfs。
 :::
 
 ## 准备 HTTP 服务器
@@ -64,7 +64,7 @@ Nodes need to have at least **8G** of RAM because the installer loads the full I
 ### CREATE 模式
 
 :::caution
-**Security Risks**: The configuration file below contains credentials which should be kept secret. 请不要公开配置文件。
+**安全风险**：下面的配置文件包含了需要保密的凭证。请不要公开配置文件。
 :::
 
 为 `CREATE` 模式创建一个名为 `config-create.yaml` 的 [Harvester 配置文件](./harvester-configuration.md)。按照需要修改值：
@@ -115,10 +115,7 @@ boot
 以上假设 iPXE 脚本存储在 `/usr/share/nginx/html/harvester/ipxe-create` 中。
 
 :::note
-If you have multiple network interfaces,
-you can leverage dracut's `ip=` parameter to specify the booting interface
-and any other network configurations that dracut supports (e.g., `ip=eth1:dhcp`)
-See [`man dracut.cmdline`](https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html) for more information.
+如果你有多个网络接口，你可以利用 dracut 的 `ip=` 参数来指定启动界面以及 dracut 支持的任何其他网络配置（例如，`ip=eth1:dhcp`）。详情请参见 [`man dracut.cmdline`](https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html)。
 
 使用 `ip=` 参数仅指定启动界面，因为我们仅支持**一个 `ip=` 参数**。
 :::
@@ -126,7 +123,7 @@ See [`man dracut.cmdline`](https://man7.org/linux/man-pages/man7/dracut.cmdline.
 ### JOIN 模式
 
 :::caution
-**Security Risks**: The configuration file below contains credentials which should be kept secret. 请不要公开配置文件。
+**安全风险**：下面的配置文件包含了需要保密的凭证。请不要公开配置文件。
 :::
 
 为 `JOIN` 模式创建一个名为 `config-join.yaml` 的 [Harvester 配置文件](./harvester-configuration.md)。按照需要修改值：
@@ -310,16 +307,15 @@ boot
 
 `initrd=harvester-<version>-initrd` 参数是必须的。
 
-## Useful Kernel Parameters
+## 好用的内核参数
 
-Besides the Harvester configuration, you can also specify other kernel parameters that are useful in different scenarios.
-See also [dracut.cmdline(7)](https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html).
+除了 Harvester 配置之外，你还可以指定用于其他场景的内核参数。
+另请参见 [dracut.cmdline(7)](https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html)。
 
 ### `ip=dhcp`
 
-If you have multiple network interfaces, you could add the `ip=dhcp` parameter to get IP from the DHCP server from all interfaces.
+如果你有多个网络接口，你可以添加 `ip=dhcp` 参数，以便通过所有接口从 DHCP 服务器获取 IP。
 
 ### `rd.net.dhcp.retry=<cnt>`
 
-Failing to get IP from the DHCP server would cause iPXE booting to fail. You can add parameter `rd.net.dhcp.retry=<cnt>`
-to retry DHCP request for `<cnt>` times.
+如果你未能从 DHCP 服务器获取 IP，iPXE 引导将会失败。你可以添加参数 `rd.net.dhcp.retry=<cnt>`，从而重试 DHCP 请求 `<cnt>` 次。

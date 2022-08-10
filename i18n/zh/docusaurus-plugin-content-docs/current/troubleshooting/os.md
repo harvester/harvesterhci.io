@@ -26,7 +26,7 @@ node1:~ # blkid
 操作系统文件系统，就像容器镜像一样，是基于镜像并且不可变的（除了某些目录）。要临时启用读写模式，请按照以下步骤操作：
 
 :::caution
-Enabling read-write mode might break your system if files are modified. 请谨慎使用。
+如果文件被修改，启用读写模式可能会破坏你的系统。请谨慎使用。
 :::
 
 - 对于版本 `v0.3.0`，你需要在启用读写模式后先应用解决方法，来[使某些目录不重叠](https://github.com/harvester/harvester/issues/1388)。在正在运行的 Harvester 节点上，以 root 用户运行以下命令：
@@ -53,7 +53,7 @@ Enabling read-write mode might break your system if files are modified. 请谨�
 ## 如何永久编辑内核参数
 
 :::note
-The following steps are a workaround. 如果我们有了永久的解决方案，我们将通知社区。
+以下步骤是一种解决方法。如果我们有了永久的解决方案，我们将通知社区。
 :::
 
 - 在 rw 模式重新挂载状态目录：
@@ -112,7 +112,7 @@ menuentry "Harvester ea6e7f5-dirty (debug)" --id cos-debug {
    ![](./assets/os-edit-first-menuentry-add-console.png)
 
 :::note
-Adjust the [console options](https://www.kernel.org/doc/html/latest/admin-guide/serial-console.html) according to your environment. **确保**将 `console=` 字符串尾附到行后。
+根据你的环境调整[控制台选项](https://www.kernel.org/doc/html/latest/admin-guide/serial-console.html)。**确保**将 `console=` 字符串尾附到行后。
 :::
 
 - 连接到串行端口来捕获日志。

@@ -17,7 +17,7 @@ Description: 从"虚拟机"页面创建一个或多个虚拟机。
 
 ## 如何创建虚拟机
 
-你可以从**虚拟机**页面创建一个或多个虚拟机。
+你可以从 **Virtual Machines** 页面创建一个或多个虚拟机。
 
 :::note
 请参阅[此页面](./create-windows-vm.md)创建 Windows 虚拟机。
@@ -26,94 +26,94 @@ Description: 从"虚拟机"页面创建一个或多个虚拟机。
 1. 选择创建`单个实例`或`多个实例`。
 1. 选择 VM 的命名空间，只有 `harvester-public` 命名空间对所有用户可见。
 1. 输入虚拟机名称（必填）。
-1. (Optional) VM template is optional, you can choose `iso-image`, `raw-image` or `windows-iso-image` template to speed up your VM instance creation.
-1. Configure the virtual machine's CPU and memory (see [overcommit settings](../settings/settings.md#overcommit-config) if you want to over-provision).
+1. （可选）VM 模板是可选的，你可以选择 `iso-image`、`raw-image` 或 `windows-iso-image` 模板来快速创建虚拟机实例。
+1. 配置虚拟机的 CPU 和内存（如果要超额配置，请参阅 [overcommit-config](../settings/settings.md#overcommit-config)）。
 1. 选择 SSH 密钥或上传新密钥。
-1. 在**卷**选项卡上选择自定义虚拟机镜像卷。默认磁盘将是根磁盘。你可以向虚拟机添加更多磁盘。
-1. 如果需要配置网络，前往**网络**选项卡。
-   1. The **Management Network** is added by default, you can remove it if the VLAN network is configured.
-   1. You can also add additional networks to the VMs using VLAN networks. You may configure the VLAN networks on **Advanced > Networks** first.
-1. Advanced options such as run strategy, os type and cloud-init data are optional. You may configure these in the **Advanced Options** section when applicable.
+1. 在 **Volumes** 选项卡上选择自定义虚拟机镜像卷。默认磁盘将是根磁盘。你可以向虚拟机添加更多磁盘。
+1. 如果需要配置网络，前往 **Networks** 选项卡。
+   1. **Management Network** 是默认添加的。如果配置了 VLAN 网络，则可以去掉它。
+   1. 你还可以使用 VLAN 网络向 VM 添加其他网络。你可以先在 **Advanced > Networks** 上配置 VLAN 网络。
+1. 运行策略、操作系统类型和 cloud-init 数据等高级选项是可选的。你可以在 **Advanced Options** 选项卡中进行配置。
 
 ![create-vm](assets/create-vm.png)
 
-## Volumes
+## 卷
 
-You can add one or more additional volumes via the `Volumes` tab, by default the first disk will be the root disk, you can change the boot order by dragging and dropping volumes, or using the arrow buttons.
+你可以通过 `Volumes` 选项卡添加一个或多个卷，默认情况下第一个磁盘是根磁盘。你可以通过拖放卷或使用箭头按钮来更改引导顺序。
 
-A disk can be made accessible via the following types:
+你可以通过以下类型访问磁盘：
 
-| type | description |
+| 类型 | 描述 |
 |:--------|:-----------------------------------------------------------------------------------------------|
-| disk | A disk disk will expose the volume as an ordinary disk to the VM. |
-| cd-rom | A cd-rom disk will expose the volume as a cd-rom drive to the VM. It is read-only by default. |
+| disk | disk 磁盘会将卷作为普通磁盘公开给 VM。 |
+| cd-rom | cd-rom 磁盘会将卷作为 CD-ROM 驱动器公开给 VM。默认情况下它是只读的。 |
 
 ![create-vm](assets/create-vm-volumes.png)
 
-:::note "Container Disk"
-`Container disks` are ephemeral storage devices that can be assigned to any number of VMs. This makes them an ideal tool for users who want to replicate a large number of VM workloads or inject machine drivers that do not require persistent data.
+:::note Container Disk
+`Container disk` 是可以分配给任意数量 VM 的临时存储设备。因此，对于需要复制大量 VM 工作负载，或注入不需要持久数据的主机驱动的用户而言，Container disk 是非常好用的。
 
-Note: Container disks are not a good solution for any workload that requires persistent root disks across VM restarts.
+注意：如果你的工作负载需要跨 VM 重启的持久根磁盘，则不推荐使用 Container Disk。
 :::
 
 ## 网络
 
-You can choose to add both the `management network` or `VLAN network` to your VM instances via the `Networks` tab, the `management network` is optional if you have the VLAN network configured.
+你可以通过 `Networks` 选项卡将 `management network`  或 `VLAN network` 添加到 VM 实例。如果你配置了 VLAN 网络，则 `management network` 是可选的。
 
-Network interfaces are configured through the `Type` field. They describe the properties of the virtual interfaces seen inside the guest OS:
+网络接口是通过 `Type` 字段配置的。它们描述了 Guest 操作系统中虚拟接口的属性：
 
-| type | description |
+| 类型 | 描述 |
 |:-----------|:-------------------------------------------------|
-| bridge | Connect using a Linux bridge |
-| masquerade | Connect using iptables rules to NAT the traffic |
+| bridge | 使用 Linux 网桥连接 |
+| masquerade | 使用 iptables 规则连接到 NAT 流量 |
 
 ### 管理网络
 
 管理网络是每个集群的默认网络，它可以为虚拟机的 eth0 网卡网络提供一个集群内可以访问的网络解决方案（如果虚拟机重启默认分配的 IP 将会发生变化）。
 
-By default, VMs are accessible through the management network within the cluster nodes.
+默认情况下，你可以通过集群节点内的管理网络访问虚拟机。
 
 ### 其他网络
 
 你也可以使用 Harvester 的内置 [VLAN 网络](../networking/harvester-network.md) 来辅助网络连接虚拟机。
 
-In bridge VLAN, virtual machines are connected to the host network through a linux `bridge`. The network IPv4 address is delegated to the virtual machine via DHCPv4. The virtual machine should be configured to use DHCP to acquire IPv4 addresses.
+在网桥 VLAN 中，虚拟机通过 Linux `bridge` 连接到主机网络。网络 IPv4 地址通过 DHCPv4 分配给虚拟机。虚拟机需要配置为使用 DHCP 来获取 IPv4 地址。
 
-## Advanced Options
+## 高级选项
 
-### Run Strategy
+### 运行策略
 
-_Available as of v1.0.2_
+_从 v1.0.2 起可用_
 
-Prior to v1.0.2, Harvester used the `Running` (a boolean) field to determine if the VM instance should be running. However, a simple boolean value is not always sufficient to fully describe the user's desired behavior. For example, in some cases the user wants to be able to shut down the instance from inside the virtual machine. If the `running` field is used, the VM will be restarted immediately.
+在 v1.0.2 之前，Harvester 使用 `Running`（布尔值）字段来确定 VM 实例应否运行。但是，有时候布尔值不足以满足用户的需求。例如，在某些情况下，用户希望从虚拟机内部关闭实例。如果使用 `Running` 字段，VM 将立即重启。
 
-In order to meet the scenario requirements of more users, the `RunStrategy` field is introduced. This is mutually exclusive with `Running` because their conditions overlap somewhat. There are currently four `RunStrategies` defined:
+为了满足更多用户的需求，我们引入了 `RunStrategy` 字段。该字段的条件与 `Running` 有些重叠，因此二者是互斥的。目前我们定义了四个 `RunStrategy`：
 
-- Always: The VM instance will always exist. If VM instance crashes, a new one will be spawned. This is the same behavior as `Running: true`.
+- Always：VM 实例将始终存在。如果 VM 实例崩溃，则会生成一个新实例。这与 `Running: true` 相同。
 
-- RerunOnFailure (default): If the previous instance failed in an error state, a VM instance will be respawned. If the guest is successfully stopped (e.g. shut down from inside the guest), it will not be recreated.
+- RerunOnFailure（默认）：如果前一个实例在错误状态下失败，将重新生成一个 VM 实例。如果 Guest 成功停止（例如从 Guest 内部关闭），则不会重新创建。
 
-- Manual: The presence or absence of a VM instance is controlled only by the `start/stop/restart` VirtualMachine actions.
+- Manual：VM 实例的存在与否仅由 `start/stop/restart` VirtualMachine 操作控制。
 
-- Stop: There will be no VM instance. If the guest is already running, it will be stopped. This is the same behavior as `Running: false`.
+- Stop：将没有 VM 实例。如果 Guest 已经在运行，它将被停止。这与 `Running: false` 相同。
 
 
-### Cloud Configuration
+### 云配置
 
-Harvester supports the ability to assign a startup script to a virtual machine instance which is executed automatically when the VM initializes.
+Harvester 支持将启动脚本分配给虚拟机实例，该脚本在 VM 初始化时自动执行。
 
-These scripts are commonly used to automate injection of users and SSH keys into VMs in order to provide remote access to the machine. For example, a startup script can be used to inject credentials into a VM that allows an Ansible job running on a remote host to access and provision the VM.
+这些脚本通常用于将用户和 SSH 密钥自动注入虚拟机，从而远程访问主机。例如，启动脚本可用于将凭证注入 VM，从而允许在远程主机上运行的 Ansible Job 访问和配置 VM。
 
 
 #### Cloud-init
-[Cloud-init](https://cloudinit.readthedocs.io/en/latest/) is a widely adopted project and the industry standard multi-distribution method for cross-platform cloud instance initialization. It is supported across all major cloud image provider like SUSE, Redhat, Ubuntu and etc., cloud-init has established itself as the defacto method of providing startup scripts to VMs.
+[Cloud-init](https://cloudinit.readthedocs.io/en/latest/) 是一个被广泛使用的工具，它是跨平台云实例初始化的行业标准方法。所有主流云镜像提供商（如 SUSE、Redhat、Ubuntu 等）都支持 cloud-init，因此 cloud-init 是向 VM 提供启动脚本的常用方法。
 
-Harvester supports injecting your custom cloud-init startup scripts into a VM instance through the use of an ephemeral disk. VMs with the cloud-init package installed will detect the ephemeral disk and execute custom user-data and network-data scripts at boot.
-
-
+Harvester 支持通过临时磁盘将自定义 cloud-init 启动脚本注入到 VM 实例中。安装了 cloud-init 包的 VM 将检测临时磁盘，并在启动时执行自定义用户数据和网络数据脚本。
 
 
-Example of password configuration for the default user:
+
+
+默认用户的密码配置示例：
 
 ```YAML
 #cloud-config
@@ -122,7 +122,7 @@ chpasswd: { expire: False }
 ssh_pwauth: True
 ```
 
-Example of network-data configuration using DHCP:
+使用 DHCP 的网络数据配置示例：
 
 ```YAML
 version: 1
@@ -137,16 +137,16 @@ config:
       - type: dhcp
 ```
 
-You can also use the `Advanced > Cloud Config Templates` feature to create a pre-defined cloud-init configuration template for the VM.
+你还可以使用 `Advanced > Cloud Config Templates` 功能为 VM 创建预定义的 cloud-init 配置模板。
 
-#### Installing the QEMU guest agent
-The QEMU guest agent is a daemon that runs on the virtual machine instance and passes information to the host about the VM, users, file systems, and secondary networks.
+#### 安装 QEMU GuestAgent
+QEMU GuestAgent 是在虚拟机实例上运行的 Daemon 进程，它将有关 VM、用户、文件系统和辅助网络的信息传递给主机。
 
-`Install guest agent` checkbox is enabled by default when a new VM is created.
+`Install guest agent` 复选框在创建新 VM 时默认启用。
 
 ![](assets/qga.png)
 
 :::note
-If your OS is openSUSE and the version is less than 15.3, please replace `qemu-guest-agent.service` with `qemu-ga.service`.
+如果你的操作系统是 openSUSE 且版本低于 15.3，请将 `qemu-guest-agent.service` 替换为 `qemu-ga.service`。
 :::
 

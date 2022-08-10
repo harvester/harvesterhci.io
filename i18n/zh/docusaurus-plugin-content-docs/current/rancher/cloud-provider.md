@@ -39,7 +39,7 @@ Description: Harvester 中的 k8s 集群使用的 Harvester Cloud Provider 提�
    ![](assets/install-harvester-cloud-provider.png)
 
 :::note
-You should specify the `Cluster name`. 如果未指定`集群名称`，则会使用默认值 `kubernetes`。`集群名称`用来区分 Harvester 负载均衡器的所有权。
+你需要指定`集群名称`。如果未指定`集群名称`，则会使用默认值 `kubernetes`。`集群名称`用来区分 Harvester 负载均衡器的所有权。
 :::
 
 - 如有需要，从 Rancher 应用市场中安装 `Harvester CSI Driver`。
@@ -66,14 +66,14 @@ You should specify the `Cluster name`. 如果未指定`集群名称`，则会使
 - [生成 addon 配置](https://github.com/harvester/cloud-provider-harvester/blob/master/deploy/generate_addon.sh)并放入 K3s 虚拟机 `/etc/kubernetes/cloud-config`。
 
 
-### Deploy external cloud provider
-Deploying external cloud provider is similar for both RKE2 and K3s based clusters.
+### 部署外部云提供商
+对于基于 RKE2 和 K3s 的集群而言，部署外部云提供商的步骤是相似的。
 
-Once the in-tree cloud provider has been disabled by following the above steps, you can deploy the external cloud provider via:
+按照上述步骤禁用 in-tree 云提供商后，你可以通过以下方式部署外部云提供商：
 
 ![](assets/external-cloud-provider-addon.png)
 
-A sample additional manifest is as follows:
+示例 manifest 如下：
 ```
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -89,16 +89,16 @@ spec:
   helmVersion: v3
 ```
 
-The cloud provider needs a kubeconfig file to work, a limited scoped one can be generated using the `generate_addon.sh` script available in the [harvester/cloud-provider-harvester](https://github.com/harvester/cloud-provider-harvester) repo.
+云提供商需要一个 kubeconfig 文件才能工作，你可以使用 [harvester/cloud-provider-harvester](https://github.com/harvester/cloud-provider-harvester) 仓库中的 `generate_addon.sh` 脚本来生成一个有限范围的文件。
 
-*NOTE:* The script needs access to the harvester cluster kubeconfig to work. In addition the namespace needs to be the namespace in which the workload cluster will be created.
+*注意*：脚本需要访问 Harvester 集群 kubeconfig 才能工作。此外，命名空间需要是将在其中创建工作负载集群的命名空间。
 
 ```
 # 依赖 kubectl 来操作 Harvester 集群
 ./deploy/generate_addon.sh <serviceaccount name> <namespace>
 ```
 
-The output will look as follows:
+输出将如下所示：
 
 ```
 (⎈ |local:default)➜  cloud-provider-harvester git:(master) ✗ ./deploy/generate_addon.sh harvester-cloud-provider default
@@ -150,10 +150,10 @@ users:
     token: TOKEN
 ```
 
-This cloud-config file can now be injected via the `user-data` available in the `advanced options` for the nodepool.
+现在，你可以通过节点池 `Advanced Options` 中的 `user-data` 注入这个 cloud-config 文件：
 ![](assets/cloud-config-userdata.png)
 
-With these settings in place a K3s / RKE2 cluster should provision successfully while using the external cloud provider.
+有了这些设置，K3s/RKE2 集群应该可以在你使用外部云提供商时成功配置。
 
 ## 负载均衡器支持
 部署 `Harvester Cloud Provider` 后，你可以使用 Kubernetes `LoadBalancer` 服务将集群内的微服务公开给外部。在你创建 Kubernetes `LoadBalancer` 服务时，会为该服务分配一个 Harvester 负载均衡器，你可以通过 Rancher UI 中的`附加配置`对其进行编辑。
@@ -171,7 +171,7 @@ Harvester 的内置负载均衡器同时支持 `pool` 和 `dhcp` 模式。你可
 - dhcp：需要 DHCP 服务器。Harvester LoadBalancer Controller 将从 DHCP 服务器请求 IP 地址。
 
 :::note
-It is not allowed to modify the IPAM mode. 如果需要修改 IPAM 模式，你需要创建一个新服务。
+不允许修改 IPAM 模式。如果需要修改 IPAM 模式，你需要创建一个新服务。
 :::
 
 ### 健康检查
@@ -179,7 +179,7 @@ Harvester 负载均衡器支持 TCP 健康检查。如果启用了`健康检查`
 
 ![](assets/health-check.png)
 
-Alternatively, you can specify the parameters by adding annotations to the service manually. 支持以下注释：
+你也可以手动将注释添加到服务来指定参数。支持以下注释：
 
 | 注释键 | 值类型 | 是否必须 | 描述 |
 |:---|:---|:---|:---|

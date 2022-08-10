@@ -16,8 +16,8 @@ Description: 热迁移（也称为实时迁移，动态迁移）指的是在不�
 热迁移（也称为实时迁移，动态迁移）指的是在不停机的情况下将虚拟机移动到不同的主机。
 
 :::note
-- Live migration is not allowed when the virtual machine is using a management network of bridge interface type.
-- To support live migration, three or more hosts in the Harvester cluster are required due to [a known issue](https://github.com/harvester/harvester/issues/798).
+- 当虚拟机使用桥接口类型的管理网络时，不允许进行热迁移。
+- 要使用热迁移，由于[已知问题](https://github.com/harvester/harvester/issues/798)，需要 Harvester 集群中的 3 台或以上的主机。
 :::
 
 

@@ -15,40 +15,40 @@ Description: 在 Harvester VM 页面编辑虚拟机。
 
 # 编辑虚拟机
 
-## How to Edit a VM
+## 如何编辑虚拟机
 
-After creating a virtual machine, you can edit your virtual machine by clicking the `⋮` button and selecting the `Edit Configurations` button.
+创建虚拟机后，你可以通过单击 `⋮` 按钮并选择 `Edit Configurations` 按钮来编辑虚拟机。
 
 :::note
-In addition to editing the description, a restart of the virtual machine is required for configuration changes to take effect.
+除了编辑描述之外，你还需要重启虚拟机才能使配置更改生效。
 :::
 
-### Basics
+### 基本信息
 
-On the basics tab, you can config your requested CPU and memory, a VM restart is required for this configuration to take effect.
+你可以在 **Basics** 选项卡上配置所需的 CPU 和内存，此配置需要重启 VM 才能生效。
 
-SSH Keys are injected into the cloud-init script when the virtual machine is first powered on. In order for the modified ssh key to take effect after the virtual machine is startup, the cloud-init script needs to be [reinstalled](../faq.md#如何在运行的虚拟机上安装-qemu-guest-agent？) from your guest OS.
+首次启动虚拟机时，SSH 密钥会被注入到 cloud-init 脚本中。为了使修改后的 SSH 密钥在虚拟机启动后生效，你需要在 Guest 操作系统中[重新安装](../faq.md#如何在运行的虚拟机上安装-qemu-guest-agent) cloud-init 脚本。
 
 ![edit-vm](assets/edit-vm-basics.png)
 
 ### 网络
 
-You can add additional VLAN networks to your VM instances after booting, the `management network` is optional if you have the VLAN network configured.
+你可以在启动后向 VM 实例添加其他 VLAN 网络。如果你配置了 VLAN 网络，则 `管理网络` 是可选的。
 
-Additional NICs are not enabled by default unless you configure them manually in the guest OS, e.g. using [wicked for your OpenSUSE Server](https://doc.opensuse.org/documentation/leap/reference/html/book-reference/cha-network.html#sec-network-manconf) or [netplan for your Ubuntu Server](https://ubuntu.com/server/docs/network-configuration).
+除非你在 Guest 操作系统中手动配置了其他 NIC（例如[将 wicked 用于 OpenSUSE Server](https://doc.opensuse.org/documentation/leap/reference/html/book-reference/cha-network.html#sec-network-manconf) 或[将 netplan 用于 Ubuntu Server](https://ubuntu.com/server/docs/network-configuration)），否则默认情况下不会启用其他 NIC。
 
 ![edit-vm](assets/edit-vm-networks.png)
 
-For more details about the network implementation, please refer to the [Networking](../networking/harvester-network.md) page.
+有关网络实现的更多详细信息，请参阅[网络](../networking/harvester-network.md)页面。
 
-### Volumes
+### 卷
 
-You can add additional volumes to the VM after booting. You can also expand the size of the volume after shutting down the VM, click the VM and go to the `Volumes` tab, then click `Edit Image Volume` to edit the size of the expanded volume. After waiting for the resize to complete and restarting the VM, your disk will automatically finish expanding.
+你可以在启动后向 VM 添加其他卷。你还可以在关闭虚拟机后扩展卷的大小，即通过点击虚拟机进入 `Volumes` 选项卡，然后点击 `Edit Image Volume` 来编辑卷的大小。大小调整完成并重启 VM 后，你的磁盘将自动完成扩展。
 
 ![edit-vm](assets/edit-vm-volumes.png)
 
-### Access Credentials
+### 访问凭证
 
-Access Credentials allow you to inject basic auth or ssh keys dynamically at run time when your guest OS has quemu guest agent installed.
+如果你的 Guest 操作系统安装了 QUEMU GuestAgent，访问凭证将允许你在运行时动态注入基本认证或 SSH 密钥。
 
-For more details please check the page here: [Dynamic SSH Key Injection via Qemu guest agent](./access-to-the-vm.md#dynamic-ssh-key-injection-via-qemu-guest-agent).
+有关更多详细信息，请查看参阅[通过 QEMU Guest Agent 进行动态 SSH 密钥注入](./access-to-the-vm.md#通过-qemu-guest-agent-进行动态-ssh-密钥注入)。

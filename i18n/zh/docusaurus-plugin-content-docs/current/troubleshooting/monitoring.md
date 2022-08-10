@@ -6,15 +6,15 @@ title: ""
 
 # 监控
 
-The following sections contain tips to troubleshoot Harvester Monitoring.
+本文介绍了对 Harvester Monitoring 进行故障排除的提示。
 
-## Monitoring is unusable
+## Monitoring 不可用
 
-When the Harvester dashboard displays nothing of the Monitoring, it may be caused by the below reasons.
+如果 Harvester 仪表板没有显示 Monitoring，可能原因如下。
 
-### Monitoring is unusable due to POD stucks in "Terminating"
+### POD 卡在 “Terminating” 状态导致 Monitoring 不可用
 
-Harvester Monitoring related PODs are deployed randomly in the cluster NODEs, when the NODE hosting following PODs is accidentally down, the related PODs may stuck in status "Terminating", then the Monitoring is unusable from the WebUI.
+Harvester Monitoring 相关的 POD 随机部署在集群节点中。如果托管以下 POD 的节点意外宕机，相关的 POD 可能会卡在 “Terminating” 状态，然后你将无法通过 WebUI 使用 Monitoring：
 
 ```
 $ kubectl get pods -n cattle-monitoring-system
@@ -31,7 +31,7 @@ cattle-monitoring-system    rancher-monitoring-kube-state-metrics-5bc8bb48bd-nbd
 
 ```
 
-Monitoring can be recovered via using CLI commands to delete related PODs forcely, the cluster will deploy new PODs to replace them.
+你可以使用 CLI 命令强制删除相关的 POD，从而恢复 Monitoring，集群会部署新的替换 POD：
 
 ```
 
@@ -51,7 +51,7 @@ $ kubectl delete pod --force -n cattle-monitoring-system rancher-monitoring-graf
 $ kubectl delete pod --force -n cattle-monitoring-system rancher-monitoring-grafana-d9c56d79b-t24sz
 ```
 
-Wait a few minutes, the new PODs are created and become ready. The Monitoring dashboard will be usable again.
+等待几分钟，新的 POD 会创建并就绪。Monitoring 仪表板将再次可用。
 
 ```
 $ kubectl get pods -n cattle-monitoring-system

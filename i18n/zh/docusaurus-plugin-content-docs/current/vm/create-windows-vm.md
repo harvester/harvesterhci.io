@@ -19,7 +19,7 @@ Description: 从"虚拟机"页面创建一个或多个 Windows 虚拟机。
 
 # 创建 Windows 虚拟机
 
-从**虚拟机**页面创建一个或多个虚拟机。
+你可以从 **Virtual Machines** 页面创建一个或多个虚拟机。
 
 :::note
 如果需要创建 Linux 虚拟机，请参见[本页面](./create-vm.md)。
@@ -36,7 +36,7 @@ Description: 从"虚拟机"页面创建一个或多个 Windows 虚拟机。
 
 1. 配置要分配给虚拟机的 `CPU` 核数。
 1. 配置要分配给虚拟机的`内存`。
-1. （可选）选择现有的 `SSH 密钥` 或上传新的密钥​​。
+1. （可选）选择现有的 `SSH密钥`或上传新的密钥​​。
 
 ![create-windows-vm](assets/create-windows-vm.png)
 
@@ -107,4 +107,22 @@ Description: 从"虚拟机"页面创建一个或多个 Windows 虚拟机。
 :::note
 如果你需要添加高级设置，你可以点击`以 YAML 文件编辑`来直接修改虚拟机配置。
 如果你需要取消所有更改，点击`取消`。
+:::
+
+## 安装 Windows
+
+1. 选择你刚才创建的虚拟机，然后单击 `Start` 来启动虚拟机（如果你选择了 `Start virtual machine on creation`，虚拟机将在创建后自动启动）。
+2. 引导安装程序，然后按照安装说明进行操作。
+3. [可选] 如果你使用的是基于 `virtio` 的卷，你需要加载特定的驱动程序来检测卷。如果你使用了虚拟机模板 `windows-iso-image-base-template`，则相关的说明如下：
+   1. 点击 `Load driver`，在对话框中点击 `Browse`，然后找到带有 `VMDP-WIN` 前缀的光驱。根据你的 Windows 版本找到驱动目录（例如，如果是 Windows Server 2012r2，则展开 `win8.1-2012r2`），然后选择里面的 `pvvx` 目录：
+      ![find-virtio-driver-directory](./assets/find-virtio-driver-directory.png)
+   2. 单击 `OK` 来允许安装程序扫描此目录并查找驱动程序。然后，选择 `SUSE Block Driver for Windows` 并单击 `Next` 来加载驱动程序：
+      ![select-virtio-block-driver](./assets/select-virtio-block-driver.png)
+   1. 等待安装程序加载驱动程序。如果你选择了正确的驱动程序版本，加载驱动程序后会检测到 `virtio` 卷：
+      ![installer-found-virtio-drive](./assets/installer-found-virtio-drive.png)
+   1. 自行操作此驱动器。
+4. [可选] 如果你使用基于 `virtio` 的硬件（例如 virtio 网络适配器），你需要在完成安装后手动安装这些驱动程序。要安装驱动程序，请打开 virtio 驱动程序盘，然后打开安装程序。
+
+:::note
+如果你需要使用其他 VM 模板而不是我们提供的 `windows-iso-image-base-template`，并且你需要使用 `virtio` 设备，请务必提供你的自己的 virtio 驱动盘，从而确保能正确检测硬件。
 :::

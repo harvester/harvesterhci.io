@@ -11,7 +11,7 @@ _从 v0.3.0 起可用_
 ## 仪表盘指标
 Harvester `v0.3.0` 已使用 [Prometheus](https://prometheus.io/) 内置集成监控。监控会在 ISO 安装期间自动安装。
 
-在 Harvester 的`仪表盘`页面中，你可以分别查看集群指标以及最常用的 10 个虚拟机指标。
+在 Harvester 的 `Dashboard` 页面中，你可以分别查看集群指标以及最常用的 10 个虚拟机指标。
 此外，你可以单击 [Grafana](http://grafana.com/) 仪表盘链接，从而在 Grafana UI 上查看更多仪表盘。
 ![](./assets/monitoring-dashboard.png)
 
@@ -25,7 +25,7 @@ Harvester `v0.3.0` 已使用 [Prometheus](https://prometheus.io/) 内置集成�
 ![](./assets/vm-metrics.png)
 
 :::note
-`内存使用率`的计算公式是 `(1 - 剩余/总量) x 100%`，而不是 `(已使用/总量) x 100%`。
+`Memory Usage` 的计算公式是 `(1 - 剩余/总量) x 100%`，而不是 `(已使用/总量) x 100%`。
 :::
 
 例如，在 Linux 操作系统中，`free -h` 命令输出当前内存的统计信息：
@@ -37,54 +37,54 @@ Mem:          7.7Gi       166Mi       4.6Gi       1.0Mi       2.9Gi       7.2Gi
 Swap:            0B          0B          0B
 ```
 
-The corresponding `Memory Usage` is `(1 - 4.6/7.7) * 100%`, roughly `40%`.
+对应的 `Memory Usage` 为 `(1 - 4.6/7.7) x 100%`，即大致为 `40%`。
 
 
-## Change resources setting of Monitoring
-_Available as of v1.0.1_
+## 更改 Monitoring 的资源设置
+_从 v1.0.1 起可用_
 
-The `Monitoring` has a couple of components to collect metrics data from all NODEs/PODs/VMs/... and summarize them. The resources required by the `Monitoring` are related to workloads and hardware resources. Harvester sets the default values according to engineering practices, and you can change them accordingly.
+`Monitoring` 有几个组件，这些组件可以收集所有 NODE/POD/VM/等指标数据并对其进行汇总。`Monitoring` 所需的资源与工作负载和硬件资源有关。Harvester 会根据工程实践设置默认值，你可以相应地更改它们。
 
-The following two components `resources settings` are available:
+以下是两个可用的组件`资源设置`：
 
 (1) Monitoring-Prometheus
 
 (2) Monitoring-Prometheus-node-exporter
 
-### Change resources settings of Monitoring-Prometheus
+### 更改 Monitoring-Prometheus 的资源设置
 
-#### From WebUI
+#### 使用 WebUI
 
-In the `Advanced Settings` page, you can view and change the resources settings as follow:
+在 `Advanced Settings` 页面中，你可以查看和更改资源设置：
 
-(1) Navigate to settings page, find `harvester monitoring`.
+(1) 导航到 **Settings** 页面，找到 `harvester-monitoring`：
 ![](./assets/monitoring-setting.png)
 
-(2) Click `Show harvester-monitoring` to view the current values.
+(2) 点击 `Show harvester-monitoring` 以查看当前的值：
 ![](./assets/monitoring-setting-view-current.png)
 
-(3) Click in the up-right corner pop up menu and select `Edit Setting` to set a new value.
+(3) 点击右上角的弹出菜单，选择 `Edit Setting` 以设置新值：
 ![](./assets/monitoring-setting-edit-config.png)
 
-(4) Click `Save`. The `Monitoring` will be restarted with the new resources settings. Please note, the restart can take some time.
+(4) 点击 `Save`。`Monitoring` 将使用新的资源设置重新启动。请注意，重新启动可能需要一些时间。
 
-The most frequently used option is memory setting.
+最常用的选项是内存设置。
 
-`Requested Memory` is the minimum memory of the `Monitoring`. The recommended value is about 5% to 10% of system memory of one single management node. A value less than 500Mi will be denied.
+`Requested Memory` 是 `Monitoring` 的最小内存。建议设置为单个管理节点系统内存的 5% 到 10%。小于 500Mi 的值将被拒绝。
 
-`Memory Limit` is the maximum memory of the `Monitoring`. The recommended value is about 30% of system memory of one single management node, when the `Monitoring` reaches this value, it will be restarted.
+`Memory Limit`是 `Monitoring` 的最大内存。建议设置为单个管理节点系统内存的 30% 左右，`Monitoring` 达到这个值时会重新启动。
 
-Depending on the available hardware resources and system loads, you may change the settings accordingly.
+你可以根据可用的硬件资源和系统负载相应地更改设置。
 
 :::note
-If you have multiple management nodes with different hardware resources, please set the value based on the smaller one.
+如果你有多个不同硬件资源的管理节点，请根据较小的节点来设置。
 :::
 
-#### From CLI
+#### 使用 CLI
 
-To update the values, you may use the CLI command: `kubectl edit managedchart rancher-monitoring -n fleet-local`.
+你可以使用 CLI 命令 `kubectl edit managedchart rancher-monitoring -nfleet-local` 来更新这些值。
 
-In v1.0.1 and later versions, the related path and default value are:
+在 v1.0.1 及以后的版本中，相关路径和默认值为：
 
 `spec.values.prometheus.prometheusSpec.resources.limits.cpu`:`1000m`
 
@@ -94,24 +94,24 @@ In v1.0.1 and later versions, the related path and default value are:
 
 `spec.values.prometheus.prometheusSpec.resources.requests.memory`:`1750Mi`
 
-In v1.0.0 and ealier versions, the related path and default value are not in the `managedchart rancher-monitoring`, you need to add them accordingly.
+在 v1.0.0 及之前的版本中，相关路径和默认值不在 `managedchart rancher-monitoring` 中，你需要相应添加它们。
 
-### Change resources settings of Monitoring-Prometheus-node-exporter
+### 更改 Monitoring-Prometheus-node-exporter 的资源设置
 
-`Monitoring-Prometheus-node-exporter` has a similar resources specifications as `Monitoring-Prometheus`.
+`Monitoring-Prometheus-node-exporter` 的资源规范与 `Monitoring-Prometheus` 的类似。
 
-#### From WebUI
+#### 使用 WebUI
 
-_Available as of v1.0.2_
+_从 v1.0.2 起可用_
 
-Follow the steps described in previous chapter `Change resources settings of Monitoring-Prometheus` `From WebUI`, after selecting `Edit Setting`, the page will be shown as:
+参阅上方`更改 Monitoring-Prometheus 的资源设置`下`使用 WebUI` 中描述的步骤，选择 `Edit Setting` 后，页面将显示为：
 ![](./assets/monitoring-setting-edit-config-v1.0.2.png)
 
-#### From CLI
+#### 使用 CLI
 
-To update the values, you may use the CLI command: `kubectl edit managedchart rancher-monitoring -n fleet-local`.
+你可以使用 CLI 命令 `kubectl edit managedchart rancher-monitoring -nfleet-local` 来更新这些值。
 
-In v1.0.1 and later versions, the related path and default value are:
+在 v1.0.1 及以后的版本中，相关路径和默认值为：
 
 `spec.values.prometheus-node-exporter.resources.limits.cpu`:`200m`
 
@@ -121,10 +121,10 @@ In v1.0.1 and later versions, the related path and default value are:
 
 `spec.values.prometheus-node-exporter.resources.requests.memory`:`30Mi`
 
-In v1.0.0 and ealier versions, the related path and default value are not in the `managedchart rancher-monitoring`, you need to add them accordingly.
+在 v1.0.0 及之前的版本中，相关路径和默认值不在 `managedchart rancher-monitoring` 中，你需要相应添加它们。
 
 :::note
-When many VMs are deployed in one NODE, the OOM(out of memory)/abnormal restarting of prometheus-node-exporter POD(s) may be observed. In that case, you should change the `limits.memory` to a bigger value.
+如果多个 VM 部署在一个 NODE 中，你可能会看到 /prometheus-node-exporter POD 的 OOM（out of memory）异常重启。在这种情况下，你需要将 `limits.memory` 设置为更大的值。
 :::
 
 ### 故障排除

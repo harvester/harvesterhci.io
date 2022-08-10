@@ -20,7 +20,7 @@ Harvester CSI Driver 提供了一个 CSI 接口，供 Harvester 中的 Kubernete
 - 作为 Kubernetes 节点运行的 Harvester 虚拟机位于相同的命名空间中。
 
 :::note
-Currently, the Harvester CSI driver only supports single-node read-write(RWO) volumes. Please follow the [issue #1992](https://github.com/harvester/harvester/issues/1992) for future multi-node `read-only`(ROX) and `read-write`(RWX) support.
+目前，Harvester CSI Driver 仅支持单节点读写 (RWO) 卷。请留意 [issue #1992](https://github.com/harvester/harvester/issues/1992) 以获得后续多节点 `read-only`(ROX) 和 `read-write`(RWX) 的支持。
 :::
 
 ### 使用 Harvester RKE1 主机驱动进行部署

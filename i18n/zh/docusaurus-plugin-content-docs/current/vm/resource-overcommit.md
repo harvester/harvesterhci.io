@@ -1,46 +1,46 @@
 ---
 sidebar_position: 8
-sidebar_label: 资源超额
+sidebar_label: 资源超量
 title: ""
 keywords:
   - Harvester
-  - Overcommit
-  - Overprovision
-  - ballooning
-Description: Overcommit resources to a VM.
+  - 过度使用
+  - 过度配置
+  - 膨胀
+Description: 过度使用 VM 资源。
 ---
 
-# 资源超额
+# 资源超量
 
-Harvester supports global configuration of resource overload percentages on CPU, memory, and storage. By setting [`overcommit-config`](../settings/settings.md#overcommit-config), this will allow scheduling of additional virtual machines even when physical resources are fully utilized.
+Harvester 支持全局配置 CPU、内存和存储资源的过载百分比。[`overcommit-config`](../settings/settings.md#overcommit-config) 让你在物理资源被充分利用的情况下调度额外的虚拟机。
 
-Harvester allows you to overcommit CPU and RAM on compute nodes. This allows you to increase the number of instances running on your cloud at the cost of reducing the performance of the instances. The Compute service uses the following ratios by default:
+Harvester 支持在计算节点上超量使用 CPU 和 RAM。这样，你能通过降低实例性能来增加在云上运行的实例数量。Compute 服务默认使用以下比率：
 
-- CPU allocation ratio: 1600%
-- RAM allocation ratio: 150%
-- Storage allocation ratio: 200%
+- CPU 分配率：1600%
+- RAM 分配率：150%
+- 存储分配率：200%
 
 :::note
-Classic memory overcommitment or memory ballooning is not yet supported by this feature. In other words, memory used by a virtual machine instance cannot be returned once allocated.
+暂时不支持经典的内存超量使用或内存膨胀。换句话说，虚拟机实例使用的内存一旦分配就无法返回。
 :::
 
-## Configure the global setting [`overcommit-config`](../settings/settings.md#overcommit-config)
+## 配置全局 [`overcommit-config`](../settings/settings.md#overcommit-config)
 
-Users can modify the global `overcommit-config` by following the steps below, and it will be applied to each newly created virtual machine after the change.
+按照以下步骤修改全局 `overcommit-config`，修改后的配置会应用到所有新创建的虚拟机上：
 
-1. Go to the **Advanced > Settings** page.
-1. Find the `overcommit-config` setting.
-1. Configure the desired CPU, Memory, and Storage ratio.
+1. 转到 **Advanced > Settings** 页面。
+1. 找到 `overcommit-config` 设置。
+1. 配置所需的 CPU、内存和存储比率。
 
-## Configure overcommit for a single virtual machine
+## 为单个虚拟机配置超量使用
 
-If you need to configure individual virtual machines without involving global configuration, consider adjusting the ` spec.template.spec.domain.resources.<memory|cpu>` value on the target VirtualMachine resource individually. Note that by modifying these values, you are taking over control of virtual machine resource management from Harvester.
+如果你需要为单个虚拟机配置超量使用，请单独调整目标 VirtualMachine 资源的 ` spec.template.spec.domain.resources.<memory|cpu>` 值。请注意，通过修改这些值，你将接管 Harvester 对虚拟机资源管理的控制。
 
-## Reserve more memory for the system overhead
+## 预留更多系统内存
 
-By default, the Harvester reserves a certain amount of system management overhead memory from the memory allocated for the virtual machine. In most cases, this will not cause any problems. However, some operating systems, such as Windows 2022, will request more memory than is reserved.
+默认情况下，Harvester 从分配给虚拟机的内存中预留一定数量的系统内存。在大多数情况下，这不会导致任何问题。但是，某些操作系统（例如 Windows 2022）会需要比预留量更多的内存。
 
-To address the issue, Harvester provides an annotation `harvesterhci.io/reservedMemory` on VirtualMachine custom resource to let you specify the amount of memory to reserve. For instance, add `harvesterhci.io/reservedMemory: 200Mi` if you decide to reserve 200 MiB for the system overhead of the VM.
+为了解决这个问题，Harvester 在 VirtualMachine 自定义资源上提供了一个 `harvesterhci.io/reservedMemory` 注释，用于指定要预留的内存量。例如，如果你决定为 VM 的系统预留 200 MiB，请添加 `harvesterhci.io/reservedMemory: 200Mi`：
 
 ```diff
  apiVersion: kubevirt.io/v1
@@ -55,6 +55,6 @@ To address the issue, Harvester provides an annotation `harvesterhci.io/reserved
    ...
 ```
 
-## Why my virtual machines are scheduled unevenly?
+## 为什么虚拟机调度不均匀？
 
-The scheduling of virtual machines depends on the underlying behavior of the kube-scheduler. We have a dedicated article explaining the details. If you would like to learn more, check out:  [Harvester Knowledge Base: VM Scheduling](https://harvesterhci.io/kb/vm-scheduling/).
+虚拟机的调度依赖于 kube-scheduler 的底层行为。我们提供了专门的文章来解释细节。要了解更多信息，请参阅 [Harvester 知识库：VM 调度](https://harvesterhci.io/kb/vm-scheduling/)。

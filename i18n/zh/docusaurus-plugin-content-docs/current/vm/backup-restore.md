@@ -20,7 +20,7 @@ _从 v0.3.0 起可用_
 ![vm-backup.png](assets/vm-backup.png)
 
 :::note
-A backup target must be set up. 详情请参见[配置备份目标](#configure-backup-target)。如果没有设置备份目标，你会收到进行设置的提示。
+必须设置备份目标。详情请参见[配置备份目标](#配置备份目标)。如果没有设置备份目标，你会收到进行设置的提示。
 :::
 
 ## 配置备份目标
@@ -80,7 +80,7 @@ _从 v1.0.0 起可用_
 用户现在可以使用虚拟机元数据和内容备份功能，在另一个集群上恢复新虚拟机。
 
 :::note
-You must manually configure the virtual machine images with the same name on the new cluster first, otherwise the virtual machines will be failed to recover.
+你必须先在新集群上手动配置同名的虚拟机镜像，否则将无法正常恢复。
 :::
 
 ### 将相同的虚拟机镜像上传到新集群

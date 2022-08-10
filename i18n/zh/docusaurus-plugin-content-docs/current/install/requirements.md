@@ -3,66 +3,66 @@ sidebar_position: 1
 sidebar_label: 要求
 title: ""
 keywords:
-- Installation Requirements
-Description: Outline the Harvester installation requirements
+- 安装要求
+Description: Harvester 安装要求概述
 ---
 # 要求
-As an HCI solution on bare metal servers, Harvester has some minimum requirements as outlined below.
+Harvester 是裸机服务器上的 HCI 解决方案，以下是 Harvester 安装的最低要求。
 
-## Hardware
-To get the Harvester server up and running the following minimum hardware is required:
+## 硬件
+硬件需要满足以下要求，才可以启动和运行 Harvester：
 
 | 类型 | 要求 |
 |:-----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | CPU | 仅支持 x86_64。需要硬件辅助虚拟化。最少需要 8 核处理器，建议使用 16 核处理器。 |
-| 内存 | 32GB minimum, 64 GB or above preferred |
-| 磁盘容量 | 140GB minimum, 500 GB or above preferred |
-| 磁盘性能 | 5,000+ random IOPS per disk(SSD/NVMe). Management nodes (first 3 nodes) must be [fast enough for Etcd](https://www.ibm.com/cloud/blog/using-fio-to-tell-whether-your-storage-is-fast-enough-for-etcd). |
-| 网卡 | 1 Gbps Ethernet minimum, 10Gbps Ethernet recommended |
+| 内存 | 32 GB（至少）。建议使用 64 GB 或以上的内存。 |
+| 磁盘容量 | 140 GB（至少）。建议使用 500 GB 或以上的磁盘。 |
+| 磁盘性能 | 每个磁盘 5,000+ 随机 IOPS (SSD/NVMe)。管理节点（前 3 个节点）必须[对 etcd 而言足够快](https://www.ibm.com/cloud/blog/using-fio-to-tell-whether-your-storage-is-fast-enough-for-etcd)。 |
+| 网卡 | 1 Gbps 以太网（至少）。建议使用 10Gbps 或以上的以太网。 |
 | 网络交换机 | VLAN 支持所需的端口中继。 |
 
-We recommend server-class hardware for best results. Laptops and nested virtualization are not officially supported.
+建议使用服务器级硬件以获得最佳效果。笔记本电脑和嵌套虚拟化不受官方支持。
 
-## Ports
-### Harvester hosts
-Inbound Rules
+## 端口
+### Harvester 主机
+入站规则
 
-| Protocol | Port | Source | 描述 |
+| 协议 | 端口 | 源 | 描述 |
 |:----------|:---------------------------|:-----------------------------------------|:----------------------------------------|
-| TCP | 2379 | Harvester management nodes | Etcd client port |
-| TCP | 2381 | Harvester management nodes | Etcd health checks |
-| TCP | 2380 | Harvester management nodes | Etcd peer port |
-| TCP | 10010 | Harvester management and compute nodes | Containerd |
-| TCP | 6443 | Harvester management nodes | Kubernetes API |
-| TCP | 9345 | Harvester management nodes | Kubernetes API |
-| TCP | 10252 | Harvester management nodes | Kube-controller-manager health checks |
-| TCP | 10257 | Harvester management nodes | Kube-controller-manager secure port |
-| TCP | 10251 | Harvester management nodes | Kube-scheduler health checks |
-| TCP | 10259 | Harvester management nodes | Kube-scheduler secure port |
-| TCP | 10250 | Harvester management and compute nodes | Kubelet |
-| TCP | 10256 | Harvester management and compute nodes | Kube-proxy health checks |
-| TCP | 10258 | Harvester management nodes | Cloud-controller-manager |
-| TCP | 9091 | Harvester management and compute nodes | Canal calico-node felix |
-| TCP | 9099 | Harvester management and compute nodes | Canal CNI health checks |
-| UDP | 8472 | Harvester management and compute nodes | Canal CNI with VxLAN |
-| TCP | 2112 | Harvester management nodes | Kube-vip |
-| TCP | 6444 | Harvester management and compute nodes | RKE2 agent |
-| TCP | 6060 | Harvester management and compute nodes | Node-disk-manager |
-| TCP | 10246/10247/10248/10249 | Harvester management and compute nodes | Nginx worker process |
-| TCP | 8181 | Harvester management and compute nodes | Nginx-ingress-controller |
-| TCP | 8444 | Harvester management and compute nodes | Nginx-ingress-controller |
-| TCP | 10245 | Harvester management and compute nodes | Nginx-ingress-controller |
-| TCP | 80 | Harvester management and compute nodes | Nginx |
-| TCP | 9796 | Harvester management and compute nodes | Node-exporter |
-| TCP | 30000-32767 | Harvester management and compute nodes | NodePort port range |
-| TCP | 22 | Harvester management and compute nodes | sshd |
-| UDP | 68 | Harvester management and compute nodes | Wicked |
-| TCP | 3260 | Harvester management and compute nodes | iscsid |
+| TCP | 2379 | Harvester 管理节点 | etcd 客户端端口 |
+| TCP | 2381 | Harvester 管理节点 | etcd 健康检查 |
+| TCP | 2380 | Harvester 管理节点 | etcd 对等端口 |
+| TCP | 10010 | Harvester 管理和计算节点 | Containerd |
+| TCP | 6443 | Harvester 管理节点 | Kubernetes API |
+| TCP | 9345 | Harvester 管理节点 | Kubernetes API |
+| TCP | 10252 | Harvester 管理节点 | Kube-controller-manager 健康检查 |
+| TCP | 10257 | Harvester 管理节点 | Kube-controller-manager 安全端口 |
+| TCP | 10251 | Harvester 管理节点 | Kube-scheduler 健康检查 |
+| TCP | 10259 | Harvester 管理节点 | kube-scheduler 安全端口 |
+| TCP | 10250 | Harvester 管理和计算节点 | Kubelet |
+| TCP | 10256 | Harvester 管理和计算节点 | Kube-proxy 健康检查 |
+| TCP | 10258 | Harvester 管理节点 | Cloud-controller-manager |
+| TCP | 9091 | Harvester 管理和计算节点 | Canal calico-node felix |
+| TCP | 9099 | Harvester 管理和计算节点 | Canal CNI 健康检查 |
+| UDP | 8472 | Harvester 管理和计算节点 | 使用 VxLAN 的 Canal CNI |
+| TCP | 2112 | Harvester 管理节点 | Kube-vip |
+| TCP | 6444 | Harvester 管理和计算节点 | RKE2 Agent |
+| TCP | 6060 | Harvester 管理和计算节点 | Node-disk-manager |
+| TCP | 10246/10247/10248/10249 | Harvester 管理和计算节点 | Nginx worker 进程 |
+| TCP | 8181 | Harvester 管理和计算节点 | Nginx-ingress-controller |
+| TCP | 8444 | Harvester 管理和计算节点 | Nginx-ingress-controller |
+| TCP | 10245 | Harvester 管理和计算节点 | Nginx-ingress-controller |
+| TCP | 80 | Harvester 管理和计算节点 | Nginx |
+| TCP | 9796 | Harvester 管理和计算节点 | Node-exporter |
+| TCP | 30000-32767 | Harvester 管理和计算节点 | NodePort 端口范围 |
+| TCP | 22 | Harvester 管理和计算节点 | sshd |
+| UDP | 68 | Harvester 管理和计算节点 | Wicked |
+| TCP | 3260 | Harvester 管理和计算节点 | iscsid |
 
-Typically, all outbound traffic will be allowed.
+所有出站流量通常都是允许的。
 
-#### Guest clusters
-As for the port requirements for the guest clusters deployed inside Harvester virtual machines, refer to the following links.
+#### Guest 集群
+对于部署在 Harvester 虚拟机中的 Guest 集群的端口要求，请参阅以下链接：
 
 K3s: [https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/#networking](https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/#networking)
 

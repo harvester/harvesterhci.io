@@ -8,32 +8,32 @@ keywords:
   - Rancher
   - rancher
   - 升级 Harvester
-Description: Describe how to troubleshoot a failed upgrade
+Description: 描述如何对失败的升级进行故障排除
 ---
 
 # 故障排除
 
 ## 概述
 
-Here are some tips to troubleshoot a failed upgrade:
+以下是解决升级失败的一些提示：
 
-- Check [version-specific upgrade notes](./automatic.md#upgrade-support-matrix). You can click the version in the support matrix table to see if there are any known issues.
-- Dive into the upgrade [design proposal](https://github.com/harvester/harvester/blob/master/enhancements/20220413-zero-downtime-upgrade.md). The following section briefly describes phases within an upgrade and possible diagnostic methods.
+- 查看[版本的升级说明](./automatic.md#升级支持矩阵)。你可以单击支持矩阵表中的版本查看是否存在已知问题。
+- 深入了解升级[设计方案](https://github.com/harvester/harvester/blob/master/enhancements/20220413-zero-downtime-upgrade.md)。以下简要介绍了升级的各个阶段以及可能的解决方法。
 
-## Diagnose the upgrade flow
+## 升级流程
 
-A Harvester upgrade process contains several phases.
+Harvester 升级包含了几个阶段：
 ![](./assets/ts_upgrade_phases.png)
 
-### Phase 1: Provision upgrade repository VM.
+### 阶段 1：预配升级仓库 VM。
 
-The Harvester controller downloads a Harvester release ISO file and uses it to provision a VM. During this phase you can see the upgrade status windows show:
+Harvester controller 下载 Harvester 版本 ISO 文件并使用它来配置 VM。在此阶段，你可以看到升级状态窗口显示：
 
 ![](./assets/ts_status_phase1.png)
 
-The time to complete the phase depends on the user's network speed and cluster resource utilization. We see failures in this phase due to network speed. If this happens, the user can [start over the upgrade](#start-over-an-upgrade) again.
+完成的时间取决于用户的网络速度和集群资源利用率。由于网络速度，我们看到此阶段出现了故障。如果发生这种情况，用户可以再次[重新开始升级](#重新开始升级)。
 
-We can also check the repository VM (named with the format `upgrade-repo-hvst-xxxx`) status and its corresponding pod:
+我们还可以检查仓库 VM（以 `upgrade-repo-hvst-xxxx` 格式命名）状态及其对应的 Pod：
 
 ```
 $ kubectl get vm -n harvester-system
@@ -44,15 +44,15 @@ $ kubectl get pods -n harvester-system | grep upgrade-repo-hvst
 virt-launcher-upgrade-repo-hvst-upgrade-9gmg2-4mnmq     1/1     Running     0          4m44s
 ```
 
-### Phase 2: Preload container images
+### 阶段 2：预加载容器镜像
 
-The Harvester controller creates jobs on each Harvester node to download images from the repository VM and preload them. These are the container images required for the next release.
+Harvester controller 在每个 Harvester 节点上创建 Job，以便从仓库 VM 下载镜像并进行预加载。这些是下一个版本所需的容器镜像。
 
-During this stage you can see the upgrade status windows shows:
+在此阶段，你可以看到升级状态窗口显示：
 
 ![](./assets/ts_status_phase2.png)
 
-It will take a while for all nodes to preload images. If the upgrade fails at this phase, the user can check job logs in the `cattle-system` namespace:
+所有节点都需要一些时间来预加载镜像。如果升级在此阶段失败，用户可以查看 `cattle-system` 命名空间中的 Job 日志：
 
 ```
 $ kubectl get jobs -n cattle-system | grep prepare
@@ -63,13 +63,13 @@ $ kubectl logs jobs/apply-hvst-upgrade-9gmg2-prepare-on-node1-with-2bbea1599a-f0
 ...
 ```
 
-It's also safe to [start over the upgrade](#start-over-an-upgrade) if an upgrade fails at this phase.
+如果升级在此阶段失败，[重新开始升级](#重新开始升级)也是安全的。
 
-### Phase 3: Upgrade system services
+### 阶段 3：升级系统服务
 
 ![](./assets/ts_status_phase3.png)
 
-In this phase, Harvester controller upgrades component Helm charts with a job. The user can check the `apply-manifest` job with the following command:
+在此阶段，Harvester controller 使用 Job 来升级组件 Helm Chart。用户可以使用以下命令检查 `apply-manifest` Job：
 
 ```
 $ kubectl get jobs -n harvester-system -l harvesterhci.io/upgradeComponent=manifest
@@ -80,18 +80,18 @@ $ kubectl logs jobs/hvst-upgrade-9gmg2-apply-manifests -n harvester-system
 ...
 ```
 
-### Phase 4: Upgrade nodes
+### 阶段 4：升级节点
 
 ![](./assets/ts_status_phase4.png)
 
-The Harvester controller creates jobs on each node (one by one) to upgrade nodes' OSes and RKE2 runtime. For multi-node clusters, there are two kinds of jobs to update a node:
+Harvester controller 在每个节点上（一个接一个）创建 Job 以升级节点的操作系统和 RKE2 运行时。对于多节点集群，更新节点的 Job 有两种：
 
-- **pre-drain** job: live-migrate or shutdown VMs on a node. When the job completes, the embedded Rancher service upgrades RKE2 runtime on a node.
-- **post-drain** job: upgrade OS and reboot.
+- **pre-drain** Job：热迁移或关闭节点上的虚拟机。Job 完成后，嵌入式 Rancher 服务会升级节点上的 RKE2 运行时。
+- **post-drain** Job：升级操作系统并重新启动。
 
-For single-node clusters, there is only one `single-node-upgrade` type job for each node (named with the format `hvst-upgrade-xxx-single-node-upgrade-<hostname>`).
+对于单节点集群，每个节点只有一个 `single-node-upgrade` 类型的 Job（命名格式为 `hvst-upgrade-xxx-single-node-upgrade-<hostname> `）。
 
-The user can check node jobs by:
+用户可以通过以下方式检查节点 Job：
 
 ```
 $ kubectl get jobs -n harvester-system -l harvesterhci.io/upgradeComponent=node
@@ -106,35 +106,35 @@ $ kubectl logs -n harvester-system jobs/hvst-upgrade-9gmg2-post-drain-node2
 ```
 
 :::caution
-Please do not start over an upgrade if the upgrade fails at this phase.
+如果升级在此阶段失败，请不要重新开始升级。
 :::
 
-### Phase 5: Clean-up
+### 阶段 5：清理
 
-The Harvester controller deletes the upgrade repository VM and all files that are no longer needed.
+Harvester controller 会删除升级仓库 VM 和不再需要的文件。
 
 
-## Common operations
+## 常用操作
 
-### Start over an upgrade
+### 重新开始升级
 
-1. Log in to a control plane node.
-2. List `Upgrade` CRs in the cluster:
+1. 登录到 controlplane 节点。
+2. 列出集群中的 `Upgrade` CR：
 
    ```
-   # become root
+   # 使用 root
    $ sudo -i
 
-   # list the on-going upgrade
+   # 列出进行中的升级
    $ kubectl get upgrade.harvesterhci.io -n harvester-system -l harvesterhci.io/latestUpgrade=true
    NAME                 AGE
    hvst-upgrade-9gmg2   10m
    ```
 
-3. Delete the Upgrade CR
+3. 删除 Upgrade CR
 
    ```
    $ kubectl delete upgrade.harvesterhci.io/hvst-upgrade-9gmg2 -n harvester-system
    ```
 
-4. Click the upgrade button in the Harvester dashboard to start an upgrade again.
+4. 单击 Harvester 仪表板中的升级按钮，重新开始升级。

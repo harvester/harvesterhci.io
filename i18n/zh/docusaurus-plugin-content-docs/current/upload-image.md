@@ -8,7 +8,7 @@ keywords:
   - Rancher
   - rancher
   - 导入镜像
-Description: 如果需要在**镜像**页面导入虚拟机镜像，输入集群可以访问的 URL。镜像名称将使用 URL 地址的文件名自动填充。你可以随时在需要时对其进行自定义。
+Description: 如果需要在 **Images** 页面导入虚拟机镜像，输入集群可以访问的 URL。镜像名称将使用 URL 地址的文件名自动填充。你可以随时在需要时对其进行自定义。
 ---
 
 # 上传镜像
@@ -17,10 +17,10 @@ Description: 如果需要在**镜像**页面导入虚拟机镜像，输入集群
 
 ### 通过 URL 上传镜像
 
-如果需要在**镜像**页面导入虚拟机镜像，输入集群可以访问的 URL。描述和标签是可选的。
+如果需要在 **Images** 页面导入虚拟机镜像，输入集群可以访问的 URL。描述和标签是可选的。
 
 :::note
-The image name will be auto-filled using the URL address's filename. 你可以随时自定义镜像的名称。
+镜像名称将使用 URL 地址的文件名自动填充。你可以随时自定义镜像的名称。
 
 :::
 
@@ -31,7 +31,7 @@ The image name will be auto-filled using the URL address's filename. 你可以�
 目前支持 qcow2、raw 和 ISO 镜像。
 
 :::note
-- Please do not refresh the page until the file upload is finished.
+- 在文件上传完成之前，请不要刷新页面，否则会中断退出。
 :::
 
 ![](./assets/upload-image-local.png)
@@ -39,15 +39,15 @@ The image name will be auto-filled using the URL address's filename. 你可以�
 
 ### 通过卷创建镜像
 
-在**卷**页面中，点击**导出镜像**。然后，输入镜像名称来创建镜像。
+在 **Volumes** 页面中，点击 **Export Image**。然后，输入镜像名称来创建镜像。
 
 ![](./assets/export-image.png)
 
-### Image labels
+### 镜像标签
 
 
-You can add labels to the image, which will help identify the OS type more accurately. Additionally, you can also add any custom labels when needed.
+你可以为镜像添加标签，以便更准确地识别操作系统类型。此外，你还可以按照需求添加自定义标签。
 
-If you create an image from a URL, the UI will automatically recognize the OS type and image category based on the image name. However, if you created the image by uploading a local file, you will need to manually select the corresponding labels.
+如果你使用 URL 创建镜像，UI 将根据镜像名称自动识别操作系统类型和镜像类别。但是，如果你通过上传本地文件创建镜像，则需要手动选择对应的标签。
 
 ![](./assets/image-labels.png)

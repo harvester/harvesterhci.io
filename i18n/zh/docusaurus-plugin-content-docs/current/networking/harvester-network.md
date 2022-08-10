@@ -21,14 +21,14 @@ Harvester 构建在 [Kubernetes](https://kubernetes.io/) 之上，并使用其�
 
 目前，Harvester 支持两种类型的网络：
 
-- [管理网络](#management-network)
-- [VLAN 网络](#vlan-network)
+- [管理网络](#管理网络)
+- [VLAN 网络](#vlan-网络)
 
 
 ## 管理网络
 
 Harvester 使用 [canal](https://projectcalico.docs.tigera.io/getting-started/kubernetes/flannel/flannel) 作为默认管理网络。它是一个内置网络，可以直接从集群中使用。
-By default, the management network IP of a VM can only be accessed within the cluster nodes, and the management network IP will change after the VM reboot. This is non-typical behaviour that needs to be taken note of since VM IPs are expected to remain unchanged after a reboot.
+默认情况下，虚拟机的管理网络 IP 只能在集群节点内访问，虚拟机重启后管理网络 IP 会改变。这是需要注意的非典型行为，因为一般我们会认为 VM IP 在重启后会保持不变。
 
 但是，用户可以利用 Kubernetes [服务对象](https://kubevirt.io/user-guide/virtual_machines/service_objects/) 为你的虚拟机与管理网络创建一个稳定的 IP。
 
@@ -56,9 +56,9 @@ By default, the management network IP of a VM can only be accessed within the cl
 ![](assets/enable-vlan.png)
 
 :::note
-- When selecting the network interface, the value in parentheses represents the distribution percentage of the network interface on all hosts. 如果选择了小于 100% 的网络接口，需要在 VLAN 网络配置失败的主机上手动指定网络接口。
-- Modifying the default VLAN network setting will not update the existing configured host network.
-- Harvester VLAN network supports bond interfaces. Currently it can only be created automatically via [PXE Boot Configuration](../install/harvester-configuration.md#installnetworks). 你也可以登录到节点并进行手动创建。
+- 选择网络接口时，括号中的数值代表网络接口在所有主机上的分布百分比。如果选择了小于 100% 的网络接口，需要在 VLAN 网络配置失败的主机上手动指定网络接口。
+- 修改默认 VLAN 网络设置不会更新现有的主机网络配置。
+- Harvester VLAN 网络支持绑定接口。目前只能通过 [PXE 引导配置](../install/harvester-configuration.md#installnetworks)自动创建。你也可以登录到节点并进行手动创建。
 :::
 
 
@@ -89,9 +89,9 @@ By default, the management network IP of a VM can only be accessed within the cl
 ![](./assets/vm-network-configuration.png)
 
 :::note
-- Only the first NIC will be enabled by default. 你可以选择使用管理网络或 VLAN 网络。
-- You need to be careful to configure virtual machines with multiple NICs to avoid connectivity issues. You can refer to the [knowledge base](https://harvesterhci.io/kb/multiple-nics-vm-connectivity) for more details.
-- You will need to select the `Install guest agent` option in the **Advanced Options** tab to get the VLAN network IP address from the Harvester UI.
+- 默认情况下仅启用第一个网卡。你可以选择使用管理网络或 VLAN 网络。
+- 你需要小心配置具有多个 NIC 的虚拟机以避免连接问题。详情请参阅[知识库](https://harvesterhci.io/kb/multiple-nics-vm-connectivity)。
+- 你需要在 **Advanced Options** 选项卡中选择 `Install guest agent`，以便从 Harvester UI 获取 VLAN 网络 IP 地址。
 :::
 
 
@@ -107,12 +107,12 @@ config:
     name: enp2s0
     subnets:
       - type: static
-        address: 10.0.0.100/24 # IP address is varies upon your environment
+        address: 10.0.0.100/24 # IP 地址因环境而异
 ```
 Harvester 与 `cloud-init 网络配置`完全兼容。你可以参考[文档](https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html)了解更多详情。
 
 :::note
-If you add additional NICs after the VM has started, you will need to manually configure IPs for the additional NICs.
+如果在 VM 启动后添加额外的 NIC，则需要手动为额外的 NIC 配置 IP。
 :::
 
 ### 在网络上配置 DHCP 服务器

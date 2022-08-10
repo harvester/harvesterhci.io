@@ -25,46 +25,46 @@ Description: 虚拟机运行后，你可以在 Harvester UI 通过 VNC 客户端
 
 ![](assets/access-to-vm.png)
 
-## SSH Access
+## SSH 访问
 
-Harvester provides two ways to inject SSH public keys into virtual machines. Generally, these methods fall into two categories. [Static key injection](#static-ssh-key-injection-via-cloud-init), which places keys in the cloud-init script when the virtual machine is first powered on; [dynamic injection](#dynamic-ssh-key-injection-via-qemu-guest-agent), which allows keys or basic auth to be updated dynamically at runtime.
+Harvester 提供了两种将 SSH 公钥注入虚拟机的方法。通常，这些方法分为两类。第一类是[静态密钥注入](#通过-cloud-init-进行静态-ssh-密钥注入)，即在虚拟机首次开机时将密钥放在 cloud-init 脚本中。第二类是[动态注入](#通过-qemu-guest-agent-进行动态-ssh-密钥注入)，即允许在运行时动态更新密钥或基本认证。
 
-### Static SSH Key Injection via cloud-init
+### 通过 cloud-init 进行静态 SSH 密钥注入
 
-You can provide ssh keys to your virtual machines during the creation time on the `Basics` tab. Additionally, you can place the public ssh keys into your cloud-init script to allow it to take place.
+你可以在创建期间在 `Basics` 选项卡上为虚拟机提供 SSH 密钥。此外，你可以将公共 SSH 密钥放在 cloud-init 脚本中。
 
 ![](assets/vm-ssh-keys.png)
 
-#### Example of SSH key cloud-init configuration:
+#### SSH 密钥 cloud-init 配置示例：
 ```yaml
 #cloud-config
 ssh_authorized_keys:
   - >-
-    ssh-rsa #replace with your public key
+    ssh-rsa # 替换为你的公钥
 ```
 
 
-### Dynamic SSH Key Injection via Qemu guest agent
+### 通过 QEMU Guest Agent 进行动态 SSH 密钥注入
 
-_Available as of v1.0.1_
+_从 v1.0.1 起可用_
 
-Harvester supports dynamically injecting public ssh keys at run time through the use of the [qemu guest agent](https://wiki.qemu.org/Features/GuestAgent). This is achieved through the `qemuGuestAgent` propagation method.
+Harvester 支持在运行时通过使用 [QEMU GuestAgent](https://wiki.qemu.org/Features/GuestAgent) 动态注入公共 SSH 密钥。这是通过 `qemuGuestAgent` 传播方法实现的。
 
 :::note
-This method requires the qemu guest agent to be installed within the guest VM.
+此方法要求在 Guest VM 中安装 QEMU GuestAgent。
 
-When using `qemuGuestAgent` propagation, the `/home/$USER/.ssh/authorized_keys` file will be owned by the guest agent. Changes to that file that are made outside of the qemu guest agent's control will get deleted.
+使用 `qemuGuestAgent` 传播时，`/home/$USER/.ssh/authorized_keys` 文件将归 GuestAgent 所有。在 QEMU GuestAgent 之外对该文件所做的更改将被删除。
 :::
 
-You can inject your access credentials via the Harvester dashboard as below:
+你可以通过 Harvester 仪表板注入你的访问凭证，如下所示：
 
-1. Select the VM and click `⋮` button.
-2. Click the `Edit Config` button and go to the `Access Credentials` tab.
-3. Click to add either basic auth credentials or ssh keys, (e.g., add `opensuse` as the user and select your ssh keys if your guest OS is OpenSUSE).
-4. Make sure your qemu guest agent is already installed and the VM should be restarted after the credentials are added.
+1. 选择虚拟机并单击 `⋮` 按钮。
+2. 单击 `Edit Config` 按钮并转到 `Access Credentials` 选项卡。
+3. 单击以添加基本认证凭证或 SSH 密钥（例如，添加 `opensuse` 作为用户，如果你的 Guest 操作系统是 OpenSUSE，则选择你的 SSH 密钥）。
+4. 确保 QEMU GuestAgent 已安装，并且在添加凭证后重启 VM。
 
 :::note
-You need to enter the VM to edit password or remove SSH-Key after deleting the credentials from the UI.
+从 UI 中删除凭证后，你需要进入 VM 以便编辑密码或删除 SSH-Key。
 :::
 
 ![](assets/vm-add-access-credentails.png)
@@ -72,7 +72,7 @@ You need to enter the VM to edit password or remove SSH-Key after deleting the c
 
 
 ### 使用 SSH 客户端访问
-Once the VM is up and running, you can enter the IP address of the VM in a terminal emulation client, such as PuTTY. 你还可以运行以下命令直接从计算机的 SSH 客户端访问虚拟机：
+虚拟机运行后，你可以在终端仿真客户端（例如 PuTTY）中输入虚拟机的 IP 地址。你还可以运行以下命令直接从计算机的 SSH 客户端访问虚拟机：
 
 ```
  ssh -i ~/.ssh/your-ssh-key user@<ip-address-or-hostname>

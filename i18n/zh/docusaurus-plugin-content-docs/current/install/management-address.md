@@ -8,10 +8,10 @@ Description: Harvester 提供一个虚拟 IP 作为管理地址。
 ---
 
 # 管理地址
-Harvester provides a fixed virtual IP (VIP) as the management address, VIP must be different than any NODE IP.  安装后，你可以在控制台仪表盘上找到管理地址。
+Harvester 提供固定的虚拟 IP（VIP）作为管理地址，VIP 必须与所有 NODE IP 都不一样。安装后，你可以在控制台仪表盘上找到管理地址。
 
 :::note
-If you selected the IP address to be configured via DHCP, you will need to configure static MAC-to-IP address mapping on your DHCP server in order to have a persistent Virtual IP
+如果你选择了通过 DHCP 配置 IP 地址，则需要在 DHCP 服务器上配置静态 MAC 到 IP 地址的映射，以便获得持久的虚拟 IP。
 :::
 
 ![](./assets/iso-installed.png)

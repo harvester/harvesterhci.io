@@ -56,6 +56,7 @@ install:
     harvester-mgmt:
       interfaces:
       - name: ens5
+        hwAddr: "B8:CA:3A:6A:64:7C"
       method: dhcp
   force_efi: true
   device: /dev/vda
@@ -327,6 +328,7 @@ install:
 - `gateway`：此网络的网关。如果选择了 `static` 方法，则必须设置此字段。
 - `interfaces`：接口名称数组。如果指定了该字段，安装程序会将这些 NIC 组合成单个逻辑绑定接口。
    - `interfaces.name`：绑定网络的从接口的名称。
+   - `interfaces.hwAddr`：接口的硬件 MAC 地址。
 - `bond_options`：绑定接口的选项。详情请参见[此处](https://www.kernel.org/doc/Documentation/networking/bonding.txt)。如果不指定，则使用以下选项：
    - `mode: balance-tlb`
    - `miimon: 100`
@@ -350,6 +352,7 @@ install:
     harvester-mgmt:       # 管理绑定名称。这是必须的。
       interfaces:
       - name: ens5
+        hwAddr: "B8:CA:3A:6A:64:7D"     # hwAddr 是可选的
       method: dhcp
       bond_options:
         mode: balance-tlb
@@ -358,6 +361,7 @@ install:
     harvester-vlan:       # VLAN 网络绑定名称。然后，用户可以在 GUI 的 VLAN NIC 设置中输入`harvester-vlan`。
       interfaces:
       - name: ens6
+        hwAddr: "B8:CA:3A:6A:64:7E"     # hwAddr 是可选的
       method: none
       bond_options:
         mode: balance-tlb
@@ -365,6 +369,7 @@ install:
     bond0:
       interfaces:
       - name: ens8
+        hwAddr: "B8:CA:3A:6A:64:7F"     # hwAddr 是可选的
       method: static
       ip: 10.10.18.2
       subnet_mask: 255.255.255.0
@@ -467,7 +472,7 @@ install:
 
 ### `install.data_disk`
 
-_Available as of v1.0.1_
+_从 v1.0.1 起可用_
 
 #### 定义
 
@@ -507,7 +512,7 @@ system_settings:
 
 ### `cluster_networks`
 
-_Available as of v1.0.1_
+_从 v1.0.1 起可用_
 
 #### 定义
 
@@ -523,6 +528,7 @@ _Available as of v1.0.1_
 要配置 `cluster_networks`，你需要使用 `create` 模式来安装 Harvester。
 如果你使用 `join` 模式安装 Harvester，则会忽略此设置。
 `join` 模式安装将应用现有 Harvester 系统中的 `cluster_networks` 配置。
+:::
 
 #### 示例
 
