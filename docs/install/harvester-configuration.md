@@ -56,6 +56,7 @@ install:
     harvester-mgmt:
       interfaces:
       - name: ens5
+        hwAddr: "B8:CA:3A:6A:64:7C"
       method: dhcp
   force_efi: true
   device: /dev/vda
@@ -78,7 +79,7 @@ system_settings:
 Below is a reference of all configuration keys.
 
 :::caution
-    **Security Risks**: The configuration file contains credentials which should be kept secret. Please do not make the configuration file publicly accessible.
+**Security Risks**: The configuration file contains credentials which should be kept secret. Please do not make the configuration file publicly accessible.
 :::
 
 
@@ -335,6 +336,7 @@ the values are configurations for each network. Valid configuration fields are:
 - `gateway`: Gateway for this network. Required if `static` method is chosen.
 - `interfaces`: An array of interface names. If provided, the installer then combines these NICs into a single logical bonded interface.
     - `interfaces.name`: The name of the slave interface for the bonded network.
+    - `interfaces.hwAddr`: The hardware MAC address of the interface.
 - `bond_options`: Options for bonded interfaces. Refer to [here](https://www.kernel.org/doc/Documentation/networking/bonding.txt) for more info. If not provided, the following options would be used:
     - `mode: balance-tlb`
     - `miimon: 100`
@@ -358,6 +360,7 @@ install:
     harvester-mgmt:       # The management bond name. This is mandatory.
       interfaces:
       - name: ens5
+        hwAddr: "B8:CA:3A:6A:64:7D"     # The hwAddr is optional
       method: dhcp
       bond_options:
         mode: balance-tlb
@@ -366,6 +369,7 @@ install:
     harvester-vlan:       # The VLAN network bond name. User can then input `harvester-vlan` in the VLAN NIC setting in the GUI.
       interfaces:
       - name: ens6
+        hwAddr: "B8:CA:3A:6A:64:7E"     # The hwAddr is optional
       method: none
       bond_options:
         mode: balance-tlb
@@ -373,6 +377,7 @@ install:
     bond0:
       interfaces:
       - name: ens8
+        hwAddr: "B8:CA:3A:6A:64:7F"     # The hwAddr is optional
       method: static
       ip: 10.10.18.2
       subnet_mask: 255.255.255.0
@@ -528,9 +533,10 @@ You can setup the default network in Harvester by configuring `cluster_networks`
         - `defaultPhysicalNIC` (string, required): assign a physical NIC to be external entry of VLAN network.
 
 :::note
-    To configure the `cluster_networks`, Harvester needs to be installed in "create" mode.
-    If you install Harvester in "join" mode, this setting is ignored.
-    Installing in "join" mode will apply the `cluster_networks` configuration from the existing Harvester system.
+To configure the `cluster_networks`, Harvester needs to be installed in "create" mode.
+If you install Harvester in "join" mode, this setting is ignored.
+Installing in "join" mode will apply the `cluster_networks` configuration from the existing Harvester system.
+:::
 
 #### Example
 

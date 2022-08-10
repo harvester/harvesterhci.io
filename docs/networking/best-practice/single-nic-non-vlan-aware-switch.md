@@ -59,5 +59,5 @@ If you need a VM to connect to the subnet of the Harvester hosts, you have to cr
 Please refer to [this page](../harvester-network.md) for additional information on Harvester Networking.
 
 :::note
-    If you create a VLAN Network different from `1`, the connection between VMs in different nodes will fail.
+If you create a VLAN Network different from `1`, the connection between VMs in different nodes will fail.
 :::

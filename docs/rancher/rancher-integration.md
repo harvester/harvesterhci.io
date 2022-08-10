@@ -50,9 +50,9 @@ Use one of the following guides to deploy and provision Rancher and a Kubernetes
 To install Rancher with Docker:
 
 1. Begin creation of a custom cluster by provisioning a Linux host. Your host can be any of the following:
-	- A cloud-hosted virtual machine (VM)
-	- An on-premises VM
-	- A bare-metal server
+    - A cloud-hosted virtual machine (VM)
+    - An on-premises VM
+    - A bare-metal server
 1. Log into your Linux host using your preferred shell, such as PuTTy or a remote terminal connection.
 1. From your shell, enter the following command:
 
