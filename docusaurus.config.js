@@ -40,7 +40,7 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
           editUrl:
-            "https://github.com/harvester/harvesterhci.io/edit/main/static/",
+            "https://github.com/harvester/harvesterhci.io/edit/main/",
           lastVersion: "current",
           versions: {
             current: {
