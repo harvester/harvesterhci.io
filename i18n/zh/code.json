@@ -223,7 +223,7 @@
     "description": "The title of the tag list page"
   },
   "Harvester is a modern Hyperconverged infrastructure (HCI) solution built for bare metal servers using enterprise-grade open source technologies including Kubernetes, Kubevirt and Longhorn. Designed for users looking for a cloud-native HCI solution, Harvester is a flexible and affordable offering capable of putting VM workloads on the edge, close to your IoT, and integrated into your cloud infrastructure.": {
-    "message": "Harvester 是一个为裸机服务器构建的超融合基础架构（HCI）软件，它采用了企业级开源技术（包括 Kubernetes、Kubevirt 和 Longhorn）。Harvester 是为寻找云原生 HCI 解决方案的用户设计的，它是一款灵活而经济的产品，能让你将虚拟机工作负载部署到边缘，靠近物联网，并集成到云基础设施中。",
+    "message": "Harvester 是一个为裸机服务器构建的超融合基础架构（HCI）软件，它采用了企业级开源技术（包括 Kubernetes、Kubevirt 和 Longhorn）。Harvester 是为寻找云原生 HCI 解决方案的用户设计的，它是一款灵活而经济的产品，能让你将虚拟机工作负载部署到边缘或物联网附近，并集成到云基础设施中。",
     "description": "Harvester description"
   },
   "Why Harvester?": {
@@ -239,7 +239,7 @@
     "description": "Feature description 1"
   },
   "As 100% open source, Harvester is free from the costly license fees of other HCI solutions. Plus, with its foundation based on existing technology such as Linux & kernel- based virtual machines.": {
-    "message": "Harvester 100% 开源，能帮你节省 HCI 解决方案的昂贵的许可费。此外，Harvester 是基于现有的技术 （如 Linux 和基于内核的虚拟机）构建的。",
+    "message": "Harvester 100% 开源，是在现有技术（如 Linux 和基于内核的虚拟机）之上构建的，能帮你节省 HCI 解决方案昂贵的许可费。",
     "description": "Feature description 2"
   },
   "Built with cloud native components at its core, Harvester is future-proof as the infrastructure industry shifts toward containers, edge and multi-cloud software engineering.": {
