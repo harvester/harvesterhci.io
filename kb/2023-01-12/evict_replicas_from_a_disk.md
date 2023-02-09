@@ -15,7 +15,7 @@ Harvester replicates volumes data across disks in a cluster. Before removing a d
 
 ## Preparation
 
-The doc describes how to evict a Longhorn disk with the `kubectl` command. The user needs to make sure the environment is set up correctly.
+The doc describes how to evict a Longhorn disk with the `kubectl` command. Before it, the user needs to make sure the environment is set up correctly.
 There are two recommended ways to do this:
 
 1. Log in to any server role node and become root (`sudo -i`).
