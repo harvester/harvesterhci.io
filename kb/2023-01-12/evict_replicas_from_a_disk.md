@@ -15,10 +15,10 @@ Harvester replicates volumes data across disks in a cluster. Before removing a d
 
 ## Preparation
 
-The doc describes how to evict a Longhorn disk with the `kubectl` command. Before it, the user needs to make sure the environment is set up correctly.
+This document describes how to evict Longhorn disks using the `kubectl` command. Before that, users must ensure the environment is set up correctly.
 There are two recommended ways to do this:
 
-1. Log in to any server role node and become root (`sudo -i`).
+1. Log in to any management node and switch to root (`sudo -i`).
 1. Download Kubeconfig file and use it locally
     - Install `kubectl` and `yq` program manually.
     - Open Harvester GUI,  click `support` at the bottom left of the page and click `Download KubeConfig` to download the Kubeconfig file.
@@ -105,5 +105,5 @@ There are two recommended ways to do this:
 
     :::note
     
-    If a replica always stays in a disk, please open the Longhorn GUI and check if there is free space on other disks.
+    If a replica always stays in a disk, please open the [Longhorn GUI](https://docs.harvesterhci.io/v1.1/troubleshooting/harvester#access-embedded-rancher-and-longhorn-dashboards) and check if there is free space on other disks.
     :::
