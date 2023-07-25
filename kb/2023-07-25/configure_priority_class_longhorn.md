@@ -1,0 +1,314 @@
+---
+title: Configure PriorityClass on Longhorn System Components
+description: Configure priority classes on Longhorn system components
+slug: configure_priority_class_longhorn
+authors:
+  - name: Kiefer Chang
+    title: Engineer Manager
+    url: https://github.com/bk201
+    image_url: https://github.com/bk201.png
+tags: [harvester, longhorn, "priority class"]
+hide_table_of_contents: false
+---
+
+Starting from Harvester `v1.2.0`, Longhorn system-managed components in new-deployed clusters have `PriorityClass` set to `system-cluster-critical` by default. But Longhorn system-managed components won't have any `PriorityClass` if a user upgrades a Harvester cluster from previous versions. 
+
+This phenomenon is because we want to support zero-downtime upgrades, but Longhorn doesn't allow changing the `priority-class` setting when there are attached volumes (Please see the [doc](https://longhorn.io/docs/1.4.3/advanced-resources/deploy/priority-class/#setting-priority-class-during-longhorn-installation)).
+
+This article describes manually configuring priority classes for Longhorn system-managed components after an upgrade.
+
+## Stop all virtual machines
+
+You must stop all virtual machines to detach all volumes. Please back up any work before doing this.
+- [Log in to a Harvester controller node and become root](https://docs.harvesterhci.io/v1.1/troubleshooting/os#how-to-log-into-a-harvester-node).
+- Get all running virtual machines and write down their namespaces and names:
+
+  ```bash
+  kubectl get vmi -A
+  ```
+
+  Or you can back up the Virtual Machine Instance (VMI) manifests:
+  ```
+  kubectl get vmi -A -o json > vmi-backup.json
+  ```
+
+- Run this script to stop all virtual machines:
+
+  ```bash
+  kubectl get vmi -A -o json | jq -r '.items[] | [.metadata.name, .metadata.namespace] | @tsv' | while IFS=$'\t' read -r name namespace; do
+        if [ -z "$name" ]; then
+          break
+        fi
+        echo "Stop ${namespace}/${name}"
+        virtctl stop $name -n $namespace
+      done
+  ```
+
+- Ensure there are no running virtual machines:
+
+  Run the command:
+
+  ```bash
+  kubectl get vmi -A
+  ```
+
+  The above command must return:
+
+  ```
+  No resources found
+  ```
+
+## Scale down monitoring pods
+
+- Scale down the Prometheus deployment.
+
+  Run the command and wait for all Prometheus pods to terminate:
+
+  ```bash
+  kubectl patch -n cattle-monitoring-system prometheus/rancher-monitoring-prometheus --patch '{"spec": {"replicas": 0}}' --type merge && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n cattle-monitoring-system statefulset/prometheus-rancher-monitoring-prometheus
+  ```
+
+  A sample output looks like:
+
+  ```
+  prometheus.monitoring.coreos.com/rancher-monitoring-prometheus patched
+  statefulset rolling update complete 0 pods at revision prometheus-rancher-monitoring-prometheus-cbf6bd5f7...
+  ```
+
+- Scale down the AlertManager deployment.
+
+  Run the command and wait for all AlertManager pods to terminate:
+
+  ```bash
+  kubectl patch -n cattle-monitoring-system alertmanager/rancher-monitoring-alertmanager --patch '{"spec": {"replicas": 0}}' --type merge && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n cattle-monitoring-system statefulset/alertmanager-rancher-monitoring-alertmanager
+  ```
+
+  A sample output looks like this:
+
+  ```
+  alertmanager.monitoring.coreos.com/rancher-monitoring-alertmanager patched
+  statefulset rolling update complete 0 pods at revision alertmanager-rancher-monitoring-alertmanager-c8c459dff...
+  ```
+
+- Scale down the Grafana deployment.
+
+  Run the command and wait for all Grafana pods to terminate:
+
+  ```bash
+  kubectl scale --replicas=0 deployment/rancher-monitoring-grafana -n cattle-monitoring-system && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n cattle-monitoring-system deployment/rancher-monitoring-grafana
+  ```
+
+  A sample output looks like this:
+
+  ```
+  deployment.apps/rancher-monitoring-grafana scaled
+  deployment "rancher-monitoring-grafana" successfully rolled out
+  ```
+
+## Scale down vm-import-controller pods
+
+Check if the [`vm-import-controller` addon](https://docs.harvesterhci.io/v1.1/advanced/vmimport) is enabled and configured with a persistent volume:
+
+```bash
+kubectl get pvc -n harvester-system harvester-vm-import-controller
+```
+
+If the above command returns an output like this, you must scale down the `vm-import-controller` pod. Otherwise, you can skip the step.
+```
+NAME                             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS         AGE
+harvester-vm-import-controller   Bound    pvc-eb23e838-4c64-4650-bd8f-ba7075ab0559   200Gi      RWO            harvester-longhorn   2m53s
+```
+
+Scale down the vm-import-controller pods:
+
+```bash
+kubectl scale --replicas=0 deployment/harvester-vm-import-controller -n harvester-system && \
+    sleep 5 && \
+    kubectl rollout status --watch=true -n harvester-system deployment/harvester-vm-import-controller
+```
+
+
+A sample output looks like this:
+
+```
+deployment.apps/harvester-vm-import-controller scaled
+deployment "harvester-vm-import-controller" successfully rolled out
+```
+
+## Set the `priority-class` setting
+
+Before applying the setting, you need to verify all volumes are detached:
+
+Run this command to verify all volumes' `STATE` are `detached`:
+
+```bash
+kubectl get volumes.longhorn.io -A
+```
+
+Verify the output looks like this:
+```
+NAMESPACE         NAME                                       STATE      ROBUSTNESS   SCHEDULED   SIZE           NODE   AGE
+longhorn-system   pvc-5743fd02-17a3-4403-b0d3-0e9b401cceed   detached   unknown                  5368709120            15d
+longhorn-system   pvc-7e389fe8-984c-4049-9ba8-5b797cb17278   detached   unknown                  53687091200           15d
+longhorn-system   pvc-8df64e54-ecdb-4d4e-8bab-28d81e316b8b   detached   unknown                  2147483648            15d
+longhorn-system   pvc-eb23e838-4c64-4650-bd8f-ba7075ab0559   detached   unknown                  214748364800          11m
+```
+
+And set the `priority-class` setting:
+
+```bash
+kubectl patch -n longhorn-system settings.longhorn.io priority-class --patch '{"value": "system-cluster-critical"}' --type merge
+```
+
+Longhorn system-managed pods will restart. you need to check if all the system-managed components have a priority set:
+
+Get the value of the `PriorityClass` `system-cluster-critical`:
+```bash
+kubectl get priorityclass system-cluster-critical
+```
+
+Output:
+```
+NAME                      VALUE        GLOBAL-DEFAULT   AGE
+system-cluster-critical   2000000000   false            15d
+```
+
+
+Get pods' priority in the `longhorn-system` namespace:
+
+```bash
+kubectl get pods -n longhorn-system -o custom-columns="Name":metadata.name,"Priority":.spec.priority
+```
+
+And verify all system-managed components' pods have the correct priority. System-managed components include:
+- `csi-attacher`
+- `csi-provisioner`
+- `csi-resizer`
+- `csi-snapshotter`
+- `engine-image-ei`
+- `instance-manager-e`
+- `instance-manager-r`
+- `longhorn-csi-plugin`
+
+## Scale up vm-import-controller pods
+
+If you scale down the `vm-import-controller` pods, you need to scale up it again. 
+
+- Scale up the `vm-import-controller` pod:
+
+  Run the command: 
+
+  ```bash
+  kubectl scale --replicas=1 deployment/harvester-vm-import-controller -n harvester-system && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n harvester-system deployment/harvester-vm-import-controller
+  ```
+
+  A sample output looks like this:
+
+  ```
+  deployment.apps/harvester-vm-import-controller scaled
+  Waiting for deployment "harvester-vm-import-controller" rollout to finish: 0 of 1 updated replicas are available...
+  deployment "harvester-vm-import-controller" successfully rolled out
+  ```
+
+- Verify `vm-import-controller` is running:
+
+  Run the command:
+  ```bash
+  kubectl get pods --selector app.kubernetes.io/instance=vm-import-controller -A
+  ```
+
+  A sample output looks like this, the pod's `STATUS` must be `Running`:
+  ```
+  NAMESPACE          NAME                                              READY   STATUS    RESTARTS   AGE
+  harvester-system   harvester-vm-import-controller-6bd8f44f55-m9k86   1/1     Running   0          4m53s
+  ```
+
+## Scale up monitoring pods
+
+- Scale up the Prometheus deployment.
+
+  Run the command and wait for all Prometheus pods to roll out:
+
+  ```bash
+  kubectl patch -n cattle-monitoring-system prometheus/rancher-monitoring-prometheus --patch '{"spec": {"replicas": 1}}' --type merge && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n cattle-monitoring-system statefulset/prometheus-rancher-monitoring-prometheus
+  ```
+
+  A sample output looks like:
+
+  ```
+  prometheus.monitoring.coreos.com/rancher-monitoring-prometheus patched
+  Waiting for 1 pods to be ready...
+  statefulset rolling update complete 1 pods at revision prometheus-rancher-monitoring-prometheus-cbf6bd5f7...
+  ```
+
+- Scale down the AlertManager deployment.
+
+  Run the command and wait for all AlertManager pods to roll out:
+
+  ```bash
+  kubectl patch -n cattle-monitoring-system alertmanager/rancher-monitoring-alertmanager --patch '{"spec": {"replicas": 1}}' --type merge && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n cattle-monitoring-system statefulset/alertmanager-rancher-monitoring-alertmanager
+  ```
+
+  A sample output looks like this:
+
+  ```
+  alertmanager.monitoring.coreos.com/rancher-monitoring-alertmanager patched
+  Waiting for 1 pods to be ready...
+  statefulset rolling update complete 1 pods at revision alertmanager-rancher-monitoring-alertmanager-c8bd4466c...
+  ```
+
+- Scale down the Grafana deployment.
+
+  Run the command and wait for all Grafana pods to roll out:
+
+  ```bash
+  kubectl scale --replicas=1 deployment/rancher-monitoring-grafana -n cattle-monitoring-system && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n cattle-monitoring-system deployment/rancher-monitoring-grafana
+  ```
+
+  A sample output looks like this:
+
+  ```
+  deployment.apps/rancher-monitoring-grafana scaled
+  Waiting for deployment "rancher-monitoring-grafana" rollout to finish: 0 of 1 updated replicas are available...
+  deployment "rancher-monitoring-grafana" successfully rolled out
+  ```
+
+## Start virtual machines
+
+- Start a virtual machine with the command:
+
+  ```bash
+  virtctl start $name -n $namespace
+  ```
+
+  Replace `$name` with the virtual machine name and `$namespace` with the virtual machine namespace. You can list all virtual machines with the command:
+
+  ```bash
+  kubectl get vms -A
+  ```
+
+- Or start all running virtual machines before applying this guide:
+
+  ```bash
+  cat vmi-backup.json | jq -r '.items[] | [.metadata.name, .metadata.namespace] | @tsv' | while IFS=$'\t' read -r name namespace; do
+        if [ -z "$name" ]; then
+          break
+        fi
+        echo "Start ${namespace}/${name}"
+        virtctl start $name -n $namespace || true
+      done
+  ```
