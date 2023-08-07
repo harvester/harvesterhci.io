@@ -32,8 +32,11 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
     kubectl get vmi -A -o json > vmi-backup.json
     ```
 
-3. Run this script to stop all virtual machines:
+3. Shutdown all virtual machines:
 
+  Log in to all running virtual machines and shut down them gracefully (recommended).
+  
+  Or use the following command to send shutdown signals to all virtual machines:
   ```bash
   kubectl get vmi -A -o json | jq -r '.items[] | [.metadata.name, .metadata.namespace] | @tsv' | while IFS=$'\t' read -r name namespace; do
         if [ -z "$name" ]; then
@@ -43,6 +46,12 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
         virtctl stop $name -n $namespace
       done
   ```
+
+  :::note
+    You can also stop all virtual machines from the Harvester GUI:
+    1. Navigate to the "Virtual Machines" page.
+    2. Select virtual machines and click the "Stop" button to stop them.
+  :::
 
 4. Ensure there are no running virtual machines:
 
@@ -299,6 +308,12 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
   ```bash
   kubectl get vms -A
   ```
+
+  :::note
+    You can also start virtual machines from the Harvester GUI:
+    1. Navigate to the "Virtual Machines" page.
+    2. Select virtual machines and click the "Start" button to start them.
+  :::
 
 2. Or start all running virtual machines before applying this guide:
 
