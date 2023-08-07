@@ -11,11 +11,11 @@ tags: [harvester, longhorn, "priority class"]
 hide_table_of_contents: false
 ---
 
-Starting from Harvester `v1.2.0`, Longhorn system-managed components in new-deployed clusters have `PriorityClass` set to `system-cluster-critical` by default. But Longhorn system-managed components won't have any `PriorityClass` if a user upgrades a Harvester cluster from previous versions. 
+Starting from Harvester `v1.2.0`, we have introduced a new enhancement where Longhorn system-managed components in newly-deployed clusters are automatically assigned the `PriorityClass` with "system-cluster-critical" by default. However, users who upgrade their Harvester clusters from previous versions may notice that Longhorn system-managed components do not have any `PriorityClass` set.
 
-This phenomenon is because we want to support zero-downtime upgrades, but Longhorn doesn't allow changing the `priority-class` setting when there are attached volumes (Please see the [doc](https://longhorn.io/docs/1.4.3/advanced-resources/deploy/priority-class/#setting-priority-class-during-longhorn-installation)).
+This behavior is intentional and aimed at supporting zero-downtime upgrades. Longhorn does not allow changing the `priority-class` setting when there are attached volumes (please refer to the [documentation](https://longhorn.io/docs/1.4.3/advanced-resources/deploy/priority-class/#setting-priority-class-during-longhorn-installation)).
 
-This article describes manually configuring priority classes for Longhorn system-managed components after an upgrade.
+In this article, we will guide you through the manual configuration of priority classes for Longhorn system-managed components after upgrading your Harvester cluster. This ensures that your Longhorn components have the appropriate priority class assigned, maintaining the stability and performance of your system.
 
 ## Stop all virtual machines
 
@@ -27,10 +27,10 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
   kubectl get vmi -A
   ```
 
-  Or you can back up the Virtual Machine Instance (VMI) manifests:
-  ```
-  kubectl get vmi -A -o json > vmi-backup.json
-  ```
+    You can also get this information by backing up the Virtual Machine Instance (VMI) manifests:
+    ```bash
+    kubectl get vmi -A -o json > vmi-backup.json
+    ```
 
 - Run this script to stop all virtual machines:
 
@@ -54,9 +54,8 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
 
   The above command must return:
 
-  ```
+  ```bash
   No resources found
-  ```
 
 ## Scale down monitoring pods
 
