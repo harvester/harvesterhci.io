@@ -20,8 +20,8 @@ In this article, we will guide you through the manual configuration of priority 
 ## Stop all virtual machines
 
 You must stop all virtual machines to detach all volumes. Please back up any work before doing this.
-- [Log in to a Harvester controller node and become root](https://docs.harvesterhci.io/v1.1/troubleshooting/os#how-to-log-into-a-harvester-node).
-- Get all running virtual machines and write down their namespaces and names:
+1. [Log in to a Harvester controller node and become root](https://docs.harvesterhci.io/v1.1/troubleshooting/os#how-to-log-into-a-harvester-node).
+2. Get all running virtual machines and write down their namespaces and names:
 
   ```bash
   kubectl get vmi -A
@@ -32,7 +32,7 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
     kubectl get vmi -A -o json > vmi-backup.json
     ```
 
-- Run this script to stop all virtual machines:
+3. Run this script to stop all virtual machines:
 
   ```bash
   kubectl get vmi -A -o json | jq -r '.items[] | [.metadata.name, .metadata.namespace] | @tsv' | while IFS=$'\t' read -r name namespace; do
@@ -44,7 +44,7 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
       done
   ```
 
-- Ensure there are no running virtual machines:
+4. Ensure there are no running virtual machines:
 
   Run the command:
 
@@ -59,7 +59,7 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
 
 ## Scale down monitoring pods
 
-- Scale down the Prometheus deployment.
+1. Scale down the Prometheus deployment.
 
   Run the command and wait for all Prometheus pods to terminate:
 
@@ -76,7 +76,7 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
   statefulset rolling update complete 0 pods at revision prometheus-rancher-monitoring-prometheus-cbf6bd5f7...
   ```
 
-- Scale down the AlertManager deployment.
+2. Scale down the AlertManager deployment.
 
   Run the command and wait for all AlertManager pods to terminate:
 
@@ -93,7 +93,7 @@ You must stop all virtual machines to detach all volumes. Please back up any wor
   statefulset rolling update complete 0 pods at revision alertmanager-rancher-monitoring-alertmanager-c8c459dff...
   ```
 
-- Scale down the Grafana deployment.
+3. Scale down the Grafana deployment.
 
   Run the command and wait for all Grafana pods to terminate:
 
@@ -199,7 +199,7 @@ And verify all system-managed components' pods have the correct priority. System
 
 If you scale down the `vm-import-controller` pods, you need to scale up it again. 
 
-- Scale up the `vm-import-controller` pod:
+1. Scale up the `vm-import-controller` pod:
 
   Run the command: 
 
@@ -217,7 +217,7 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
   deployment "harvester-vm-import-controller" successfully rolled out
   ```
 
-- Verify `vm-import-controller` is running:
+2. Verify `vm-import-controller` is running:
 
   Run the command:
   ```bash
@@ -232,7 +232,7 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
 
 ## Scale up monitoring pods
 
-- Scale up the Prometheus deployment.
+1. Scale up the Prometheus deployment.
 
   Run the command and wait for all Prometheus pods to roll out:
 
@@ -250,7 +250,7 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
   statefulset rolling update complete 1 pods at revision prometheus-rancher-monitoring-prometheus-cbf6bd5f7...
   ```
 
-- Scale down the AlertManager deployment.
+2. Scale down the AlertManager deployment.
 
   Run the command and wait for all AlertManager pods to roll out:
 
@@ -268,7 +268,7 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
   statefulset rolling update complete 1 pods at revision alertmanager-rancher-monitoring-alertmanager-c8bd4466c...
   ```
 
-- Scale down the Grafana deployment.
+3. Scale down the Grafana deployment.
 
   Run the command and wait for all Grafana pods to roll out:
 
@@ -288,7 +288,7 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
 
 ## Start virtual machines
 
-- Start a virtual machine with the command:
+1. Start a virtual machine with the command:
 
   ```bash
   virtctl start $name -n $namespace
@@ -300,7 +300,7 @@ If you scale down the `vm-import-controller` pods, you need to scale up it again
   kubectl get vms -A
   ```
 
-- Or start all running virtual machines before applying this guide:
+2. Or start all running virtual machines before applying this guide:
 
   ```bash
   cat vmi-backup.json | jq -r '.items[] | [.metadata.name, .metadata.namespace] | @tsv' | while IFS=$'\t' read -r name namespace; do
