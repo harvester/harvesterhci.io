@@ -27,10 +27,10 @@ Stop all virtual machines (VMs) to detach all volumes. Please back up any work b
   kubectl get vmi -A
   ```
 
-Alternatively, you can get this information by backing up the Virtual Machine Instance (VMI) manifests with the following command:
-    ```bash
-    kubectl get vmi -A -o json > vmi-backup.json
-    ```
+  Alternatively, you can get this information by backing up the Virtual Machine Instance (VMI) manifests with the following command:
+  ```bash
+  kubectl get vmi -A -o json > vmi-backup.json
+  ```
 
 3. Shut down all VMs. Log in to all running VMs and shut them down gracefully (recommended). Or use the following command to send shutdown signals to all VMs:
   ```bash
@@ -113,82 +113,83 @@ Alternatively, you can get this information by backing up the Virtual Machine In
 
 1. Check if the [`vm-import-controller` addon](https://docs.harvesterhci.io/v1.1/advanced/vmimport) is enabled and configured with a persistent volume with the following command:
 
-```bash
-kubectl get pvc -n harvester-system harvester-vm-import-controller
-```
+  ```bash
+  kubectl get pvc -n harvester-system harvester-vm-import-controller
+  ```
 
-If the above command returns an output like this, you must scale down the `vm-import-controller` pod. Otherwise, you can skip the following step.
-```
-NAME                             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS         AGE
-harvester-vm-import-controller   Bound    pvc-eb23e838-4c64-4650-bd8f-ba7075ab0559   200Gi      RWO            harvester-longhorn   2m53s
-```
+  If the above command returns an output like this, you must scale down the `vm-import-controller` pod. Otherwise, you can skip the following step.
+  ```
+  NAME                             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS         AGE
+  harvester-vm-import-controller   Bound    pvc-eb23e838-4c64-4650-bd8f-ba7075ab0559   200Gi      RWO            harvester-longhorn   2m53s
+  ```
 
 2. Scale down the `vm-import-controller` pods with the following command:
 
-```bash
-kubectl scale --replicas=0 deployment/harvester-vm-import-controller -n harvester-system && \
-    sleep 5 && \
-    kubectl rollout status --watch=true -n harvester-system deployment/harvester-vm-import-controller
-```
+  ```bash
+  kubectl scale --replicas=0 deployment/harvester-vm-import-controller -n harvester-system && \
+      sleep 5 && \
+      kubectl rollout status --watch=true -n harvester-system deployment/harvester-vm-import-controller
+  ```
 
-A sample output looks like this:
+  A sample output looks like this:
 
-```
-deployment.apps/harvester-vm-import-controller scaled
-deployment "harvester-vm-import-controller" successfully rolled out
-```
+  ```
+  deployment.apps/harvester-vm-import-controller scaled
+  deployment "harvester-vm-import-controller" successfully rolled out
+  ```
 
 ## Set the `priority-class` setting
 
 1. Before applying the `priority-class` setting, you need to verify all volumes are detached. Run the following command to verify the `STATE` of each volume is `detached`:
 
-```bash
-kubectl get volumes.longhorn.io -A
-```
+  ```bash
+  kubectl get volumes.longhorn.io -A
+  ```
 
-Verify the output looks like this:
-```
-NAMESPACE         NAME                                       STATE      ROBUSTNESS   SCHEDULED   SIZE           NODE   AGE
-longhorn-system   pvc-5743fd02-17a3-4403-b0d3-0e9b401cceed   detached   unknown                  5368709120            15d
-longhorn-system   pvc-7e389fe8-984c-4049-9ba8-5b797cb17278   detached   unknown                  53687091200           15d
-longhorn-system   pvc-8df64e54-ecdb-4d4e-8bab-28d81e316b8b   detached   unknown                  2147483648            15d
-longhorn-system   pvc-eb23e838-4c64-4650-bd8f-ba7075ab0559   detached   unknown                  214748364800          11m
-```
+  Verify the output looks like this:
+  ```
+  NAMESPACE         NAME                                       STATE      ROBUSTNESS   SCHEDULED   SIZE           NODE   AGE
+  longhorn-system   pvc-5743fd02-17a3-4403-b0d3-0e9b401cceed   detached   unknown                  5368709120            15d
+  longhorn-system   pvc-7e389fe8-984c-4049-9ba8-5b797cb17278   detached   unknown                  53687091200           15d
+  longhorn-system   pvc-8df64e54-ecdb-4d4e-8bab-28d81e316b8b   detached   unknown                  2147483648            15d
+  longhorn-system   pvc-eb23e838-4c64-4650-bd8f-ba7075ab0559   detached   unknown                  214748364800          11m
+  ```
 
 1. Set the `priority-class` setting with the following command:
 
-```bash
-kubectl patch -n longhorn-system settings.longhorn.io priority-class --patch '{"value": "system-cluster-critical"}' --type merge
-```
+  ```bash
+  kubectl patch -n longhorn-system settings.longhorn.io priority-class --patch '{"value": "system-cluster-critical"}' --type merge
+  ```
 
-Longhorn system-managed pods will restart and then you need to check if all the system-managed components have a priority class set:
+  Longhorn system-managed pods will restart and then you need to check if all the system-managed components have a priority class set:
 
-Get the value of the priority class `system-cluster-critical`:
-```bash
-kubectl get priorityclass system-cluster-critical
-```
+  Get the value of the priority class `system-cluster-critical`:
+  ```bash
+  kubectl get priorityclass system-cluster-critical
+  ```
 
-Verify the output looks like this:
-```
-NAME                      VALUE        GLOBAL-DEFAULT   AGE
-system-cluster-critical   2000000000   false            15d
-```
+  Verify the output looks like this:
+  ```
+  NAME                      VALUE        GLOBAL-DEFAULT   AGE
+  system-cluster-critical   2000000000   false            15d
+  ```
 
 3. Use the following command to get pods' priority in the `longhorn-system` namespace:
 
-```bash
-kubectl get pods -n longhorn-system -o custom-columns="Name":metadata.name,"Priority":.spec.priority
-```
+  ```bash
+  kubectl get pods -n longhorn-system -o custom-columns="Name":metadata.name,"Priority":.spec.priority
+  ```
 
 4. Verify all system-managed components' pods have the correct priority. System-managed components include:
-- `csi-attacher`
-- `csi-provisioner`
-- `csi-resizer`
-- `csi-snapshotter`
-- `engine-image-ei`
-- `instance-manager-e`
-- `instance-manager-r`
-- `longhorn-csi-plugin`
+
+    - `csi-attacher`
+    - `csi-provisioner`
+    - `csi-resizer`
+    - `csi-snapshotter`
+    - `engine-image-ei`
+    - `instance-manager-e`
+    - `instance-manager-r`
+    - `longhorn-csi-plugin`
 
 ## Scale up vm-import-controller pods
 
@@ -278,7 +279,7 @@ If you scale down the `vm-import-controller` pods, you must scale it up again.
   virtctl start $name -n $namespace
   ```
 
-Replace `$name` with the VM's name and `$namespace` with the VM's namespace. You can list all virtual machines with the command:
+  Replace `$name` with the VM's name and `$namespace` with the VM's namespace. You can list all virtual machines with the command:
 
   ```bash
   kubectl get vms -A
@@ -290,7 +291,7 @@ Replace `$name` with the VM's name and `$namespace` with the VM's namespace. You
     2. For each VM, select **⋮** > **Start**.
   :::
 
-Alternatively, you can start all running VMs with the following command:
+  Alternatively, you can start all running VMs with the following command:
 
   ```bash
   cat vmi-backup.json | jq -r '.items[] | [.metadata.name, .metadata.namespace] | @tsv' | while IFS=$'\t' read -r name namespace; do
