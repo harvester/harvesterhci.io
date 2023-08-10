@@ -45,7 +45,7 @@ Stop all virtual machines (VMs) to detach all volumes. Please back up any work b
 
   :::note
     You can also stop all VMs from the Harvester UI:
-    1. Go to the "Virtual Machines" page.
+    1. Go to the **Virtual Machines** page.
     2. For each VM, select **⋮** > **Stop**.
   :::
 
@@ -111,7 +111,7 @@ Stop all virtual machines (VMs) to detach all volumes. Please back up any work b
 
 ## Scale down vm-import-controller pods
 
-1. Check if the [`vm-import-controller` addon](https://docs.harvesterhci.io/v1.1/advanced/vmimport) is enabled and configured with a persistent volume with the following command:
+1. Check if the [`vm-import-controller`](https://docs.harvesterhci.io/v1.1/advanced/vmimport) addon is enabled and configured with a persistent volume with the following command:
 
   ```bash
   kubectl get pvc -n harvester-system harvester-vm-import-controller
@@ -287,7 +287,7 @@ If you scale down the `vm-import-controller` pods, you must scale it up again.
 
   :::note
    You can also stop all VMs from the Harvester UI:
-    1. Go to the "Virtual Machines" page.
+    1. Go to the **Virtual Machines** page.
     2. For each VM, select **⋮** > **Start**.
   :::
 
