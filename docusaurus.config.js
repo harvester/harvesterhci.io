@@ -112,6 +112,8 @@ const config = {
         routeBasePath: 'kb',
         include: ['**/*.{md,mdx}'],
         postsPerPage: 10,
+        blogSidebarTitle: 'All Posts',
+        blogSidebarCount: 'ALL',
       },
     ],
   ],
