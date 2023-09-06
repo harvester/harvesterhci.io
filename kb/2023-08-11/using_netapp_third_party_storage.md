@@ -29,19 +29,77 @@ We are assuming that before beginning this procedure,
 a Harvester cluster and a NetApp ONTAP storage system
 are both installed and configured for use.
 
-Follow all of the following steps, but ONLY on the initial cluster node.
+Most of these steps can be performed on any system that has the `helm` and `kubectl` commands installed, and which has network connectivity to the management port of the Harvester cluster.  Let's call this your workstation.  Certain steps must be performed on one or more cluster nodes themselves.  The steps described below should be done on your workstation unless otherwise indicated.
 
 The last step (setting up multipathd) should be done on all nodes,
-AFTER the initial node has had Trident installed.
+after the Trident CSI has been installed.
+
+Certain parameters of your installation will require modification of details in the examples in the procedure given below. This which you may wish to modify include:
+* The namespace.  `trident` is used as the namespace in the examples, but you may prefer to use another.
+* The name of the deployment. `mytrident` is used but you can change this to something else.
+* The management IP address of the Ontap storage system
+* Login credentials (username and password) of the Ontap storage system
 
 1. Read the NetApp Astra Trident documentation
        https://docs.netapp.com/us-en/trident/
        https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-deploy-operator.html
-   We are describing the "manual deployment" procedure here.
-1. Log into the Harvester cluster in one of the nodes.
-1. Download and extract the Trident software into /tmp on the Harvester node.
-   Note that the Harvester node will not have "wget" but it does have
-   "curl", so the command to download the software is adjusted accordingly:
+       https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm
+   The simplest method is to install using Helm; that process is described here.
+1. Download the KubeConfig from the Harvester cluster.
+   * Open the web UI for your Harvester cluster
+   * In the lower left corner, click the "Support" link.  This will take you to a "Harvester Support" page.
+   * Click the button labeled "Download KubeConfig".  This will download a your cluster config in a file called "local.yaml" by default.
+   * Move this file to a convenient location and set your KUBECONFIG environment variable to the path of this file.
+1. Prepare the cluster for installation of the Helm chart.
+   Before starting installation of the helm chart, special authorization must be provided to enable certain modifications to be made during the installation.
+   * Put the following text into a file.  For this example we'll call it `authorize_trident.yaml`.
+
+      ```yaml
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: trident-operator-psa
+      rules:
+      - apiGroups:
+        - management.cattle.io
+        resources:
+        - projects
+        verbs:
+        - updatepsa
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: trident-operator-psa
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: trident-operator-psa
+      subjects:
+      - kind: ServiceAccount
+        name: trident-operator
+        namespace: trident
+      ```
+
+   * Apply this manifest via the command `kubectl apply -f authorize_trident.yaml`.
+
+1. Install the helm chart.
+   * First you will need to add the Astra Trident Helm repository:
+
+      ```shell
+      helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
+      ```
+
+   * Next, install the Helm cart.  This example uses `mytrident` as the deployment name, `trident` as the namespace, and 23.07.0 as the version number to install:
+
+      ```shell
+      helm install mytrident netapp-trident/trident-operator --version 23.07.0 --create-namespace --namespace trident
+      ```
+
+   * The NetApp documentation describes variations on how you can do this.
+
+1. Download and extract the tridentctl command, which will be needed for the next few steps:
 
    ```shell
    cd /tmp
@@ -49,58 +107,6 @@ AFTER the initial node has had Trident installed.
    tar -xf trident-installer-23.07.0.tar.gz
    cd trident-installer
    ```
-
-1. Prepare, install Trident, and verify the installation
-   This part is a summary of the relevant steps from the NetApp Trident
-   website.
-   1. Create the TridentOrchestrator CRD.
-
-      ```shell
-      kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
-      ```
-
-   1. Deploy the Trident operator (assuming the "trident" namespace)
-
-      ```shell
-      # kubectl apply -f deploy/namespace.yaml
-      kubectl apply -f deploy/bundle_post_1_25.yaml
-      ```
-
-      The operator, deployment, and replicasets can be verified with:
-
-      ```shell
-      kubectl get all -n trident
-      ```
-
-   1. Create the TridentOrchestrator and install Trident
-
-      ```shell
-      kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
-      ```
-
-      This will take a while (a few minutes); you can check progress with
-
-         ```shell
-         kubectl desribe torc trident
-         ```
-
-      The last few lines of output will tell you whether the installation
-      has completed successfully.  When it has finished, the last few
-      lines should look something like this:
-
-         ```shell
-         Events:
-            Type Reason Age From Message ---- ------ ---- ---- -------Normal
-            Installing 74s trident-operator.netapp.io Installing Trident Normal
-            Installed 67s trident-operator.netapp.io Trident installed
-         ```
-
-   1. Verify the installation
-
-      ```shell
-      kubectl get pods -n trident
-      ./tridentctl -n trident version
-      ```
 
 1. Install a backend.
    This part is specific to Harvester.
@@ -177,6 +183,39 @@ AFTER the initial node has had Trident installed.
                start:
                - multipathd
       ```
+
+   1. Configure `multipathd` to exclude pathnames used by Longhorn.
+      This part is a little tricky.  `multipathd` will automatically discover
+      device names matching a certain pattern, and attempt to set up multipathing on them.
+      Unfortunately, Longhorn's device names follow the same pattern, and
+      will not work correctly if `multipathd` tries to use those devices.
+      Therefore the file `/etc/multipath.conf` must be set up on each node
+      so as to prevent `multipathd` from touching any of the devices
+      that Longhorn will use.  Unfortunately, it is not possible to know
+      in advance which device names will be used until the volumes are attached
+      to a VM when the VM is started, or when the volumes are hot-added to a running VM.
+      The recommended method is to "whitelist" the Trident devices using device
+      properties rather than device naming.  The properties to allow are the
+      device vendor and product.  Here is an example of what you'll want in `/etc/multipath.conf`:
+
+       ```text
+       blacklist {
+           device {
+               vendor "!NETAPP"
+               product "!LUN"
+           }
+       }
+       blacklist_exceptions {
+           device {
+               vendor "NETAPP"
+               product "LUN"
+           }
+       }
+       ```
+
+       This is only an example that works if NetApp is the only storage provider in the system
+       for which `multipathd` must be used.  More complex environments will require
+       more complex configuration.
 
    1. Enable multipathd
     The above file will take effect on the next reboot of the node;
