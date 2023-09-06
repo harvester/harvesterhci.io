@@ -217,6 +217,36 @@ Certain parameters of your installation will require modification of details in 
        for which `multipathd` must be used.  More complex environments will require
        more complex configuration.
 
+       Explicitly putting that content into `/etc/multipath.conf` will work when you start `multipathd` as described below,
+       but the change in `/etc` will not persist across node reboots.  To solve that problem, you should add another
+       file to `/oem` that will re-generate `/etc/multipath.conf` when the node reboots.  The following example
+       will create the `/etc/multipath.conf` given in the example above, but may need to be modified for your
+       environment if you have a more complex iSCS configuration:
+
+       ```text
+       stages:
+          initramfs:
+            - name: "Configure multipath blacklist and whitelist"
+              files:
+              - path: /etc/multipath.conf
+                permissions: 0644
+                owner: 0
+                group: 0
+                content: |
+                  blacklist {
+                      device {
+                          vendor "!NETAPP"
+                          product "!LUN"
+                       }
+                   }
+                   blacklist_exceptions {
+                       device {
+                           vendor "NETAPP"
+                           product "LUN"
+                       }
+                   }
+       ```
+
    1. Enable multipathd
     The above file will take effect on the next reboot of the node;
     multipathd can be enabled immediately without rebooting the node
