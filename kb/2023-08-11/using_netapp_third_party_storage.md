@@ -269,8 +269,8 @@ The procedure is as follows.
 
    1. Enable multipathd
 
-    The above file will take effect on the next reboot of the node;
-    multipathd can be enabled immediately without rebooting the node
+    Adding the above files to `/oem` will take effect on the next reboot of the node;
+    `multipathd can be enabled immediately without rebooting the node
     using the following commands:
 
       ```shell
