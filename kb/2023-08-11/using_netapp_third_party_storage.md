@@ -38,8 +38,8 @@ Certain parameters of your installation will require modification of details in 
 
 * The namespace.  `trident` is used as the namespace in the examples, but you may prefer to use another.
 * The name of the deployment. `mytrident` is used but you can change this to something else.
-* The management IP address of the Ontap storage system
-* Login credentials (username and password) of the Ontap storage system
+* The management IP address of the ONTAP storage system
+* Login credentials (username and password) of the ONTAP storage system
 
 The procedure is as follows.
 
@@ -56,7 +56,7 @@ The procedure is as follows.
    * Open the web UI for your Harvester cluster
    * In the lower left corner, click the "Support" link.  This will take you to a "Harvester Support" page.
    * Click the button labeled "Download KubeConfig".  This will download a your cluster config in a file called "local.yaml" by default.
-   * Move this file to a convenient location and set your KUBECONFIG environment variable to the path of this file.
+   * Move this file to a convenient location and set your `KUBECONFIG` environment variable to the path of this file.
 
 1. Prepare the cluster for installation of the Helm chart.
 
@@ -155,7 +155,7 @@ The procedure is as follows.
 
 1. Define a StorageClass and SnapshotClass.
 
-   1. Put the following into a file, for example /tmp/storage.yaml
+   1. Put the following into a file, for example `/tmp/storage.yaml`
 
       ```yaml
       ---
