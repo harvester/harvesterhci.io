@@ -34,7 +34,7 @@ Most of these steps can be performed on any system that has the `helm` and `kube
 The last step (setting up multipathd) should be done on all nodes,
 after the Trident CSI has been installed.
 
-Certain parameters of your installation will require modification of details in the examples in the procedure given below. This which you may wish to modify include:
+Certain parameters of your installation will require modification of details in the examples in the procedure given below. Those which you may wish to modify include:
 
 * The namespace.  `trident` is used as the namespace in the examples, but you may prefer to use another.
 * The name of the deployment. `mytrident` is used but you can change this to something else.
@@ -102,7 +102,7 @@ The procedure is as follows.
       helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
       ```
 
-   * Next, install the Helm cart.  This example uses `mytrident` as the deployment name, `trident` as the namespace, and 23.07.0 as the version number to install:
+   * Next, install the Helm chart.  This example uses `mytrident` as the deployment name, `trident` as the namespace, and 23.07.0 as the version number to install:
 
       ```shell
       helm install mytrident netapp-trident/trident-operator --version 23.07.0 --create-namespace --namespace trident
