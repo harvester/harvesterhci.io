@@ -9,9 +9,7 @@ tags: [harvester]
 hide_table_of_contents: false
 ---
 
-Instructions for installing the Netapp Astra Trident CSI driver into a Harvester cluster.
-
-This enables use of NetApp storage systems to store storage volumes usable by virtual machines running in Harvester.
+This article covers instructions for installing the Netapp Astra Trident CSI driver into a Harvester cluster, which enables NetApp storage systems to store storage volumes usable by virtual machines running in Harvester.
 
 The NetApp storage will be an option in addition to the normal Longhorn storage; it will not replace Longhorn. Virtual machine images will still be stored using Longhorn.
 
@@ -25,14 +23,11 @@ This procedure only works to access storage via iSCSI, not NFS.
 
 # Detailed Instructions
 
-We are assuming that before beginning this procedure,
-a Harvester cluster and a NetApp ONTAP storage system
-are both installed and configured for use.
+We assume that before beginning this procedure, a Harvester cluster and a NetApp ONTAP storage system are both installed and configured for use.
 
-Most of these steps can be performed on any system that has the `helm` and `kubectl` commands installed, and which has network connectivity to the management port of the Harvester cluster.  Let's call this your workstation.  Certain steps must be performed on one or more cluster nodes themselves.  The steps described below should be done on your workstation unless otherwise indicated.
+Most of these steps can be performed on any system with the `helm` and `kubectl` commands installed and network connectivity to the management port of the Harvester cluster.  Let's call this your workstation.  Certain steps must be performed on one or more cluster nodes themselves.  The steps described below should be done on your workstation unless otherwise indicated.
 
-The last step (setting up multipathd) should be done on all nodes,
-after the Trident CSI has been installed.
+The last step (enabling multipathd) should be done on all nodes after the Trident CSI has been installed.
 
 Certain parameters of your installation will require modification of details in the examples in the procedure given below. Those which you may wish to modify include:
 
@@ -231,15 +226,9 @@ The procedure is as follows.
        }
        ```
 
-       This is only an example that works if NetApp is the only storage provider in the system
-       for which `multipathd` must be used.  More complex environments will require
-       more complex configuration.
+       This example only works if NetApp is the only storage provider in the system for which `multipathd` must be used.  More complex environments will require more complex configuration.
 
-       Explicitly putting that content into `/etc/multipath.conf` will work when you start `multipathd` as described below,
-       but the change in `/etc` will not persist across node reboots.  To solve that problem, you should add another
-       file to `/oem` that will re-generate `/etc/multipath.conf` when the node reboots.  The following example
-       will create the `/etc/multipath.conf` given in the example above, but may need to be modified for your
-       environment if you have a more complex iSCSI configuration:
+       Explicitly putting that content into `/etc/multipath.conf` will work when you start `multipathd` as described below, but the change in `/etc` will not persist across node reboots.  To solve that problem, you should add another file to `/oem` that will re-generate `/etc/multipath.conf` when the node reboots.  The following example will create the `/etc/multipath.conf` given in the example above, but may need to be modified for your environment if you have a more complex iSCSI configuration:
 
        ```text
        stages:
@@ -265,17 +254,15 @@ The procedure is as follows.
                    }
        ```
 
-       Again, this has to be done on every node.
+       Remember, this has to be done on every node.
 
-   1. Enable multipathd
+   1. Enable multipathd.
 
-    Adding the above files to `/oem` will take effect on the next reboot of the node;
-    `multipathd` can be enabled immediately without rebooting the node
-    using the following commands:
+    Adding the above files to `/oem` will take effect on the next reboot of the node; `multipathd` can be enabled immediately without rebooting the node using the following commands:
 
       ```shell
       systemctl enable multipathd
       systemctl start multipathd
       ```
 
-      After the above steps, the `ontap-san-economy` storage class should be available for use when creating a volume for a Harvester VM.
+      After the above steps, the `ontap-san-economy` storage class should be available when creating a volume for a Harvester VM.
