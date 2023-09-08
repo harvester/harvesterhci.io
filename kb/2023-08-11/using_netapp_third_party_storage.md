@@ -105,7 +105,9 @@ The procedure is as follows.
 
    * The NetApp documentation describes variations on how you can do this.
 
-1. Download and extract the tridentctl command, which will be needed for the next few steps:
+1. Download and extract the tridentctl command, which will be needed for the next few steps.
+
+   This and the next few steps need to be performed logged into a master node of the Harvester cluster, using root access.
 
    ```shell
    cd /tmp
@@ -179,7 +181,7 @@ The procedure is as follows.
 1. Enable multipathd
 
    The following is required to enable multipathd.
-   This must be done on every node of the Harvester cluster.
+   This must be done on every node of the Harvester cluster, using root access.
    The preceding steps should only be done once on a single node.
 
    1. Create this file in `/oem/99_multipathd.yaml`:
