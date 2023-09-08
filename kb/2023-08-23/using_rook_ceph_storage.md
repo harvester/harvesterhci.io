@@ -29,7 +29,7 @@ Harvester's operating system follows an immutable design, meaning that most OS f
 
 ```yaml
 os:
-  persistentStatePaths:
+  persistent_state_paths:
     - /var/lib/rook
     - /var/lib/ceph
   modules:
