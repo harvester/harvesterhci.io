@@ -56,6 +56,7 @@ The procedure is as follows.
 1. Prepare the cluster for installation of the Helm chart.
 
    Before starting installation of the helm chart, special authorization must be provided to enable certain modifications to be made during the installation.
+   This addresses the issue described here: https://github.com/NetApp/trident/issues/839
 
    * Put the following text into a file.  For this example we'll call it `authorize_trident.yaml`.
 
