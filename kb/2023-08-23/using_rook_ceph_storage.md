@@ -1,7 +1,7 @@
 ---
-title: Using Rook Ceph Storage in Harvester
-description: Using Rook Ceph storage in Harvester
-slug: using_rook_ceph_storage
+title: Use Rook Ceph External Storage with Harvester
+description: Use Rook Ceph External Storage with Harvester
+slug: use_rook_ceph_external_storage
 authors:
   - name: Hang Yu
     title: Staff Software Engineer
@@ -21,7 +21,7 @@ One of the options for integrating external storage with Harvester is Rook, an o
 
 [Rook](https://rook.io) simplifies the deployment and management of Ceph, offering self-managing, self-scaling, and self-healing storage services. It leverages Kubernetes resources to automate the deployment, configuration, provisioning, scaling, upgrading, and monitoring of Ceph.
 
-In this article, we will walk you through the process of installing, configuring, and utilizing [Rook Ceph](https://rook.io/docs/rook/v1.12/Getting-Started/intro/) as a data disk for a VM within the Harvester environment.
+In this article, we will walk you through the process of installing, configuring, and utilizing [Rook](https://rook.io/docs/rook/v1.12/Getting-Started/intro/) to use storage from an [existing external Ceph cluster](https://www.rook.io/docs/rook/v1.12/CRDs/Cluster/external-cluster/) as a data disk for a VM within the Harvester environment.
 
 ## Install Harvester Cluster
 
@@ -51,24 +51,7 @@ kubectl apply -f crds.yaml -f common.yaml -f operator.yaml
 kubectl -n rook-ceph wait --for=condition=Available deploy rook-ceph-operator --timeout=10m
 ```
 
-## Setup the Ceph Cluster
-
-### Option 1: Create a new Ceph cluster using free disks on the Harvester hosts
-
-1. Create a new Ceph cluster.
-```bash
-# apply configurations ref: https://rook.github.io/docs/rook/v1.12/Getting-Started/example-configurations/#cluster-crd
-kubectl apply -f cluster.yaml
-```
-
-2. Create the StorageClass `rook-ceph-block` and VolumeSnapshotClass `csi-rbdplugin-snapclass`.
-
-```bash
-kubectl apply -f ./csi/rbd/storageclass.yaml -f ./csi/rbd/snapshotclass.yaml
-```
-
-
-### Option 2: Using an existing external Ceph cluster (Recommended)
+## Using an existing external Ceph cluster
 
 1. Run the python script `create-external-cluster-resources.py` in the [existing external Ceph cluster](https://www.rook.io/docs/rook/v1.12/CRDs/Cluster/external-cluster/) for creating all users and keys.
 ```bash
@@ -141,10 +124,8 @@ Before you can make use of Harvester's **Backup & Snapshot** features, you need 
 1. Login to the Harvester UI, then navigate to **Advanced** > **Settings**.
 1. Find and select **csi-driver-config**, and then click on the **⋮** > **Edit Setting** to access the configuration options.
 1. In the settings, set the **Provisioner** to `rook-ceph.rbd.csi.ceph.com`.
-1. Next, specify the **Volume Snapshot Class Name** as `csi-rbdplugin-snapclass` for the internal Ceph cluster or `csi-rbdplugin-snapclass-external` for the external Ceph cluster. This setting points to the name of the `VolumeSnapshotClass` used for creating volume snapshots or VM snapshots.
-1. Similarly, set the **Backup Volume Snapshot Class Name** to `csi-rbdplugin-snapclass` or `csi-rbdplugin-snapclass-external`. This corresponds to the name of the `VolumeSnapshotClass` responsible for creating VM backups.
-
-![csi-driver-config](./imgs/csi-driver-config.png)
+2. Next, specify the **Volume Snapshot Class Name** as `csi-rbdplugin-snapclass-external`. This setting points to the name of the `VolumeSnapshotClass` used for creating volume snapshots or VM snapshots.
+3. Similarly, set the **Backup Volume Snapshot Class Name** to `csi-rbdplugin-snapclass-external`. This corresponds to the name of the `VolumeSnapshotClass` responsible for creating VM backups.
 
 ![csi-driver-config-external](./imgs/csi-driver-config-external.png)
 
@@ -153,10 +134,6 @@ Before you can make use of Harvester's **Backup & Snapshot** features, you need 
 After successfully configuring these settings, you can proceed to utilize the Rook Ceph StorageClass, which is named `rook-ceph-block` for the internal Ceph cluster or named `ceph-rbd` for the external Ceph cluster. You can apply this StorageClass when creating an empty volume or adding a new block volume to a VM, enhancing your Harvester cluster's storage capabilities.
 
 With these configurations in place, your Harvester cluster is ready to make the most of the Rook Ceph storage integration.
-
-![rook-ceph-volume](./imgs/rook-ceph-volume.png)
-
-![rook-ceph-vm](./imgs/rook-ceph-vm.png)
 
 ![rook-ceph-volume-external](./imgs/rook-ceph-volume-external.png)
 
