@@ -24,6 +24,7 @@ While the [issue](https://github.com/harvester/harvester/issues/3960) is being w
 Change the `net.bridge.bridge-nf-call-iptables` parameter from 1 to 0.
 
 To update Harvester configurations, you must first update the runtime value in the system and then update configuration files to make the changes persistent between reboots.
+
 Refer [here](https://docs.harvesterhci.io/v1.2/install/update-harvester-configuration/#configuration-persistence).
 
 
