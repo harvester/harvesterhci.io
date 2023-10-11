@@ -28,7 +28,6 @@ To update Harvester configurations, you must first update the runtime value in t
 Refer [here](https://docs.harvesterhci.io/v1.2/install/update-harvester-configuration/#configuration-persistence).
 
 
-
 In this specific case, the steps to follow are:
 
 1. Set the variable `net.bridge.bridge-nf-call-iptables` to zero directly on the nodes.
