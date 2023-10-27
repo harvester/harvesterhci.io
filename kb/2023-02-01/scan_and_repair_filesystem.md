@@ -65,11 +65,30 @@ This section will introduce how to scan the filesystem (e.g., XFS, EXT4) using r
 
 Before scanning, you need to know the filesystem's device/partition.
 
-- Find the filesystem's device by running the `dmesg` command. The most recent device should be what we wanted because we attach the latest.
-- You should now know the filesystem's partition. In the example below, sdd3 is the filesystem's partition.
+- Identify the filesystem's device by checking the major and minor numbers of that device.
 
-![finding the related device](./imgs/finding_related_device.png)
+1. Obtain the major and minor numbers from the listed volume information.
+  
+  In the following example, the volume name is `pvc-ea7536c0-301f-479e-b2a2-e40ddc864b58`.
+  ```
+  harvester-node-0:~ # ls /dev/longhorn/pvc-ea7536c0-301f-479e-b2a2-e40ddc864b58 -al
+  brw-rw---- 1 root root 8, 0 Oct 23 14:43 /dev/longhorn/pvc-ea7536c0-301f-479e-b2a2-e40ddc864b58
+  ```
+  The output indicates that the major and minor numbers are `8:0`.
+  
+2. Obtain the device name from the output of the `lsblk` command.
+  ```
+  harvester-node-0:~ # lsblk
+  NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+  loop0    7:0    0     3G  1 loop /
+  sda      8:0    0    40G  0 disk
+  ├─sda1   8:1    0     2M  0 part
+  ├─sda2   8:2    0    20M  0 part
+  └─sda3   8:3    0    40G  0 part
+  ```
+  The output indicates that `8:0` are the major and minor numbers of the device named `sda`. Therefore, `/dev/sda` is related to the volume named `pvc-ea7536c0-301f-479e-b2a2-e40ddc864b58`.
 
+- You should now know the filesystem's partition. In the example below, sda3 is the filesystem's partition.
 - Use the Filesystem toolbox image to scan and repair.
 
 ```
@@ -80,16 +99,17 @@ Then we try to scan with this target device.
 
 ### XFS
 
-When scanning a XFS filesystem, use the `xfs_repair` command as follows, where `/dev/sdd3` is the problematic partition of the device.
+When scanning an XFS filesystem, use the `xfs_repair` command and specify the problematic partition of the device.
 
+In the following example, `/dev/sda3` is the problematic partition.
 ```
-# xfs_repair -n /dev/sdd3
+# xfs_repair -n /dev/sda3
 ```
 
 To repair the corrupted partition, run the following command.
 
 ```
-# xfs_repair /dev/sdd3
+# xfs_repair /dev/sda3
 ```
 
 ### EXT4
@@ -118,7 +138,7 @@ After the corrupted partition is scanned and repaired, detach the volume and try
 
 ![detach volume on longhorn UI](./imgs/detach_volume.png)
 
-- Start the related VM again from the Longhorn UI.
+- Start the related VM again from the Harvester UI.
 
 ![Start VM again](./imgs/start_vm_again.png)
 
