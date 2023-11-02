@@ -46,30 +46,55 @@ const config = {
         src: "img/logo_horizontal.svg",
       },
       items: [
+          {
+            href: "https://docs.harvesterhci.io/",
+            position: "right",
+            label: "Docs",
+            className: "navbar__docs",
+          },
+          {
+            href: "https://github.com/harvester/harvester",
+            label: "GitHub",
+            position: "right",
+            className: "navbar__github btn btn-secondary icon-github",
+          },
         {
-          href: "https://docs.harvesterhci.io/",
-          position: "right",
-          label: "Docs",
-          className: "navbar__docs",
-        },
-        {
-          href: "https://www.suse.com/c/?s=harvester",
-          position: "right",
-          label: "Blog",
-          className: "navbar__blog",
-        },
-        {
-          to: "kb",
-          position: "right",
-          label: "Knowledge Base",
-          className: "navbar__kb",
-        },
-        {
-          href: "https://github.com/harvester/harvester",
-          label: "GitHub",
-          position: "right",
-          className: "navbar__github btn btn-secondary icon-github",
-        },
+          type: 'dropdown',
+          label: 'More from SUSE',
+          position: 'right',
+          items: [
+            {
+              href: 'https://www.rancher.com',
+              label: 'Rancher',
+              className: 'navbar__icon navbar__rancher',
+            },
+            {
+              href: 'https://elemental.docs.rancher.com/',
+              label: 'Elemental',
+              className: 'navbar__icon navbar__elemental',
+            },
+            {
+              href: 'https://epinio.io/',
+              label: 'Epinio',
+              className: 'navbar__icon navbar__epinio',
+            },
+            {
+              href: 'https://fleet.rancher.io/',
+              label: 'Fleet',
+              className: 'navbar__icon navbar__fleet',
+            },
+            {
+              href: 'https://opni.io/',
+              label: 'Opni',
+              className: 'navbar__icon navbar__opni',
+            },
+            {
+              href: 'https://opensource.suse.com/',
+              label: 'More Projects...',
+              className: 'navbar__icon navbar__suse',
+            },
+          ],
+      },
       ],
     },
     colorMode: {
