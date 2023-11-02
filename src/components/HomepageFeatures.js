@@ -181,7 +181,7 @@ export default function HomepageFeatures() {
                                             <a href="https://slack.rancher.io" className="font-weight-bolder rfs-10 text-white">Join our Slack Community</a>
                                         </p>
                                         <p className="mb-2">
-                                            <a href="https://www.youtube.com/watch?v=uhdqD7_Mwzw" className="font-weight-bolder rfs-10 text-white">Watch the latest meetup</a>
+                                            <a href="https://www.youtube.com/live/BS2GOa4ktpY?si=KET366mGmW_gjqlk" className="font-weight-bolder rfs-10 text-white">Watch the latest meetup</a>
                                         </p>
                                     </div>
                                     </div>
