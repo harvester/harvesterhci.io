@@ -53,6 +53,18 @@ const config = {
             className: "navbar__docs",
           },
           {
+            href: "https://www.suse.com/c/?s=harvester",
+            position: "right",
+            label: "Blog",
+            className: "navbar__blog",
+          },
+          {
+            to: "kb",
+            position: "right",
+            label: "Knowledge Base",
+            className: "navbar__kb",
+          },
+          {
             href: "https://github.com/harvester/harvester",
             label: "GitHub",
             position: "right",
