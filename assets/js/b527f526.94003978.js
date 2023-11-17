@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkharvesterhci_io=self.webpackChunkharvesterhci_io||[]).push([[9462],{3724:function(s){s.exports=JSON.parse('{"allTagsPath":"/kb/tags","slug":"/kb/tags/policy","name":"policy","count":1,"permalink":"/kb/tags/policy"}')}}]);
