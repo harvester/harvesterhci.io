@@ -27,13 +27,13 @@ The following sections outline other recommendations for achieving optimal disk 
 
 ## IO Performance
 
-- **Storage network**: Use a dedicated storage network to improve IO performance and stability.  
+- **Storage network**: Use a [dedicated storage network](https://docs.harvesterhci.io/v1.2/advanced/storagenetwork) to improve IO performance and stability.  
 
-- **Longhorn disk**: Use a dedicate for Longhorn storage instead of using the root disk.  
+- **Longhorn disk**: Use a [dedicated disk](https://docs.harvesterhci.io/v1.2/host/#multi-disk-management) for Longhorn storage instead of using the root disk.  
 
-- **Replica count**: Set the [default replica count](https://longhorn.io/docs/1.5.3/references/settings/#default-replica-count) to "2" to achieve data availability with better disk space usage or less impact to system performance. This practice is especially beneficial to data-intensive applications.  
+- **Replica count**: Set the [default replica count](https://docs.harvesterhci.io/v1.2/advanced/storageclass#parameters-tab) to "2" to achieve data availability with better disk space usage or less impact to system performance. This practice is especially beneficial to data-intensive applications.  
 
-- **Storage tag**: Use [storage tags](https://longhorn.io/docs/1.5.3/volumes-and-nodes/storage-tags/) to define storage tiering for data-intensive applications. For example, only high-performance disks can be used for storing performance-sensitive data.  
+- **Storage tag**: Use storage tags to define storage tiering for data-intensive applications. For example, only high-performance disks can be used for storing performance-sensitive data. You can either [add disks with tags](https://docs.harvesterhci.io/v1.2/host/#storage-tags) or [create StorageClasses with tags](https://docs.harvesterhci.io/v1.2/advanced/storageclass#disk-selector-optional).  
 
 - **Data locality**: Use `best-effort` as the default [data locality](https://longhorn.io/docs/1.5.3/high-availability/data-locality/) of Longhorn Storage Classes.  
 
