@@ -41,17 +41,11 @@ The following sections outline other recommendations for achieving optimal disk 
 
   For data-intensive applications, you can use pod scheduling functions such as node selector or taint toleration. These functions allow you to schedule the workload to a specific storage-tagged node together with one replica.  
 
-- **Revision counter**: You can disable the [revision counter](https://longhorn.io/docs/1.5.3/advanced-resources/deploy/revision_counter/) to improve IO performance, especially for write-intensive applications. When the revision counter is disabled, Longhorn does not track write operations for replicas and the Longhorn Engine does not check the `revision.counter` file after restarting.
-
-  :::info important
-  IO performance is improved only if the cluster nodes sync time from a dedicated, close, and highly accurate NTP server with minimal sync delay (measured in microseconds).
-  :::
-
 ## Space Efficiency  
 
-- **Recurring snapshots**: Periodically clean up system-generated snapshots and retain only the number of snapshots that makes sense for your implementation. For applications with replication capability, periodically [delete all types of snapshots](https://longhorn.io/docs/1.5.3/concepts/#243-deleting-snapshots).
+- **Recurring snapshots**: Periodically clean up system-generated snapshots and retain only the number of snapshots that makes sense for your implementation. 
 
-- **Recurring filesystem trim**: Periodically [trim the filesystem](https://longhorn.io/docs/1.5.3/volumes-and-nodes/trim-filesystem/) inside volumes to reclaim disk space.
+  For applications with replication capability, periodically [delete all types of snapshots](https://longhorn.io/docs/1.5.3/concepts/#243-deleting-snapshots).
 
 ## Disaster Recovery
 
