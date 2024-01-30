@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkharvesterhci_io=self.webpackChunkharvesterhci_io||[]).push([[6995],{8267:function(a){a.exports=JSON.parse('{"allTagsPath":"/kb/tags","slug":"/kb/tags/calculation","name":"calculation","count":1,"permalink":"/kb/tags/calculation"}')}}]);

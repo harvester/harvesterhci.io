@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkharvesterhci_io=self.webpackChunkharvesterhci_io||[]).push([[6486],{2484:function(e){e.exports=JSON.parse('{"allTagsPath":"/kb/tags","slug":"/kb/tags/reserved-resource","name":"reserved resource","count":1,"permalink":"/kb/tags/reserved-resource"}')}}]);
