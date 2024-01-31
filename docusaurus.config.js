@@ -120,7 +120,7 @@ const config = {
   customFields: {
     title: "Harvester - Open-source hyperconverged infrastructure",
     description:
-      "An open-source hyperconverged infrastructure software for a cloud-native world",
+      "An open-source hyperconverged infrastructure solution for a cloud-native world",
   },
   plugins: [
     [
