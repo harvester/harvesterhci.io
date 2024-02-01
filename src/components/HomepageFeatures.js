@@ -148,7 +148,7 @@ export default function HomepageFeatures() {
                                         <div>
                                             <h2 className="font-weight-bolder mb-0">Get Started</h2>
                                             <p className="font-weight-light">Want to try Harvester?</p>
-                                            <p className="font-weight-light lead">Simply install it directly onto your bare-metal server to get started.</p>
+                                            <p className="font-weight-light lead">Simply install it directly onto your bare metal server to get started.</p>
                                             <a className="btn btn-lg btn-secondary" href="https://github.com/harvester/harvester/releases" target="_blank" rel="noopener">Download Now</a>
                                         </div>
                                     </div>
