@@ -5,7 +5,9 @@ const FeatureList = [
         title: 'Sits on the shoulders of cloud native giants',
         description: (
             <>
-                Harvester uses some of the most proven and mature open source software (OSS) components to build virtualization instead of proprietary kernels that are kept hidden from view.
+                Harvester uses some of the most proven and mature open source software
+                (OSS) components to build virtualization instead of proprietary kernels
+                that are kept hidden from view.
             </>
         ),
     },
@@ -13,7 +15,9 @@ const FeatureList = [
         title: 'Lower Total Cost of Ownership (TCO)',
         description: (
             <>
-                As 100% open source, Harvester is free from the costly license fees of other HCI solutions. Plus, its foundation is based on existing technology such as Linux and kernel-based virtual machines.
+                As 100% open source, Harvester is free from the costly license fees of
+                other HCI solutions. Plus, its foundation is based on existing technology
+                such as Linux and kernel-based virtual machines.
             </>
         ),
     },
@@ -21,7 +25,9 @@ const FeatureList = [
         title: 'Integrate and prepare for the future',
         description: (
             <>
-                Built with cloud native components at its core, Harvester is future-proof as the infrastructure industry shifts toward containers, edge and multi-cloud software engineering.
+                Built with cloud native components at its core, Harvester is future-proof
+                as the infrastructure industry shifts toward containers, edge and
+                multi-cloud software engineering.
             </>
         ),
     },
@@ -94,11 +100,12 @@ export default function HomepageFeatures() {
                                     <div className="lc-block text-center mb-5">
                                         <div>
                                             <h2 className="h3 font-weight-bolder">What is Harvester?</h2>
-                                            <p class="font-weight-light">Harvester is a modern hyperconverged infrastructure (HCI) solution built for
-                                                bare metal servers using enterprise-grade open-source technologies including Linux, KVM, Kubernetes, KubeVirt, and
-                                                Longhorn. Designed for users looking for a flexible and affordable solution to run cloud-native and
-                                                virtual machine (VM) workloads in your datacenter and at the edge, Harvester provides a single pane of glass for virtualization
-                                                and cloud-native workload management.<br /></p>
+                                            <p class="font-weight-light">Harvester is a modern hyperconverged infrastructure (HCI)
+                                                solution built for bare metal servers using enterprise-grade open-source technologies
+                                                including Linux, KVM, Kubernetes, KubeVirt, and Longhorn. Designed for users looking
+                                                for a flexible and affordable solution to run cloud-native and virtual machine (VM)
+                                                workloads in your datacenter and at the edge, Harvester provides a single pane of glass
+                                                for virtualization and cloud-native workload management.<br /></p>
                                                 <div class="lc-block mb-5"><iframe width="560" height="315" src="https://www.youtube.com/embed/MWejWLfuTRg" title="Introducing Harvester HCI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
                                         </div>
                                     </div>
@@ -131,7 +138,7 @@ export default function HomepageFeatures() {
                                             <h2 className="font-weight-bolder mb-0">How it Works<br /></h2>
                                         </div>
                                     </div>
-                                    <div className="lc-block mb-5"><img src="../img/Harvester-Architecture-3.2-Outlines.svg" alt="" /></div>
+                                    <div className="lc-block mb-5"><img src="../img/harvester-architecture-updated.svg" alt="" /></div>
                                 </div>
                             </div>
                         </div>
