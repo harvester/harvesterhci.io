@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://harvesterhci.io/kb</id>
-    <title>The open source hyperconverged infrastructure (HCI) solution for a cloud native world Blog</title>
+    <title>The open-source hyperconverged infrastructure solution for a cloud-native world Blog</title>
     <updated>2024-01-23T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://harvesterhci.io/kb"/>
-    <subtitle>The open source hyperconverged infrastructure (HCI) solution for a cloud native world Blog</subtitle>
+    <subtitle>The open-source hyperconverged infrastructure solution for a cloud-native world Blog</subtitle>
     <icon>https://harvesterhci.io/img/favicon.ico</icon>
     <entry>
         <title type="html"><![CDATA[Calculation of Resource Metrics in Harvester]]></title>
