@@ -13,7 +13,7 @@ const FeatureList = [
         title: 'Lower Total Cost of Ownership (TCO)',
         description: (
             <>
-                As 100% open source, Harvester is free from the costly license fees of other HCI solutions. Plus, with its foundation based on existing technology such as Linux and kernel-based virtual machines.
+                As 100% open source, Harvester is free from the costly license fees of other HCI solutions. Plus, its foundation is based on existing technology such as Linux and kernel-based virtual machines.
             </>
         ),
     },
@@ -95,9 +95,9 @@ export default function HomepageFeatures() {
                                         <div>
                                             <h2 className="h3 font-weight-bolder">What is Harvester?</h2>
                                             <p class="font-weight-light">Harvester is a modern hyperconverged infrastructure (HCI) solution built for
-                                                bare metal servers using enterprise-grade open source technologies including Linux, KVM, Kubernetes, KubeVirt, and
+                                                bare metal servers using enterprise-grade open-source technologies including Linux, KVM, Kubernetes, KubeVirt, and
                                                 Longhorn. Designed for users looking for a flexible and affordable solution to run cloud-native and
-                                                virtual machine (VM) workloads in your datacenter and at the edge, providing a single pane of glass for virtualization
+                                                virtual machine (VM) workloads in your datacenter and at the edge, Harvester provides a single pane of glass for virtualization
                                                 and cloud-native workload management.<br /></p>
                                                 <div class="lc-block mb-5"><iframe width="560" height="315" src="https://www.youtube.com/embed/MWejWLfuTRg" title="Introducing Harvester HCI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
                                         </div>
