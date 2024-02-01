@@ -131,8 +131,8 @@ export default function HomepageFeatures() {
                                         <div>
                                             <h2 className="font-weight-bolder mb-0">How it Works<br /></h2>
                                         </div>
+                                        <div className="lc-block mb-5"><img src="../img/harvester-arch-update-grey.png" alt="Harvester Architecture Diagram" /></div>
                                     </div>
-                                    <div className="lc-block mb-5"><img src="../img/harvester-architecture-update.png" alt="Harvester Architecture Diagram" /></div>
                                 </div>
                             </div>
                         </div>
