@@ -128,7 +128,7 @@ Longhorn allows you to specify the percentage of disk space that is not allocate
 
 Depending on the disk size, you can modify the default value using the [embedded Longhorn UI](https://docs.harvesterhci.io/v1.2/troubleshooting/harvester/#access-embedded-rancher-and-longhorn-dashboards).
 
-::: note
+:::note
 
 Before changing the settings, read the Longhorn documentation carefully.
 
