@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const config = {
   title:
-    "The open source hyperconverged infrastructure (HCI) solution for a cloud native world",
+    "The open-source hyperconverged infrastructure solution for a cloud-native world",
   tagline: "",
   url: "https://harvesterhci.io",
   baseUrl: "/",
@@ -46,30 +46,57 @@ const config = {
         src: "img/logo_horizontal.svg",
       },
       items: [
+          {
+            href: "https://docs.harvesterhci.io/",
+            position: "right",
+            label: "Docs",
+            className: "navbar__docs",
+          },
+          {
+            href: "https://www.suse.com/c/?s=harvester",
+            position: "right",
+            label: "Blog",
+            className: "navbar__blog",
+          },
+          {
+            to: "kb",
+            position: "right",
+            label: "Knowledge Base",
+            className: "navbar__kb",
+          },
+          {
+            href: "https://github.com/harvester/harvester",
+            label: "GitHub",
+            position: "right",
+            className: "navbar__github btn btn-secondary icon-github",
+          },
         {
-          href: "https://docs.harvesterhci.io/",
-          position: "right",
-          label: "Docs",
-          className: "navbar__docs",
-        },
-        {
-          href: "https://www.suse.com/c/?s=harvester",
-          position: "right",
-          label: "Blog",
-          className: "navbar__blog",
-        },
-        {
-          to: "kb",
-          position: "right",
-          label: "Knowledge Base",
-          className: "navbar__kb",
-        },
-        {
-          href: "https://github.com/harvester/harvester",
-          label: "GitHub",
-          position: "right",
-          className: "navbar__github btn btn-secondary icon-github",
-        },
+          type: 'dropdown',
+          label: 'More from SUSE',
+          position: 'right',
+          items: [
+            {
+              href: 'https://www.rancher.com',
+              label: 'Rancher',
+              className: 'navbar__icon navbar__rancher',
+            },
+            {
+              href: 'https://elemental.docs.rancher.com/',
+              label: 'Elemental',
+              className: 'navbar__icon navbar__elemental',
+            },
+            {
+              href: 'https://fleet.rancher.io/',
+              label: 'Fleet',
+              className: 'navbar__icon navbar__fleet',
+            },
+            {
+              href: 'https://opensource.suse.com/',
+              label: 'More Projects...',
+              className: 'navbar__icon navbar__suse',
+            },
+          ],
+      },
       ],
     },
     colorMode: {
@@ -93,7 +120,7 @@ const config = {
   customFields: {
     title: "Harvester - Open-source hyperconverged infrastructure",
     description:
-      "An open-source hyperconverged infrastructure (HCI) software for a cloud-native world",
+      "The open-source hyperconverged infrastructure solution for a cloud-native world",
   },
   plugins: [
     [
@@ -112,6 +139,8 @@ const config = {
         routeBasePath: 'kb',
         include: ['**/*.{md,mdx}'],
         postsPerPage: 10,
+        blogSidebarTitle: 'All Posts',
+        blogSidebarCount: 'ALL',
       },
     ],
   ],
