@@ -283,11 +283,11 @@ so the first thing you must do is to re-mount the volume to be read-write.
 
 Start out by using the `blkid` command to find the device name of the correct partition:
 
-```shell
+```
     $ sudo -i
-	# blkid -L COS_STATE
-	/dev/sda4
-	#
+    # blkid -L COS_STATE
+    /dev/sda4
+    #
 ```
 
 The device name will be something like `/dev/sda4`.  The following examples assume that's the name but you should modify the commands to match what you see on your system.
