@@ -52,6 +52,9 @@ That is, all interaction occurs between a client which requests service and a se
 
 In SCSI terminology, the client is called the **initiator** and the server is called the **target**.
 
+iSCSI initiators and targets identify themselves to each other by means of
+a specially formatted identifier called an iSCSI Qualified Name (IQN).
+
 The controller used to provide access to the storage devices is commonly called an HBA (Host Bus Adapter).
 
 When using iSCSI, the access is provided by a traditional Internet protocol, with an extra layer to encapsulate SCSI commands within TCP/IP messages.
@@ -81,7 +84,16 @@ This is in keeping with the philosophy of Hyper-Converged Infrastructure (HCI),
 which by definition hosts computational capability, storage, and networking all in a single device
 or set of similar devices operating in a cluster.
 
-Through Harvester release 1.3.0, no explicit support has been provided for installing Harvester to any type of storage which is not locally attached,
+While the notion of a purely Hyper-Converged Infrastructure is very tidy,
+the real world is messy and contains heterogeneous environments
+with both Hyper-Converged and non-Hyper-Converged elements.
+Users have expressed interest in having Harvester Hyper-Converged systems
+be able to make use of non-Hyper-Converged storage.
+
+These notes desribe a way to do this in a particular limited situation.
+
+Through Harvester release 1.3.0, no explicit support has been provided for installing Harvester
+to any type of storage which is not locally attached,
 nor does it contain any explicit support for booting and running from storage which is not locally attached.
 
 However, it has been observed that systems with CNAs _might_ in fact permit Harvester to do just this.
@@ -144,6 +156,37 @@ so you will have to re-edit those parameters by hand.
 
 ## Provision storage for your Harvester node on your iSCSI server system
 
+Before attempting to install Harvester onto a disk accessed by iSCSI,
+the storage must first be provisioned on the storage server.
+
+The details depend on the storage server and will not be discussed here.
+
+However, several pieces of information must be obtained
+in order for the system being installed to be able
+to access the storage using iSCSI.
+
+* The IP address and port number of the iSCSI server.
+* The iSCSI Qualified Name (IQN) of the iSCSI target on the server.
+* The LUN of the volume on the server to be accessed from the client as the disk on which Harvester will be installed.
+* Depending on on how the server is administered, authentication parameters may also be required.
+
+These items of information will be determined by the server system.
+
+In addition, an IQN must be chosen for the client system to be used as its initiator identifier.
+
+An IQN is a string in a certain format.
+In general, any string in the defined format can be used as long as it is unique.
+However, specific environments may place stricter requirements on the choice of names.
+
+The format of an IQN is illustrated in the following example:
+
+```
+    iqn.2024-02.com.example:cluster1-node0-boot-disk
+```
+
+There are lots of variations of this format, and this is just an example.
+
+The correct name to use should be chosen in consultation with the administrator of your storage server and storage area network.
 
 ## Configure system firmware to boot via iSCSI using the available CNA
 
