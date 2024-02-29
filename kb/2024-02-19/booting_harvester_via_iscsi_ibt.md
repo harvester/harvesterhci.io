@@ -152,7 +152,7 @@ There are lots of variations of this format, and this is just an example.
 
 The correct name to use should be chosen in consultation with the administrator of your storage server and storage area network.
 
-## Configure system firmware to boot via iSCSI using the available CNA
+### 2. Configure system firmware to boot via iSCSI using the available CNA.
 
 When your system to be installed powers on or is reset, you must enter the firmware setup menu to change the boot settings and enable booting via iSCSI.
 
