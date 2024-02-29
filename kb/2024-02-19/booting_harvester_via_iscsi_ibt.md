@@ -288,10 +288,10 @@ A few important notes:
 * These changes will be overwritten by the upgrade procedure if you upgrade your cluster to a newer version of Harvester.  Therefore, if you do an upgrade, be sure to re-do the procedure to edit the `grub.cfg` on every node of your cluster that is booting by iSCSI.
 
 
-# References
+## References
 
-1. [SCSI](https://en.wikipedia.org/wiki/SCSI) provides an overview of SCSI and contains references to additional material.
-2. [iSCSI](https://en.wikipedia.org/wiki/ISCSI) provides an overview of iSCSI and contains references to additional material.
-3. [Converged Network Adapter](https://en.wikipedia.org/wiki/Converged_network_adapter) provides a summary of CNAs and references to additional material.
-4. [Harvester Docuementation](https://docs.harvesterhci.io/v1.2/troubleshooting/os/#how-to-permanently-edit-kernel-parameters) provides a general description of how to permanently edit kernel parameters to be used when booting a Harvester node.
-5. [Dell PowerEdge R630 Owner's Manual](https://www.dell.com/support/manuals/en-us/poweredge-r630/r630_om_pub/uefi-iscsi-settings?guid=guid-adc7d625-5c7b-469d-ba9c-4a2c704fcc49&lang=en-us) This is an example of relevant vendor documentation.  Other vendors such as HPE, IBM, Lenovo, etc should provide comparable documentation, though the details will vary.
+- [SCSI](https://en.wikipedia.org/wiki/SCSI) provides an overview of SCSI and contains references to additional material.
+- [iSCSI](https://en.wikipedia.org/wiki/ISCSI) provides an overview of iSCSI and contains references to additional material.
+- [Converged Network Adapter](https://en.wikipedia.org/wiki/Converged_network_adapter) provides a summary of CNAs and references to additional material.
+- [Harvester Docuementation](https://docs.harvesterhci.io/v1.2/troubleshooting/os/#how-to-permanently-edit-kernel-parameters) provides a general description of how to permanently edit kernel parameters to be used when booting a Harvester node.
+- [Dell PowerEdge R630 Owner's Manual](https://www.dell.com/support/manuals/en-us/poweredge-r630/r630_om_pub/uefi-iscsi-settings?guid=guid-adc7d625-5c7b-469d-ba9c-4a2c704fcc49&lang=en-us) This is an example of relevant vendor documentation.  Other vendors such as HPE, IBM, Lenovo, etc should provide comparable documentation, though the details will vary.
