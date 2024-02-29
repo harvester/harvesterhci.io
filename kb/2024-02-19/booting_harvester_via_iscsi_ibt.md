@@ -35,13 +35,11 @@ When using iSCSI, access is provided by a traditional Internet protocol, with an
 
 Systems with iSCSI CNAs can be configured to enable the system bootstrap firmware to boot the system via iSCSI. In addition, if the loaded operating system is aware of such an interface provided by the CNA, it can access the bootstrap device using that firmware interface *as if it were a locally attached device* without requiring initialization of the operating system's full software iSCSI protocol machinery.
 
-## Additional Concepts and Terminology
+### Additional Concepts and Terminology
 
-Harvester installs to a bootable storage device which we will refer to as the _boot disk_.
+Harvester must be installed on a bootable storage device, which is referred to as the *boot disk*.
 
-Additional storage devices may be used as well; we will refer to those devices as _non-boot disks_.
-
-This document is only concerned with the _boot disk_.
+Other storage devices, which are referred to as *non-boot disks*, may also be used in the Harvester ecosystem.
 
 ## Purpose of the Procedure Described in this Document
 
