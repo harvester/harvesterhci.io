@@ -234,7 +234,7 @@ Now the node should come up normally, and finish with the normal Harvester conso
 
 The the node should operate normally now **but** the kernel boot argument changes will not be preserved across a reboot unless you perform the next step.
 
-## Permanently edit the GRUB configuration file
+### 5. Permanently edit the GRUB configuration file.
 
 At this point you need to preserve these boot argument changes.
 
