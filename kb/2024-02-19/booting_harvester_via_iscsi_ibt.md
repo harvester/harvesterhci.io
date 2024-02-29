@@ -174,7 +174,7 @@ The typical things you need to configure are:
 * Enable the iSCSI device in the boot menu
 * Set the boot order so that your system will boot from the iSCSI device
 
-## Boot the Harvester install image and install to the iSCSI device
+### Boot the Harvester install image and install to the iSCSI device
 
 This can be done by whatever means you would normally use to load the Harvester install image.
 
