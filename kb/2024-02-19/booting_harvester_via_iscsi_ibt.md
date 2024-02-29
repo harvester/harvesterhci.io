@@ -41,31 +41,6 @@ Harvester must be installed on a bootable storage device, which is referred to a
 
 Other storage devices, which are referred to as *non-boot disks*, may also be used in the Harvester ecosystem.
 
-## Purpose of the Procedure Described in this Document
-
-It was not originally envisioned that Harvester would be installed and used on systems without a locally boot disk.
-This is in keeping with the philosophy of Hyper-Converged Infrastructure (HCI),
-which by definition hosts computational capability, storage, and networking all in a single device
-or set of similar devices operating in a cluster.
-
-While the notion of a purely Hyper-Converged Infrastructure is very tidy,
-the real world is messy and contains heterogeneous environments
-with both Hyper-Converged and non-Hyper-Converged elements.
-Users have expressed interest in having Harvester Hyper-Converged systems
-be able to make use of non-Hyper-Converged storage.
-
-These notes desribe a way to do this in a particular limited situation.
-
-Through Harvester release 1.3.0, no explicit support has been provided for installing Harvester
-to any type of storage which is not locally attached,
-nor does it contain any explicit support for booting and running from storage which is not locally attached.
-
-However, it has been observed that systems with CNAs _might_ in fact permit Harvester to do just this.
-
-After some experimentation it has been determined that in _certain cases_ it _does_ work,
-_but_ the boot loader configuration of the installed system must be modified after installation,
-according to the procedure described in the following sections of this document.
-
 # Requirements and Limitations
 
 The procedures described in this document do not apply to all circumstances.
