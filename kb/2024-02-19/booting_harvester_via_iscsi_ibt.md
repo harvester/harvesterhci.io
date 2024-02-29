@@ -17,50 +17,23 @@ However, there are certain limited conditions that allow Harvester to be used on
 
 This section describes background concepts and outlines requirements and limitations that you must consider before performing the procedure. For more information about the described concepts, see the references listed at the end of this article.
 
-## iSCSI Concepts and Terminology
+### iSCSI Concepts and Terminology
 
-SCSI (Small Computer System Interface) is a set of standards for transferring data between computers systems and I/O devices.
-It is primarily known for use with storage devices; this is the case that concerns us here.
+SCSI (Small Computer System Interface) is a set of standards for transferring data between computers systems and I/O devices. It is primarily used with storage devices.
 
-The SCSI standards specify
-* a set of message formats and rules of exchange (the **SCSI protocol**), and
-* various methods for physically connecting the storage devices to the computer system and transferring the SCSI protocol between them; these methods are called **SCSI transports**.
+The SCSI standards specify the following:
+- **SCSI protocol**: A set of message formats and rules of exchange
+- **SCSI transports**: Methods for physically connecting storage devices to the computer system and transferring SCSI messages between them
 
-A number of SCSI transports are defined, including
-* SAS (Serial Attached SCSI)
-* UAS (USB Attached SCSI)
-* FCP (Fibre Channel Protocol)
-* iSCSI (Internet SCSI)
+A number of SCSI transports are defined, including the following:
+- **SAS (Serial Attached SCSI)** and **UAS (USB Attached SCSI)**: Used to access SCSI storage devices that are directly attached to the computers using that storage
+- **FCP (Fibre Channel Protocol)** and **iSCSI (Internet SCSI)**: Permit computer systems to access storage via a Storage Area Network (SAN), where the storage devices are attached to a system other than the computers using that storage
 
-SAS and UAS are methods used to access SCSI storage devices that are directly attached to the computer using that storage.
+The SCSI protocol is a client-server protocol, which means that all interaction occurs between clients that send requests and a server that services the requests. In the SCSI context, the client is called the **initiator** and the server is called the **target**. iSCSI initiators and targets identify themselves using a specially formatted identifier called an **iSCSI qualified name (IQN)**. The controller used to provide access to the storage devices is commonly called a **host bus adapter (HBA)**.
 
-FCP and iSCSI are methods which permit computer systems to access storage via a SAN (Storage Area Network)
-where the storage devices are attached to a storage system other than the computer(s) using that storage.
+When using iSCSI, access is provided by a traditional Internet protocol, with an extra layer to encapsulate SCSI commands within TCP/IP messages. This can be implemented entirely in software (transferring messages using a traditional NIC), or it can be "offloaded" to a "smart" NIC that contains the iSCSI protocol and provides access through special firmware. Such NICs, which provide both a traditional Ethernet interface for regular Internet traffic and a higher-level storage interface for iSCSI services, are often called **converged network adapters (CNAs)**.
 
-It is only the last of these -- iSCSI -- which concerns us in this document.
-
-The SCSI Protocol is a so-called client/server protocol.
-
-That is, all interaction occurs between a client which requests service and a server which provides it.
-
-In SCSI terminology, the client is called the **initiator** and the server is called the **target**.
-
-iSCSI initiators and targets identify themselves to each other by means of
-a specially formatted identifier called an iSCSI Qualified Name (IQN).
-
-The controller used to provide access to the storage devices is commonly called an HBA (Host Bus Adapter).
-
-When using iSCSI, the access is provided by a traditional Internet protocol, with an extra layer to encapsulate SCSI commands within TCP/IP messages.
-
-This implementation can be entirely in software, transferring messages using a traditional NIC;
-or it can be "offloaded" to a "smart" NIC that contains the iSCSI protocol and provides access for the system through special firmware.
-Such NICs -- providing both a traditional Ethernet interface for "normal" Internet traffic and a higher-level storage interface for iSCSI services --
-are often called "Converged Network Adapters" (CNAs).
-
-Systems with iSCSI CNAs enable the system bootstrap firmware to boot the system via iSCSI, if configured to do so.
-If, in addition, the loaded operating system is aware of such an interface provided by the CNA,
-it can access the bootstrap device using that firmware interface *as if it were a locally attached device*
-without requiring initialization of the operating system's full software iSCSI protocol machinery.
+Systems with iSCSI CNAs can be configured to enable the system bootstrap firmware to boot the system via iSCSI. In addition, if the loaded operating system is aware of such an interface provided by the CNA, it can access the bootstrap device using that firmware interface *as if it were a locally attached device* without requiring initialization of the operating system's full software iSCSI protocol machinery.
 
 ## Additional Concepts and Terminology
 
