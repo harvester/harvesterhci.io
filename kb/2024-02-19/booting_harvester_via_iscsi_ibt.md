@@ -185,7 +185,7 @@ Installation should proceed and complete normally.
 
 When installation completes, your system should reboot.
 
-## On first boot, edit kernel boot parameters in the GRUB kernel command line
+### 4. On first boot, edit kernel boot parameters in the GRUB kernel command line.
 
 As your system starts to come up after the first reboot,
 the firmware will load the boot loader (GRUB) from the iSCSI device,
