@@ -9,15 +9,9 @@ tags: [harvester]
 hide_table_of_contents: false
 ---
 
-Although Harvester through release 1.3.0 does not yet support booting and running on nodes without locally attached storage,
-there are certain cases where it can be made to work.
+Through v1.3.0, no explicit support has been provided for using Harvester (installing, booting, and running) with any type of storage that is not locally attached. This is in keeping with the philosophy of Hyper-Converged Infrastructure (HCI), which by definition hosts computational capability, storage, and networking in a single device or a set of similar devices operating in a cluster.
 
-These notes describe the specific limited conditions where it is possible,
-and provide some manual changes to the boot configuration to make it work when those conditions apply.
-
-The procedure is fairly simple; most of this document provides context and discusses limitations of the procedure.
-
-The procedure contains some manual steps.  It is possible that a future Harvester release _may_ automate these steps.
+However, there are certain limited conditions that allow Harvester to be used on nodes without locally-attached bootable storage devices. Specifically, the use of converged network adapters (CNAs) as well as manual changes to the boot loader configuration of the installed system are required.
 
 # Concepts and Purpose
 
