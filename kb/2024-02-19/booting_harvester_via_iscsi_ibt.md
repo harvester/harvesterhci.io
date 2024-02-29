@@ -13,10 +13,9 @@ Through v1.3.0, no explicit support has been provided for using Harvester (insta
 
 However, there are certain limited conditions that allow Harvester to be used on nodes without locally-attached bootable storage devices. Specifically, the use of converged network adapters (CNAs) as well as manual changes to the boot loader configuration of the installed system are required.
 
-# Concepts and Purpose
+## Concepts, Requirements, and Limitations
 
-This section provides some background concepts and describes the purpose of the procedure described in these notes.
-Further information may be found by consulting references listed at the end of this document.
+This section describes background concepts and outlines requirements and limitations that you must consider before performing the procedure. For more information about the described concepts, see the references listed at the end of this article.
 
 ## iSCSI Concepts and Terminology
 
