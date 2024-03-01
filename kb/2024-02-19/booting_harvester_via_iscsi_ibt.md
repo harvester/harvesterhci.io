@@ -41,12 +41,6 @@ Harvester must be installed on a bootable storage device, which is referred to a
 
 Other storage devices, which are referred to as *non-boot disks*, may also be used in the Harvester ecosystem.
 
-# Requirements and Limitations
-
-The procedures described in this document do not apply to all circumstances.
-
-To the extent possible, necessary requirements and limitations are described here.
-
 ### Requirements
 
 You must install Harvester on a node with a converged NIC that provides iSCSI offload capability with firmware support. This firmware must specifically support the iSCSI Boot Firmware Table (iBFT).
