@@ -79,7 +79,7 @@ The following is a summary of the procedure. Individual steps, which are describ
 The boot configuration changes will persist across node reboots but **not** across system upgrades, which will overwrite the GRUB parameters. 
 :::
 
-## Provision storage for your Harvester node on your iSCSI server system
+### 1. Provision storage for your Harvester node on your iSCSI server system.
 
 Before attempting to install Harvester onto a disk accessed by iSCSI,
 the storage must first be provisioned on the storage server.
