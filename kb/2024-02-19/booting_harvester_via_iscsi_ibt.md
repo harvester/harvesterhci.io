@@ -47,19 +47,14 @@ The procedures described in this document do not apply to all circumstances.
 
 To the extent possible, necessary requirements and limitations are described here.
 
-## Requirements
+### Requirements
 
-For this to work, the node where you are installing Harvester **must** have
-a converged NIC providing iSCSI offload capability with firmware support.
-This firmware must specifically include iBFT (iSCSI Boot Firmware Table) support.
+You must install Harvester on a node with a converged NIC that provides iSCSI offload capability with firmware support. This firmware must specifically support the iSCSI Boot Firmware Table (iBFT).
 
 :::note
-This has been tested with Harvester releases 1.2.1 and 1.3.0.
-:::
-
-:::note
-This has been tested on a Dell PowerEdge R650 system.
-It may work with other systems with comparable hardware and firmware iSCSI support.
+The procedure was tested with the following:
+- Harvester v1.2.1 and v1.3.0
+- Dell PowerEdge R650 (Other systems with comparable hardware and firmware iSCSI support may also be suitable.)
 :::
 
 ## Limitations
