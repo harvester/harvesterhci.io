@@ -65,21 +65,19 @@ The procedure will not work in environments with the following conditions:
 - Nodes boot via PXE.
 - Harvester is installed only on virtual machines.
 
-# Procedure
+## Procedure
 
-The procedure can be summarized in the following steps, each of which is discussed in more detail.
+The following is a summary of the procedure. Individual steps, which are described in the following sections, must be performed interactively. A fully automated installation is **not** possible at this time.
 
 1. Provision storage for your Harvester node on your iSCSI server system.
-2. Configure system firmware to boot via iSCSI using the available CNA
-3. Boot the Harvester install image and install to the iSCSI device
-4. On first Harvester boot after installation, edit the kernel boot parameters in the GRUB kernel command line
-5. Permanently edit the GRUB configuration file in the normally read-only partition
+1. Configure system firmware to boot via iSCSI using the available CNA.
+1. Boot the Harvester install image and install to the iSCSI device.
+1. On first Harvester boot after installation, edit the kernel boot parameters in the GRUB kernel command line.
+1. Permanently edit the GRUB configuration file in the normally read-only partition.
 
-Steps for this need to be performed interactively, so a fully automated / unattended installation is **not** possible at this time.
-
-It is **very important** to be aware that if you subsequently upgrade Harvester,
-the upgrade **will overwrite** the "permanently edited" GRUB parameters,
-so you will have to re-edit those parameters by hand.
+:::info important
+The boot configuration changes will persist across node reboots but **not** across system upgrades, which will overwrite the GRUB parameters. 
+:::
 
 ## Provision storage for your Harvester node on your iSCSI server system
 
