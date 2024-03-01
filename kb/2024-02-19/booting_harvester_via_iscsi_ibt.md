@@ -57,20 +57,13 @@ The procedure was tested with the following:
 - Dell PowerEdge R650 (Other systems with comparable hardware and firmware iSCSI support may also be suitable.)
 :::
 
-## Limitations
+### Limitations
 
-This procedure is not guaranteed to work on all systems.
+The procedure will not work in environments with the following conditions:
 
-This procedure will not work in cases where iSCSI is not implemented in a converged NIC.
-
-This procedure does not work for cases where the nodes boot via PXE.
-
-This procedure only applies when installing Harvester on **bare metal**, not in a virtual machine.
-
-:::note
-The boot configuration changes described in the next section **will** persist across node reboots,
-but they **will not** persist across system **upgrades**.
-:::
+- iSCSI is not implemented in a converged NIC.
+- Nodes boot via PXE.
+- Harvester is installed only on virtual machines.
 
 # Procedure
 
