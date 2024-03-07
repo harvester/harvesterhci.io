@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkharvesterhci_io=self.webpackChunkharvesterhci_io||[]).push([[4491],{8295:function(e){e.exports=JSON.parse('{"permalink":"/kb/tags/rancher-integration","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"previousPage":null,"nextPage":null,"blogDescription":"Blog","blogTitle":"Harvester HCI knowledge base"}')}}]);
