@@ -21,13 +21,13 @@ Filesystem trim is a common way to release unused space in a filesystem. However
 - Harvester: [Issue 4793](https://github.com/harvester/harvester/issues/4739)
 - Longhorn: [Issue 7103](https://github.com/longhorn/longhorn/issues/7103)
 
-## Risks Associated with Trim Filesystem Usage
+## Risks Associated with Filesystem Trim
 
 A consequence of the IO errors caused by filesystem trim is that VMs using affected Longhorn volumes become stuck. Imagine the VM is running critical applications, then becomes unavailable. This is significant because Harvester typically uses Longhorn volumes as VM disks. The IO errors will cause VMs to flap between running and paused states until volume rebuilding is completed.
 
 Although the described system behavior does not affect data integrity, it might induce panic in some users. Consider the guest Kubernetes cluster scenario. In a stuck VM, the etcd service is unavailable. The effects of this failure cascade from the Kubernetes cluster becoming unavailable to services running on the cluster becoming unavailable.
 
-## How to Check If Trim Filesystem Is Enabled
+## How to Check If Filesystem Trim Is Enabled
 
 ### Linux
 
