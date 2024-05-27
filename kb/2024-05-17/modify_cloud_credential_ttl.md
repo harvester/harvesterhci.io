@@ -15,29 +15,31 @@ tags: [harvester, cloud credentials, rancher]
 hide_table_of_contents: false
 ---
 
-## Kubeconfig token expiry in Rancher 2.8.x
+## Expiration of kubeconfig tokens in Rancher 2.8.x
 
-Rancher 2.8.x has introduced a new [kubeconfig-default-token-ttl-minutes](https://ranchermanager.docs.rancher.com/api/api-tokens#kubeconfig-default-token-ttl-minutes) setting. As highlighted in the document the default value for this setting is 30 days.
+In Rancher 2.8.x, the default value of the [kubeconfig-default-token-ttl-minutes](https://ranchermanager.docs.rancher.com/api/api-tokens#kubeconfig-default-token-ttl-minutes) setting is `30` days.
 
-A side effect of this issue, has been the expiry of kubeconfig tokens used by rancher in provisioning downstream clusters on Harvester.
+A side effect of using this default value is the expiration of authentication tokens embedded in kubeconfigs that Rancher uses to provision guest Kubernetes clusters on Harvester. When such tokens expire, Rancher loses the ability to perform management operations for the corresponding Rancher-managed guest Kubernetes clusters. [Issue #44912](https://github.com/rancher/rancher/issues/44912) tracks the issue described in this article.
 
-When the cloud credential token expires, the end users cannot perform any further cluster management operations on downstream clusters on Harvester. An issue tracking the same is available [here.](https://github.com/rancher/rancher/issues/44912)
-
-**NOTE:** This only impacts Harvester cloud credentials created after installing or upgrading to Rancher 2.8.x
+:::info important
+The issue affects only guest Kubernetes clusters running on Harvester that use cloud credentials created after installing or upgrading to Rancher v2.8.x.
+:::
 
 ## Workaround
 
-Users can patch the expired harvester cloud credential to the use a new api token as follows:
+You can patch the expired Harvester cloud credentials to use a new authentication token.
 
-1. Identify the expired cloud credential for the cluster
+1. Identify the expired cloud credentials for the cluster.
+
 ![identify-credentials](./imgs/identify-cloud-credential.png)
 
-2. Generate a new rancher api token with "No Scope". Users can custom the ttl for their token, a custom value of 0 results in tokens that do not expire.
+1. Generate a new Rancher authentication token with the value of **Scope** set to **No Scope**. You can customize the TTL for the token (for example, a value of `0` results in tokens that do not expire).
+
 ![api-token](./imgs/api-token.png)
 
-3. Generate a kubeconfig to access the rancher server using the [instructions.](https://ranchermanager.docs.rancher.com/api/quickstart)
+1. Generate a kubeconfig to access the Rancher server using the [instructions](https://ranchermanager.docs.rancher.com/api/quickstart) in the Rancher documentation.
 
-4. the cloud credential is stored as a secret in `cattle-global-data` namespace, and can be patched with new API token as follows. Please ensure that environment variable KUBECONFIG points to the generated kubeconfig
+1. The cloud credential is stored as a secret in `cattle-global-data` namespace, and can be patched with new authentication token. Ensure that the environment variable `KUBECONFIG` points to the generated kubeconfig.
 
 ```shell
 #!/bin/sh
