@@ -46,7 +46,7 @@ You can patch the expired Harvester cloud credentials to use a new authenticatio
 CLOUD_CREDENTIAL_NAME=$1
 API_TOKEN=$2
 
-kubeconfig=$(kubectl get secret $CLOUD_CREDENTIAL_NAME -n cattle-global-data -o yaml |   yq '.data.harvestercredentialConfig-kubeconfigContent' | base64 -d | token=${API_TOKEN} yq -e '.users[0].user.token = env(token)' | base64 )
+kubeconfig=$(kubectl get secret $CLOUD_CREDENTIAL_NAME -n cattle-global-data -o yaml |   yq '.data.harvestercredentialConfig-kubeconfigContent' | base64 -d | token=${API_TOKEN} yq -e '.users[0].user.token = env(token)' | base64 -w 0)
 
 patch_file=$(mktemp)
 
@@ -58,3 +58,5 @@ EOF
 kubectl patch secret ${CLOUD_CREDENTIAL_NAME} -n cattle-global-data --patch-file ${patch_file} --type merge
 rm ${patch_file}
 ```
+
+*Note:* macos users will need to switch to use `gbase64` to ensure `-w` flag is supported
