@@ -11,15 +11,24 @@ tags: [harvester, rancher integration, longhorn, filesystem trim]
 hide_table_of_contents: false
 ---
 
-:::note
-This issue is already resolved by Longhorn v1.5.4, v1.6.1, v1.7.0 and later versions.
-:::
-
-
 Filesystem trim is a common way to release unused space in a filesystem. However, this operation is known to cause IO errors when used with Longhorn volumes that are rebuilding. For more information about the errors, see the following issues:
 
 - Harvester: [Issue 4793](https://github.com/harvester/harvester/issues/4739)
 - Longhorn: [Issue 7103](https://github.com/longhorn/longhorn/issues/7103)
+
+:::info important
+
+Filesystem trim was introduced in Longhorn v1.4.0 because of [Issue 836](https://github.com/longhorn/longhorn/issues/836).
+
+Longhorn volumes affected by the mentioned IO errors can disrupt operations in Harvester VMs that use those volumes. If you are using any of the following Harvester versions, see the instructions for risk mitigation in this article.
+
+| Affected Harvester Version | Built-In Longhorn Version |
+|----------------------------|---------------------------|
+| v1.2.0                     | v1.4.3                    |
+| v1.2.1                     | v1.4.3                    | 
+| v1.3.0                     | v1.6.0                    | 
+
+:::
 
 ## Risks Associated with Filesystem Trim
 
