@@ -17,7 +17,7 @@ hide_table_of_contents: false
 
 # Best Practices for Optimizing Longhorn Disk Performance
 
-The Longhorn documentation provides [best practice recommendations](https://longhorn.io/docs/1.5.3/best-practices/) for deploying Longhorn in production environments. Before configuring workloads, ensure that you have set up the following basic requirements for optimal disk performance.
+The Longhorn documentation provides [best practice recommendations](https://longhorn.io/docs/1.6.0/best-practices/) for deploying Longhorn in production environments. Before configuring workloads, ensure that you have set up the following basic requirements for optimal disk performance.
 
 - SATA/NVMe SSDs or disk drives with similar performance
 - 10 Gbps network bandwidth between nodes
