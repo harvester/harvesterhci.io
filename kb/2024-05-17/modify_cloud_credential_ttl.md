@@ -29,24 +29,23 @@ The issue affects only guest Kubernetes clusters running on Harvester that use c
 
 You can patch the expired Harvester cloud credentials to use a new authentication token.
 
-1. Identify the expired cloud credentials for the cluster.
+1. Identify the expired cloud credentials and which Harvester cluster is
+   affected by them.
 
   ![identify-credentials](./imgs/identify-cloud-credential.png)
 
-1. Generate a new Rancher authentication token with the value of **Scope** set to **No Scope**. You can customize the TTL for the token (for example, a value of `0` results in tokens that do not expire).
+1. Download a new kubeconfig file for the affected Harvester cluster.
 
-  ![api-token](./imgs/api-token.png)
+  ![context-menu](./imgs/harvester-renew-kubeconfig-menu.png)
 
-1. Generate a kubeconfig to access the Rancher server using the [instructions](https://ranchermanager.docs.rancher.com/api/quickstart) in the Rancher documentation.
-
-1. The cloud credential is stored as a secret in `cattle-global-data` namespace, and can be patched with new authentication token. Ensure that the environment variable `KUBECONFIG` points to the generated kubeconfig.
+1. Patch the cloud credentials. The cloud credential is stored as a secret in `cattle-global-data` namespace, and can be replaced with the new kubeconfig file. Ensure that the environment variable `KUBECONFIG_FILE` contains the path to the new kubeconfig file.
 
   ```shell
   #!/bin/sh
   CLOUD_CREDENTIAL_NAME=$1
-  API_TOKEN=$2
+  KUBECONFIG_FILE=$2
 
-  kubeconfig=$(kubectl get secret $CLOUD_CREDENTIAL_NAME -n cattle-global-data -o yaml |   yq '.data.harvestercredentialConfig-kubeconfigContent' | base64 -d | token=${API_TOKEN} yq -e '.users[0].user.token = env(token)' | base64 -w 0)
+  kubeconfig="$(base64 -w 0 "${KUBECONFIG_FILE}")"
 
   patch_file=$(mktemp)
 
