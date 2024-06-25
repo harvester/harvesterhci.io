@@ -160,15 +160,15 @@ The procedure is as follows.
       apiVersion: storage.k8s.io/v1
       kind: StorageClass
       metadata:
-      name: ontap-san-economy
+        name: ontap-san-economy
       provisioner: csi.trident.netapp.io
       parameters:
-      selector: "name=default_backend_san"
+        selector: "name=default_backend_san"
       ---
       apiVersion: snapshot.storage.k8s.io/v1
       kind: VolumeSnapshotClass
       metadata:
-      name: csi-snapclass
+        name: csi-snapclass
       driver: csi.trident.netapp.io
       deletionPolicy: Delete
       ```
