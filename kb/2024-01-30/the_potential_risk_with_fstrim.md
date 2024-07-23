@@ -20,13 +20,11 @@ Filesystem trim is a common way to release unused space in a filesystem. However
 
 Filesystem trim was introduced in Longhorn v1.4.0 because of [Issue 836](https://github.com/longhorn/longhorn/issues/836).
 
-Longhorn volumes affected by the mentioned IO errors can disrupt operations in Harvester VMs that use those volumes. If you are using any of the following Harvester versions, see the instructions for risk mitigation in this article.
+Longhorn volumes affected by the mentioned IO errors can disrupt operations in Harvester VMs that use those volumes. If you are using any of the affected Harvester versions, upgrade to a version with fixes or follow the instructions for risk mitigation in this article.
 
-| Affected Harvester Version | Built-In Longhorn Version |
-|----------------------------|---------------------------|
-| v1.2.0                     | v1.4.3                    |
-| v1.2.1                     | v1.4.3                    | 
-| v1.3.0                     | v1.6.0                    | 
+**Affected Harvester versions**: v1.2.0 (uses Longhorn v1.4.3), v1.2.1 (uses Longhorn v1.4.3), and v1.3.0 (uses Longhorn v1.6.0)
+
+**Harvester versions with fixes**: v1.2.2 (uses Longhorn v1.5.5) and v1.3.1 (uses Longhorn v1.6.2)
 
 :::
 
