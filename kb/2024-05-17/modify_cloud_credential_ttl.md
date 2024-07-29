@@ -42,8 +42,8 @@ You can patch the expired Harvester cloud credentials to use a new authenticatio
 
   ```shell
   #!/bin/sh
-  CLOUD_CREDENTIAL_NAME=$1
-  KUBECONFIG_FILE=$2
+  CLOUD_CREDENTIAL_ID=$1  # .metadata.name of the cloud credential
+  KUBECONFIG_FILE=$2      # path to the downloaded kubeconfig file
 
   kubeconfig="$(base64 -w 0 "${KUBECONFIG_FILE}")"
 
@@ -54,7 +54,7 @@ You can patch the expired Harvester cloud credentials to use a new authenticatio
     harvestercredentialConfig-kubeconfigContent: $kubeconfig
   EOF
 
-  kubectl patch secret ${CLOUD_CREDENTIAL_NAME} -n cattle-global-data --patch-file ${patch_file} --type merge
+  kubectl patch secret ${CLOUD_CREDENTIAL_ID} -n cattle-global-data --patch-file ${patch_file} --type merge
   rm ${patch_file}
   ```
 

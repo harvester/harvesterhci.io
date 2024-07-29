@@ -134,7 +134,7 @@ const config = {
         showReadingTime: true,
         // Please change this to your repo.
         editUrl:
-          "https://github.com/harvester/harvesterhci.io/edit/main/kb/",
+          "https://github.com/harvester/harvesterhci.io/edit/main/",
         blogTitle: 'Harvester HCI knowledge base',
         routeBasePath: 'kb',
         include: ['**/*.{md,mdx}'],
