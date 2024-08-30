@@ -19,7 +19,7 @@ Scenarios:
 
 1. The Harvester cluster is imported to this Rancher manager and works as a node driver.
 
-1. The Rancher manager deploys a couple of downstream k8s clusters, the machines/nodes of those clusters are backed by Harvester VMs.
+1. The Rancher manager deploys a couple of downstream K8s clusters, the machines/nodes of those clusters are backed by Harvester VMs.
 
 1. There are also some traditional VMs deployed on the Harvester cluster, which have no direct connection with the Rancher manager.
 
@@ -43,7 +43,7 @@ Those facts need to be taken into account particularly:
 
 1. Harvester has embedded Longhorn as the default CSI driver, each PV can have 3 or more replicas, when replicas are rescheduled to other nodes, Longhorn will copy data from source node and rebuild the replica. Undoubtedly, stop the PVs as much as possible before the cluster shutdown to avoid the data moving.
 
-1. Unlike normal kubernetes deployments which have no PVs and are more flexible & agile to deploy anywhere on the cluster, the VMs are backed by massive sized PVs, slowly to move/migrate or even pinned on certain nodes to take the advantage of pci-passthrough/vgpu/... and much more sensitive to data consistency.
+1. Unlike normal kubernetes deployments which have no PVs and are more flexible & agile to deploy anywhere on the cluster, the VMs are backed by massive sized PVs, slowly to move/migrate or even pinned on certain nodes to take the advantage of pci-passthrough/vgpu/... and are much more sensitive to data consistency.
 
 Needless to say, it is a bad practice to brutally power off the nodes on production environments.
 
@@ -57,7 +57,7 @@ For trouble-shooting purpose, it is essential to follow [this instruction](https
 
 :::info important
 
-Harvester cluster is built on top of Kubernetes, a general requirement is that the Node/Host IP and the cluster VIP should keep stable in the whole lifecycle, if IP changes the cluster will fail to work as expected.
+Harvester cluster is built on top of Kubernetes, a general requirement is that the Node/Host IP and the cluster VIP should keep stable in the whole lifecycle, if IP changes the cluster may fail to recover/work.
 
 If your VMs on Harvester are used as Rancher downstream cluster machines/nodes, and their IPs are allocated from DHCP server, also make sure those VMs will still get the same IPs after the Harvester cluster is rebooted and VMs are restarted.
 
@@ -65,11 +65,11 @@ If your VMs on Harvester are used as Rancher downstream cluster machines/nodes, 
 
 A good practice is to have detailed documents about the infrastructure related settings.
 
-- The bare metal server nic slot/port connections with the remote (ToR) Switches.
+- The bare metal server NIC slot/port connections with the remote (ToR) Switches.
 
 - The VLAN for the management network.
 
-- (Optional) The DHCP Server, ip-pools and ip-mac bindings for the Harvester cluster if DHCP server is used. If there is no fixed ip binding, when the server restarts after some days it may get a different IP from the DHCP server.
+- (Optional) The DHCP Server, ip-pools and ip-mac bindings for the Harvester cluster if DHCP server is used. If there is no fixed IP binding, when the server restarts after some days it may get a different IP from the DHCP server.
 
 - The [VLANs for the VM networks](https://docs.harvesterhci.io/v1.3/networking/harvester-network#vlan-network), the CIDRs, default gateways and optional DHCP servers.
 
@@ -93,13 +93,13 @@ Before the Harvester cluster is restarted later, check and test those settings a
 
 It is always a good practice to backup things before a whole cluster shutdown.
 
-### (Optional) Backup Downstream k8s Clusters if Possible
+### (Optional) Backup Downstream K8s Clusters if Possible
 
-Harvester doesn't touch the (Rancher manager managed) downstream k8s clusters' workload, when they are not able to be migrated to other node drivers, suggests to backup those clusters.
+Harvester doesn't touch the (Rancher manager managed) downstream K8s clusters' workload, when they are not able to be migrated to other node drivers, suggests to backup those clusters.
 
-### (Optional) Stop or Migrate Downstream k8s Clusters if Possible
+### (Optional) Stop or Migrate Downstream K8s Clusters if Possible
 
-Harvester doesn't touch the downstream k8s clusters' workload, but suggests to stop or migrate the downstream clusters to avoid your service interruption.
+Harvester doesn't touch the downstream K8s clusters' workload, but suggests to stop or migrate the downstream clusters to avoid your service interruption.
 
 ## 3. Shutdown Workloads
 
@@ -320,7 +320,7 @@ harv43   Ready    control-plane,etcd,master   54d   v1.27.10+rke2r1  // control-
 
 ### 4.1 Shutdown the Worker Nodes
 
-1. Ssh to the Harvester `worker nodes`.
+1. SSH to the Harvester `worker nodes`.
 
 2. Run command `sudo -i shutdown`.
 
@@ -330,11 +330,11 @@ $ sudo -i shutdown
 Shutdown scheduled for Mon 2024-07-22 06:58:56 UTC, use 'shutdown -c' to cancel.
 ```
 
-3. Wait until all those nodes are downs
+3. Wait until all those nodes are down.
 
 ### 4.2 Shutdown Control-plane Nodes and Witness Node
 
-To now, there are generally three control-plane nodes left, and three `etcd-*` pods are running in `kube-system` namespaces.
+So far, there are generally three control-plane nodes left, and three `etcd-*` pods are running in `kube-system` namespaces.
 
 The first step is to find which one of the `etcd-*` pod is running as the leader.
 
@@ -373,7 +373,7 @@ harv43   Ready      etcd                         1d    v1.27.10+rke2r1  // witne
 +------------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
 ```
 
-Run `kubectl delete pod -n kube-system etcd-name` command to delete the etcd pod on the `witness node` to trigger the pod replacement and leader re-election so that the `etcd` leader will be located on one of the `control-plane` nodes. Check the `etcd` leader again to make sure.
+Run `kubectl delete pod -n kube-system etcd-name` command to delete the `etcd` pod on the `witness node` to trigger the pod replacement and leader re-election so that the `etcd` leader will be located on one of the `control-plane` nodes. Check the `etcd` leader again to make sure.
 
 ```
 +------------------------------+------------------+---------+---------+-----------+------------+-----------+------------+--------------------+--------+
@@ -389,7 +389,7 @@ To now, the `etcd` has three running instances and the leader is located on the 
 
 :::info important
 
-Write down the information of those nodes like name, ip, and the leader. Ideally give them a sequence like 1, 2, 3.
+Write down the information of those nodes like name, IP, and the leader. Ideally give them a sequence like 1, 2, 3.
 
 :::
 
@@ -485,15 +485,104 @@ harv43   Ready    control-plane,etcd,master   54d   v1.27.10+rke2r1
 
 ```
 
+#### Healthy Check
+
+##### Basic Components
+
+Harvester deploys some basic components on the following namespaces. When a bare-metal server is powered on, it may take upto around 15 minutes for the Harvester OS to be running and all the deployments on this node to be ready.
+
+If any of them continues to show the status like `Failed`/`CrashLoopBackOff`, a troubleshooting is needed to confirm the root cause.
+
+```
+NAMESPACE                         NAME                                                     READY   STATUS      RESTARTS       AGE
+cattle-fleet-local-system         fleet-agent-645766877f-bt424                             1/1     Running     0              11m
+
+cattle-fleet-system               fleet-controller-57f78dcd48-5tkkj                        1/1     Running     4 (14m ago)    42h
+cattle-fleet-system               gitjob-d5bb7b548-jscgk                                   1/1     Running     2 (14m ago)    42h
+
+cattle-system                     harvester-cluster-repo-6c6458bd46-7jcrl                  1/1     Running     2 (14m ago)    42h
+cattle-system                     system-upgrade-controller-6f86d6d4df-f8jg7               1/1     Running     2 (14m ago)    42h
+cattle-system                     rancher-7bc9d94b87-g4k4v                                 1/1     Running     3 (14m ago)    42h  // note: if embedded Rancher was stopped in the above steps, it is not Running now
+cattle-system                     rancher-webhook-6c5c6fbb65-2cbbs                         1/1     Running     2 (14m ago)    42h
+
+harvester-system                  harvester-787b467f4-qlfwt                                1/1     Running     2 (14m ago)    39h
+harvester-system                  harvester-load-balancer-56d9c8758c-cvcmk                 1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-load-balancer-webhook-6b4d4d9d6b-4tsgl         1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-network-controller-9pzxh                       1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-network-controller-manager-69bcf67c7f-44zqj    1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-network-webhook-6c5d48bdf5-8kn9r               1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-node-disk-manager-c4c5k                        1/1     Running     3 (14m ago)    42h
+harvester-system                  harvester-node-manager-qbvbr                             1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-node-manager-webhook-6d8b48f559-m5shk          1/1     Running     2 (14m ago)    42h
+harvester-system                  harvester-webhook-87dc4cdd8-jg2q6                        1/1     Running     2 (14m ago)    39h
+harvester-system                  kube-vip-n4s8l                                           1/1     Running     3 (14m ago)    42h
+harvester-system                  virt-api-799b99fb65-g8wgq                                1/1     Running     2 (14m ago)    42h
+harvester-system                  virt-controller-86b84c8f8f-4hhlg                         1/1     Running     2 (14m ago)    42h
+harvester-system                  virt-controller-86b84c8f8f-krq4f                         1/1     Running     3 (14m ago)    42h
+harvester-system                  virt-handler-j9gwn                                       1/1     Running     2 (14m ago)    42h
+harvester-system                  virt-operator-7585847fbc-hvs26                           1/1     Running     2 (14m ago)    42h
+
+kube-system                       cloud-controller-manager-harv41                          1/1     Running     5 (14m ago)    42h
+kube-system                       etcd-harv41                                              1/1     Running     2              42h
+kube-system                       harvester-snapshot-validation-webhook-8594c5f8f8-8mk57   1/1     Running     2 (14m ago)    42h
+kube-system                       harvester-snapshot-validation-webhook-8594c5f8f8-dkjmf   1/1     Running     2 (14m ago)    42h
+kube-system                       harvester-whereabouts-cpqvl                              1/1     Running     2 (14m ago)    42h
+
+kube-system                       kube-apiserver-harv41                                    1/1     Running     2              42h
+kube-system                       kube-controller-manager-harv41                           1/1     Running     4 (14m ago)    42h
+kube-system                       kube-proxy-harv41                                        1/1     Running     2 (14m ago)    42h
+kube-system                       kube-scheduler-harv41                                    1/1     Running     2 (14m ago)    42h
+kube-system                       rke2-canal-d5kmc                                         2/2     Running     4 (14m ago)    42h
+kube-system                       rke2-coredns-rke2-coredns-84b9cb946c-qbwnb               1/1     Running     2 (14m ago)    42h
+kube-system                       rke2-coredns-rke2-coredns-autoscaler-b49765765-6bjsk     1/1     Running     2 (14m ago)    42h
+kube-system                       rke2-ingress-nginx-controller-cphgw                      1/1     Running     2 (14m ago)    42h
+kube-system                       rke2-metrics-server-655477f655-gsnsc                     1/1     Running     2 (14m ago)    42h
+kube-system                       rke2-multus-8nqg4                                        1/1     Running     2 (14m ago)    42h
+kube-system                       snapshot-controller-5fb6d65787-nmjdh                     1/1     Running     2 (14m ago)    42h
+kube-system                       snapshot-controller-5fb6d65787-phvq7                     1/1     Running     3 (14m ago)    42h
+
+longhorn-system                   backing-image-manager-5c32-ea70                          1/1     Running     0              13m
+longhorn-system                   csi-attacher-749459cf65-2x792                            1/1     Running     6 (13m ago)    42h
+longhorn-system                   csi-attacher-749459cf65-98tj4                            1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-attacher-749459cf65-nwglq                            1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-provisioner-775b4f76f4-h9mwd                         1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-provisioner-775b4f76f4-nvjzt                         1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-provisioner-775b4f76f4-zvd6w                         1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-resizer-68867d54f5-4hf5j                             1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-resizer-68867d54f5-fs9ht                             1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-resizer-68867d54f5-ht5hj                             1/1     Running     6 (13m ago)    42h
+longhorn-system                   csi-snapshotter-8469656cc7-6c47f                         1/1     Running     6 (13m ago)    42h
+longhorn-system                   csi-snapshotter-8469656cc7-9kk2v                         1/1     Running     5 (13m ago)    42h
+longhorn-system                   csi-snapshotter-8469656cc7-vf9z4                         1/1     Running     5 (13m ago)    42h
+longhorn-system                   engine-image-ei-94d5ee6c-pqx9h                           1/1     Running     2 (14m ago)    42h
+longhorn-system                   instance-manager-beb75434e263a2aa9eedc0609862fed2        1/1     Running     0              13m
+longhorn-system                   longhorn-csi-plugin-85qm7                                3/3     Running     14 (13m ago)   42h
+longhorn-system                   longhorn-driver-deployer-6448498bc6-sv857                1/1     Running     2 (14m ago)    42h
+longhorn-system                   longhorn-loop-device-cleaner-bqg9v                       1/1     Running     2 (14m ago)    42h
+longhorn-system                   longhorn-manager-nhxbl                                   2/2     Running     6 (14m ago)    42h
+longhorn-system                   longhorn-ui-7f56fcf5ff-clc8b                             1/1     Running     6 (13m ago)    42h
+longhorn-system                   longhorn-ui-7f56fcf5ff-m95sh                             1/1     Running     7 (13m ago)    42h
+```
+
+:::note
+
+If any of Longhorn PODs continues to show the status like `Failed`/`CrashLoopBackOff`, do not execute the following steps as many of them rely on the Longhorn to provision persistant volumes for running.
+
+:::
+
+##### Storage Network
+
+When the [Storage Network](https://docs.harvesterhci.io/v1.3/advanced/storagenetwork) has been enabled on the cluster, follow [those steps](https://docs.harvesterhci.io/v1.3/advanced/storagenetwork#verify-configuration-is-completed) to check if the Longhorn PODs have the correct second IP assigned to them.
+
 ### 5.3 Enable Addons
 
 Enable those previously disabled addons, wait until they are `DepoloySuccessful`.
 
 ### 5.4 Restore the Connection to the Rancher Manager
 
-Run following 1, 2 commands on the Harvester cluster.
+Run following 1, 2 commands on the **Harvester cluster**.
 
-1. Set the `management.cattle.io/scale-available` of `rancher deployment` to be the value recorded on the above steps.
+1. Set the `management.cattle.io/scale-available` of `rancher` deployment to be the value recorded on the above steps.
 
 This change will enable the auto-scaling.
 
@@ -559,7 +648,7 @@ Wait until they are `Running`.
 
 #### 5.2 Rancher Downstream Cluster Machines(VMs)
 
-After the Harvester cluster is re-connected to the `Rancher manager` successfully, the `Rancher manager` will handle the downstream k8s clusters' machines(vms) automatically. Wait until all the downstream clusters are ready.
+After the Harvester cluster is re-connected to the `Rancher manager` successfully, the `Rancher manager` will handle the downstream K8s clusters' machines(vms) automatically. Wait until all the downstream clusters are ready.
 
 If `Rancher manager` does not restart the machines(vms) automatically, you can start those VMs from the **Vitrual Machines** page on Harvester UI.
 
