@@ -61,3 +61,13 @@ You can patch the expired Harvester cloud credentials to use a new authenticatio
   :::info important
   macOS users must use `gbase64` to ensure that the `-w` flag is supported.
   :::
+
+## Expiration of kubeconfig Tokens in Rancher 2.9.3
+
+From Rancher 2.9.3 the Rancher Management UI will warn when a Harvester cloud credential, or cluster connected to one, contains an expired token. Users will be given the option to `Renew` the token via the cloud credential / cluster menu
+
+![cc-renew](./imgs/cc-renew.png)
+
+:::note
+On upgrade existing expired Harvester cloud credentials will not contain a warning. Users can though still `Renew` their token via the resource's menu.
+:::
