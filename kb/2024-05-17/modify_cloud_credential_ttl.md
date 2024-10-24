@@ -64,10 +64,10 @@ You can patch the expired Harvester cloud credentials to use a new authenticatio
 
 ## Expiration of kubeconfig Tokens in Rancher 2.9.3
 
-From Rancher 2.9.3 the Rancher Management UI will warn when a Harvester cloud credential, or cluster connected to one, contains an expired token. Users will be given the option to `Renew` the token via the cloud credential / cluster menu
+In Rancher 2.9.3 and later versions, the Rancher UI displays a warning when a Harvester cloud credential or a related cluster contains an expired token. You can renew the token on the **Cloud Credentials** screen by selecting **⋮ > Renew**, or the Clusters screen by selecting **⋮ > Renew Cloud Credential**
 
 ![cc-renew](./imgs/cc-renew.png)
 
 :::note
-On upgrade existing expired Harvester cloud credentials will not contain a warning. Users can though still `Renew` their token via the resource's menu.
+When you upgrade Rancher, the Rancher UI does not display a warning for Harvester cloud credentials that expired before the upgrade was started. However, you can still renew the token on the **Cloud Credentials** or **Clusters** screen.
 :::
