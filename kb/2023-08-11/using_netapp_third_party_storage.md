@@ -90,7 +90,7 @@ The procedure is as follows.
 
    * Apply this manifest via the command `kubectl apply -f authorize_trident.yaml`.
 
-1. Install the helm chart.
+1. Install the helm chart. This example uses `mytrident` as the deployment name, `trident` as the namespace, 100.2406.1 as the Helm chart version and 24.06.1 as the application version number to install:
 
    * First you will need to add the Astra Trident Helm repository:
 
@@ -98,10 +98,18 @@ The procedure is as follows.
       helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
       ```
 
-   * Next, install the Helm chart.  This example uses `mytrident` as the deployment name, `trident` as the namespace, and 23.07.0 as the version number to install:
+   * Next, find the desired Helm chart. Take note of the associated application version for the commands that will be run on the Harvester control-plane node.  
 
       ```shell
-      helm install mytrident netapp-trident/trident-operator --version 23.07.0 --create-namespace --namespace trident
+      helm search repo netapp-trident --versions
+      ```
+   * Set this variables for the following command:
+      ```shell
+      export CHART_VERSION="100.2406.1"
+      ```
+   * Install the Helm chart:
+      ```shell
+      helm install mytrident netapp-trident/trident-operator --version ${CHART_VERSION} --create-namespace --namespace trident
       ```
 
    * The NetApp documentation describes variations on how you can do this.
@@ -110,10 +118,14 @@ The procedure is as follows.
 
    This and the next few steps need to be performed logged into a master node of the Harvester cluster, using root access.
 
+   * Set this variables for the following command:
+      ```shell
+      export APP_VERSION="24.06.1"
+      ```
    ```shell
    cd /tmp
-   curl -L -o trident-installer-23.07.0.tar.gz https://github.com/NetApp/trident/releases/download/v23.07.0/trident-installer-23.07.0.tar.gz
-   tar -xf trident-installer-23.07.0.tar.gz
+   curl -L -o trident-installer-${APP_VERSION}.tar.gz https://github.com/NetApp/trident/releases/download/v${APP_VERSION}/trident-installer-${APP_VERSION}.tar.gz
+   tar -xf trident-installer-${APP_VERSION}.tar.gz
    cd trident-installer
    ```
 
