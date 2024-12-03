@@ -13,7 +13,7 @@ This article covers instructions for installing the Netapp Astra Trident CSI dri
 
 The NetApp storage will be an option in addition to the normal Longhorn storage; it will not replace Longhorn. Virtual machine images will still be stored using Longhorn.
 
-This has been tested with Harvester 1.2.0 and Trident v23.07.0.
+This has been tested with Harvester 1.2.0 and Trident v${APP_VERSION}.
 
 This procedure only works to access storage via iSCSI, not NFS.
 
@@ -96,12 +96,21 @@ The procedure is as follows.
 
       ```shell
       helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
+      helm repo update
       ```
 
-   * Next, install the Helm chart.  This example uses `mytrident` as the deployment name, `trident` as the namespace, and 23.07.0 as the version number to install:
+   * Set these variables for the Helm chart you are installing:
 
       ```shell
-      helm install mytrident netapp-trident/trident-operator --version 23.07.0 --create-namespace --namespace trident
+      helm search repo netapp-trident --versions
+      export CHART_VERSION=""
+      export APP_VERSION=""
+      ```
+
+   * Next, install the Helm chart.  This example uses `trident` as the deployment name, `trident` as the namespace, and 100.2406.1 as the Helm chart version to install:
+
+      ```shell
+      helm install trident netapp-trident/trident-operator --version ${CHART_VERSION} --create-namespace --namespace trident
       ```
 
    * The NetApp documentation describes variations on how you can do this.
@@ -112,8 +121,8 @@ The procedure is as follows.
 
    ```shell
    cd /tmp
-   curl -L -o trident-installer-23.07.0.tar.gz https://github.com/NetApp/trident/releases/download/v23.07.0/trident-installer-23.07.0.tar.gz
-   tar -xf trident-installer-23.07.0.tar.gz
+   curl -L -o trident-installer-${APP_VERSION}.tar.gz https://github.com/NetApp/trident/releases/download/v${APP_VERSION}/trident-installer-${APP_VERSION}.tar.gz
+   tar -xf trident-installer-${APP_VERSION}.tar.gz
    cd trident-installer
    ```
 
@@ -121,35 +130,47 @@ The procedure is as follows.
 
    This part is specific to Harvester.
 
-   1. Put the following into a text file, for example /tmp/backend.yaml
+   1. Create the following text file:
 
       ```yaml
+      cat <<EOF> /tmp/backend.yaml
       version: 1
       backendName: default_backend_san
-      storageDriverName: ontap-san-economy
-      managementLIF: 172.19.97.114
-      svm: default_backend
-      username: admin
-      password: password1234
+      storageDriverName: <<ontap-san-economy or ontap-san>>
+      managementLIF: <<ADMIN_IPADDRESS>>  ## Often the same as the storage UI IP address
+      dataLIF: <<DATA_IPADDRESS>>  ## IP assigned to the iSCSI-only SVM
+      svm: <<SVM_NAME>>
+      username: <<ONTAP storage admin user>>
+      password: <<password>>
       labels:
       name: default_backend_san
+      EOF
       ```
 
-    The LIF IP address, username, and password of this file
-    should be replaced with the management LIF and credentials
-    for the ONTAP system.
+    Update the IP addresses, SVM name, username, and password in this file
+    with the appropriate values for the the ONTAP system.
 
    1. Create the backend
 
       ```shell
       ./tridentctl create backend -f /tmp/backend.yaml -n trident
       ```
+   * A successful completion of the command will result in an output similar to the following:
+      ```text
+      +------------------------+----------------+--------------------------------------+--------+---------+
+      |          NAME          | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
+      +------------------------+----------------+--------------------------------------+--------+---------+
+      | default_backend_san    | ontap-san      | 6788533c-7fea-4a35-b797-fb9bb3322b91 | online |       0 |
+      +------------------------+----------------+--------------------------------------+--------+---------+
+      ```
 
-   1. Check that it is created
+   1. You can verify the status of the backend at any time with:
 
       ```shell
       ./tridentctl get backend -n trident
       ```
+
+     * You should see an output similar to the output for a successful backend creation.
 
 1. Define a StorageClass and SnapshotClass.
 
@@ -160,10 +181,11 @@ The procedure is as follows.
       apiVersion: storage.k8s.io/v1
       kind: StorageClass
       metadata:
-        name: ontap-san-economy
+        name: ontap-san
       provisioner: csi.trident.netapp.io
       parameters:
-        selector: "name=default_backend_san"
+        backendType: <<"ontap-san" or "ontap-san-economy">>
+      allowVolumeExpansion: true
       ---
       apiVersion: snapshot.storage.k8s.io/v1
       kind: VolumeSnapshotClass
@@ -172,6 +194,7 @@ The procedure is as follows.
       driver: csi.trident.netapp.io
       deletionPolicy: Delete
       ```
+    Select the correct value for the backendType in this file before applying.
 
    1. Apply the definitions:
 
