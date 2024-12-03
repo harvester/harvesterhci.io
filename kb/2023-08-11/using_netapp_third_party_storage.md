@@ -103,6 +103,8 @@ The procedure is as follows.
 
       ```shell
       helm search repo netapp-trident --versions
+      ```
+      ```shell
       export CHART_VERSION=""
       export APP_VERSION=""
       ```
