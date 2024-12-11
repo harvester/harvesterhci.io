@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkharvesterhci_io=self.webpackChunkharvesterhci_io||[]).push([[5996],{5928:function(a){a.exports=JSON.parse('{"allTagsPath":"/kb/tags","slug":"/kb/tags/ca","name":"ca","count":1,"permalink":"/kb/tags/ca"}')}}]);

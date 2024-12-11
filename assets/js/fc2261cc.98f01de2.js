@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkharvesterhci_io=self.webpackChunkharvesterhci_io||[]).push([[1734],{7589:function(e){e.exports=JSON.parse('{"allTagsPath":"/kb/tags","slug":"/kb/tags/kubevirt","name":"kubevirt","count":1,"permalink":"/kb/tags/kubevirt"}')}}]);
