@@ -119,7 +119,7 @@ kubectl apply -f ./csi/rbd/snapshotclass-external.yaml
 
 ## Configure Harvester Cluster
 
-Before you can make use of Harvester's **Backup & Snapshot** features, you need to set up some essential configurations through the Harvester [csi-driver-config](https://docs.harvesterhci.io/v1.2/advanced/settings#csi-driver-config) setting. To set up these configurations, follow these steps:
+Before you can make use of Harvester's **Backup & Snapshot** features, you need to set up some essential configurations through the Harvester [csi-driver-config](https://docs.harvesterhci.io/v1.4/advanced/index#csi-driver-config) setting. To set up these configurations, follow these steps:
 
 1. Login to the Harvester UI, then navigate to **Advanced** > **Settings**.
 1. Find and select **csi-driver-config**, and then click on the **⋮** > **Edit Setting** to access the configuration options.
