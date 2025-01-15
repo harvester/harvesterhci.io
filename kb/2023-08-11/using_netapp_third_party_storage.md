@@ -13,7 +13,7 @@ This article covers instructions for installing the Netapp Astra Trident CSI dri
 
 The NetApp storage will be an option in addition to the normal Longhorn storage; it will not replace Longhorn. Virtual machine images will still be stored using Longhorn.
 
-This has been tested with Harvester 1.2.0 and Trident v${APP_VERSION}.
+This has been tested with Harvester 1.2.0 and Trident v23.07.0.
 
 This procedure only works to access storage via iSCSI, not NFS.
 
