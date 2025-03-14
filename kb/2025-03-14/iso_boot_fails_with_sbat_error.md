@@ -23,10 +23,6 @@ Verifying shim SBAT data failed: Security Policy Violation
 Something has gone seriously wrong: SBAT self-check failed: Security Policy Violation
 ```
 
-This issue is known to occur if openSUSE Leap 15.5 or Harvester v1.3.1 or newer were installed previously. It is also likely to occur if a recent version of Windows was installed previously, and may occur if other Linux variants were installed previously.
-
-The underlying problem is that the Harvester ISO uses a shim bootloader which is older than the bootloader which was previously installed on the host. As a specific example, when you first install Harvester v1.3.1, the ISO is using shim version 15.4, but the system ultimately ends up with shim 15.8 installed, which sets SBAT revocations for older shims. Subsequently attempting to boot the older shim on the ISO will thus fail with the above error.
-
 To mitigate the issue, perform the following workaround:
 
 1. Disable Secure Boot.
