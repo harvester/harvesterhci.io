@@ -11,7 +11,12 @@ tags: [installation, operating system, secure boot]
 hide_table_of_contents: false
 ---
 
-When installing Harvester on a host that previously had an operating system installed and has UEFI secure boot enabled, the ISO image may fail to boot with the following error:
+The ISO image may fail to boot when you attempt to install Harvester on a host with the following characteristics:
+
+- An operating system was previously installed, particularly openSUSE Leap 15.5 or later and Harvester v1.3.1 or later. Other Linux distributions and recent versions of Windows may also be affected.
+- UEFI secure boot is enabled.
+
+This issue occurs when the Harvester ISO uses a shim bootloader that is older than the bootloader previously installed on the host. For example, the Harvester v1.3.1 ISO uses shim 15.4 but the system uses shim 15.8 after installation, which sets SBAT revocations for older shims. Subsequent attempts to boot the older shim on the ISO fail with the following error:
 
 ```
 Verifying shim SBAT data failed: Security Policy Violation
@@ -22,11 +27,11 @@ This issue is known to occur if openSUSE Leap 15.5 or Harvester v1.3.1 or newer 
 
 The underlying problem is that the Harvester ISO uses a shim bootloader which is older than the bootloader which was previously installed on the host. As a specific example, when you first install Harvester v1.3.1, the ISO is using shim version 15.4, but the system ultimately ends up with shim 15.8 installed, which sets SBAT revocations for older shims. Subsequently attempting to boot the older shim on the ISO will thus fail with the above error.
 
-The workaround for this issue is:
+To mitigate the issue, perform the following workaround:
 
-1. Disable secure boot
-2. Boot the ISO image and perform the install
-3. Re-enable secure boot and boot into the installed system
+1. Disable Secure Boot.
+1. Boot the ISO image and proceed with the installation.
+1. Enable Secure Boot and boot into the installed system.
 
 ## References
 
