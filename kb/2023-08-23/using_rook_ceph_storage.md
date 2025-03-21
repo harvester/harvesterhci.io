@@ -125,7 +125,6 @@ Before you can make use of Harvester's **Backup & Snapshot** features, you need 
 1. Find and select **csi-driver-config**, and then click on the **⋮** > **Edit Setting** to access the configuration options.
 1. In the settings, set the **Provisioner** to `rook-ceph.rbd.csi.ceph.com`.
 2. Next, specify the **Volume Snapshot Class Name** as `csi-rbdplugin-snapclass-external`. This setting points to the name of the `VolumeSnapshotClass` used for creating volume snapshots or VM snapshots.
-3. Similarly, set the **Backup Volume Snapshot Class Name** to `csi-rbdplugin-snapclass-external`. This corresponds to the name of the `VolumeSnapshotClass` responsible for creating VM backups.
 
 ![csi-driver-config-external](./imgs/csi-driver-config-external.png)
 
