@@ -1,7 +1,7 @@
 ---
-title: Understanding Harvester storage consumption when migrating a VM
-description: 'This article explains how Harvester allocates storage during virtual machine (VM) migration using the VM import controller, focusing on the storage implications when migrating larger VMs. Understanding these mechanics is crucial for effective storage planning and ensuring a smooth migration process.'
-slug: understanding_harvester_storage_consumption_during_VM_migration
+title: Understanding Harvester storage consumption while importing a VM
+description: 'This article explains how Harvester allocates storage while importing the virtual machine (VM) using the VM import controller, focusing on the storage implications when importing larger VMs. Understanding these mechanics is crucial for effective storage planning and ensuring a seamless import process.'
+slug: understanding_harvester_storage_consumption_during_VM_import
 authors:
   - name: Devendra Kulkarni
     title: Customer Support Engineer IV
@@ -11,7 +11,7 @@ tags: [virt-import-controller, disk-usage, longhorn]
 hide_table_of_contents: false
 ---
 
-This article explains how Harvester allocates storage during virtual machine (VM) migration using the VM import controller, focusing on the storage implications when migrating larger VMs. Understanding these mechanics is crucial for effective storage planning and ensuring a smooth migration process.
+This article explains how Harvester allocates storage while importing the virtual machine (VM) using the VM import controller, focusing on the storage implications when importing larger VMs. Understanding these mechanics is crucial for effective storage planning and ensuring a smooth import process.
 
 ## Harvester's Storage Allocation Mechanism:
 
