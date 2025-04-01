@@ -1,6 +1,6 @@
 ---
-title: Understanding Harvester storage consumption while importing a VM
-description: 'This article explains how Harvester allocates storage while importing the virtual machine (VM) using the VM import controller, focusing on the storage implications when importing larger VMs. Understanding these mechanics is crucial for effective storage planning and ensuring a seamless import process.'
+title: Storage Allocation and Consumption During Virtual Machine Importing
+description: 'This article explains how Harvester (via the vm-import-controller add-on) allocates and consumes storage during importing of virtual machines, focusing on the storage implications for large virtual machines. Understanding these mechanics is crucial for effective storage planning and ensuring a seamless import process.'
 slug: understanding_harvester_storage_consumption_during_VM_import
 authors:
   - name: Devendra Kulkarni
@@ -11,55 +11,36 @@ tags: [virt-import-controller, disk-usage, longhorn]
 hide_table_of_contents: false
 ---
 
-This article explains how Harvester allocates storage while importing the virtual machine (VM) using the VM import controller, focusing on the storage implications when importing larger VMs. Understanding these mechanics is crucial for effective storage planning and ensuring a smooth import process.
+This article explains how Harvester (via the vm-import-controller add-on) allocates and consumes storage during importing of virtual machines, focusing on the storage implications for large virtual machines. Understanding these mechanics is crucial for effective storage planning and ensuring a seamless import process.
 
-## Harvester's Storage Allocation Mechanism:
+## Storage Allocation Mechanism
 
-Harvester employs a distributed block-storage architecture utilizing Longhorn. Key concepts to understand include:
+Harvester employs a distributed block-storage architecture utilizing Longhorn. Key concepts include the following:
+- **Backing images**: These are qcow2 images that serve as the base disk images of virtual machines. By default, three copies of each backing image are created.
+- **Volume replicas**: Harvester creates replicas of virtual machine volumes across cluster nodes for redundancy and high availability. Each volume replica consists of the backing image, the volume head, and snapshots. By default, three replicas are created for each volume.
+- **Sparse files**: Harvester uses Linux sparse files, which means that storage space is allocated but not immediately consumed. Physical disk space is consumed only as data is written to the virtual machine.
+- **Snapshots**: Both system and user-created snapshots contribute to storage consumption. Harvester creates snapshots for internal operations such as replica rebuilding. You can also create snapshots for data protection and other purposes.
+- **Volume Head**: This is the active writable layer of the volume.
 
-- **Backing Images:** These are the base disk images of your VMs, stored as qcow2 files.
-- **Volume Replicas:** Harvester creates multiple replicas of the VM's volumes across cluster nodes for redundancy and high availability. By default, three copies of the backing image and three volume replicas are created.
-- **Sparse Files:** Harvester uses Linux sparse files, meaning that storage space is allocated but not immediately consumed. Physical disk space is only utilized as data is written to the VM.
-- **Snapshots:** Both system and user-created snapshots contribute to storage consumption.
-    * **System Snapshots:** Used for internal operations, like replica rebuilding.
-    * **User Snapshots:** Created by users for data protection.
-- **Volume Head:** The active writable layer of the volume.
+## Storage Implications for Large Virtual Machines
 
+The following example illustrates storage allocation and consumption for a large virtual machine.
+- **Virtual machine size**: 500 GB
+- **Default configuration**: By default, Harvester creates three backing image copies and three volume replicas.
+- **Worst-case scenario**: Each node stores a copy of the backing image (500 GB), the volume head (500 GB), and space for snapshots (500 GB maximum). The assumption is that all allocated space (up to 1.5 TB) is consumed.
+- **Cluster-wide allocation**: In a three-node cluster, you may need to allocate 4.5 TB of storage for a single 500 GB virtual machine.
+- **Actual usage**: The use of sparse files will likely result in significantly lower storage consumption, since only space containing actual data is consumed.
 
-## Storage Consumption Breakdown:
+## Key Recommendations
 
-Each volume replica consists of:
+- Ensure that your Harvester cluster has sufficient storage capacity to accommodate the worst-case scenario.
+- Plan for the worst-case scenario, but understand that actual consumption will likely be lower.
+- Maintain the default number of backing image copies for data redundancy.
+- Consider the total number of snapshots that will be created.
+- Review and configure the Harvester cluster using the [Best Practices for Optimizing Longhorn Disk Performance](https://harvesterhci.io/kb/best_practices_for_optimizing_longhorn_disk_performance).
+- Use the command `du -sh /var/lib/harvester/defaultdisk/*` on Harvester nodes to check actual file sizes and storage consumption.
 
-- The backing image
-- Any snapshots (system or user)
-- The volume head
+## References
 
-
-## Storage Implications for a large size VM:
-
-To illustrate storage consumption, let's consider migrating a 500GB VM.
-
-- **Default Configuration:** Harvester's default configuration involves three copies of the backing image and three volume replicas.
-- **Worst-Case Scenario:** In the worst-case scenario, we assume all allocated space is utilized. This means each node will store:
-    - One copy of the 500GB backing image.
-    - One 500GB volume head.
-    - Potential space for snapshots, maximum 500GB.
-    - Therefore each node could allocate up to 1.5TB of storage.
-- **Cluster-Wide Allocation:** Across a three-node cluster, this could lead to a potential storage allocation of 4.5TB for a single 500GB VM.
-- **Actual Usage:** It is important to remember that actual storage usage will likely be significantly lower due to the use of sparse files. Only the space that contains actual data will be consumed.
-
-
-## Key Recommendations:
-
-- Ensure your Harvester cluster has sufficient storage capacity to accommodate the potential worst-case scenario.
-- Plan for the worst-case storage scenario, but understand that actual usage will likely be lower.
-- Maintain the default three backing image copies for data redundancy.
-- Consider the amount of snapshots that will be taken.
-- Review and configure Harvester cluster using [Best Practices for Optimizing Longhorn Disk Performance](https://harvesterhci.io/kb/best_practices_for_optimizing_longhorn_disk_performance).
-- Use the `du -sh /var/lib/harvester/defaultdisk/*` command on Harvester nodes to check actual file sizes and storage consumption.
-
-
-## References:
-
-- Refer to the Longhorn documentation for detailed information on [volume size](https://longhorn.io/docs/1.8.1/nodes-and-volumes/volumes/volume-size/), [replica management](https://longhorn.io/docs/1.8.1/concepts/#231-how-read-and-write-operations-work-for-replicas), [backing images](https://longhorn.io/docs/1.8.1/advanced-resources/backing-image/backing-image/) and [snapshots](https://longhorn.io/docs/1.8.1/concepts/#24-snapshots).
-- [Sparse File](https://en.wikipedia.org/wiki/Sparse_file)
+- Longhorn documentation: [volume size](https://longhorn.io/docs/1.8.1/nodes-and-volumes/volumes/volume-size/), [replica management](https://longhorn.io/docs/1.8.1/concepts/#231-how-read-and-write-operations-work-for-replicas), [backing images](https://longhorn.io/docs/1.8.1/advanced-resources/backing-image/backing-image/), [snapshots](https://longhorn.io/docs/1.8.1/concepts/#24-snapshots)
+- [Sparse file](https://en.wikipedia.org/wiki/Sparse_file)
