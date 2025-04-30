@@ -15,13 +15,13 @@ Scenarios:
 
 1. The Harvester cluster is installed with 3+ nodes.
 
-1. The **Rancher manager/server** is deployed independently. (Hereafter it is mentioned as `Rancher manager`)
+1. The **Rancher Manager/Server** is deployed independently. (Hereafter it is mentioned as `Rancher Manager`)
 
-1. The Harvester cluster is imported to this Rancher manager and works as a node driver.
+1. The Harvester cluster is imported to this Rancher Manager and works as a node driver.
 
-1. The Rancher manager deploys a couple of downstream K8s clusters, the machines/nodes of those clusters are backed by Harvester VMs.
+1. The Rancher Manager deploys a couple of downstream K8s clusters, the machines/nodes of those clusters are backed by Harvester VMs.
 
-1. There are also some traditional VMs deployed on the Harvester cluster, which have no direct connection with the Rancher manager.
+1. There are also some traditional VMs deployed on the Harvester cluster, which have no direct connection with the Rancher Manager.
 
 You plan to move those Harvester nodes geographically, or to power off the whole cluster for some time, it is essential to shutdown the Harvester cluster and restart later.
 
@@ -37,13 +37,13 @@ To safely shutdown a Harvester cluster, you need to follow the roughly reverse o
 
 Those facts need to be taken into account particularly:
 
-1. The common methodology of kubernetes operator/controller is to try things continuously until they meet expectations. When the cluster is shutting down node by node, if you don't stop those workloads in advance, they will try hard until the last node is off. It causes the last few nodes to have heavy CPU/memory/network/storage usage and increases the chance of data corruption.
+1. The common methodology of Kubernetes operator/controller is to try things continuously until they meet expectations. When the cluster is shutting down node by node, if you don't stop those workloads in advance, they will try hard until the last node is off. It causes the last few nodes to have heavy CPU/memory/network/storage usage and increases the chance of data corruption.
 
 1. Each Harvester node has limited capacity of CPU/memory/network/storage and the max-pod-number, when all workloads are crowded on the last few nodes, the unexpected pod eviction, scheduling failure and other phenomena may happen.
 
 1. Harvester has embedded Longhorn as the default CSI driver, each PV can have 3 or more replicas, when replicas are rescheduled to other nodes, Longhorn will copy data from source node and rebuild the replica. Undoubtedly, stop the PVs as much as possible before the cluster shutdown to avoid the data moving.
 
-1. Unlike normal kubernetes deployments which have no PVs and are more flexible & agile to deploy anywhere on the cluster, the VMs are backed by massive sized PVs, slowly to move/migrate or even pinned on certain nodes to take the advantage of pci-passthrough/vgpu/... and are much more sensitive to data consistency.
+1. Unlike normal Kubernetes deployments which have no PVs and are more flexible & agile to deploy anywhere on the cluster, the VMs are backed by massive sized PVs, slowly to move/migrate or even pinned on certain nodes to take the advantage of PCI-passthrough/vGPU/... and are much more sensitive to data consistency.
 
 Needless to say, it is a bad practice to brutally power off the nodes on production environments.
 
@@ -95,7 +95,7 @@ It is always a good practice to backup things before a whole cluster shutdown.
 
 ### (Optional) Backup Downstream K8s Clusters if Possible
 
-Harvester doesn't touch the (Rancher manager managed) downstream K8s clusters' workload, when they are not able to be migrated to other node drivers, suggests to backup those clusters.
+Harvester doesn't touch the (Rancher Manager managed) downstream K8s clusters' workload, when they are not able to be migrated to other node drivers, suggests to backup those clusters.
 
 ### (Optional) Stop or Migrate Downstream K8s Clusters if Possible
 
@@ -123,9 +123,9 @@ This depends on the [auto-replace](https://ranchermanager.docs.rancher.com/refer
 
 If you have got a solution to **shutdown** those downstream clusters, and check those VMs are `Off`; or there is no downstream clusters, then jump to the step [disable some addons](#33-disable-some-addons).
 
-Unless you have already deleted all the downstream clusters which are deploy on this Harvester, **DO NOT** [remove this imported Harvester from the Rancher manager](https://docs.harvesterhci.io/v1.3/rancher/virtualization-management#delete-imported-harvester-cluster). Harvester will get a different driver-id when it is imported later, but those aforementioned downstream clusters are connected to driver-id.
+Unless you have already deleted all the downstream clusters which are deploy on this Harvester, **DO NOT** [remove this imported Harvester from the Rancher Manager](https://docs.harvesterhci.io/v1.3/rancher/virtualization-management#delete-imported-harvester-cluster). Harvester will get a different driver-id when it is imported later, but those aforementioned downstream clusters are connected to driver-id.
 
-To safely shutdown those VMs but still keep the Rancher manager managed downstream cluster `alive`, please follow the steps below:
+To safely shutdown those VMs but still keep the Rancher Manager managed downstream cluster `alive`, please follow the steps below:
 
 #### Disconnect Harvester from the Rancher Manager
 
@@ -133,11 +133,11 @@ To safely shutdown those VMs but still keep the Rancher manager managed downstre
 
 :::note
 
-Harvester has an `embedded rancher` deployment which is used to help the lifecycle management of Harvester itself, it is different from the independently deployed **Rancher manager** for multi-cluster management and more.
+Harvester has an `embedded Rancher` deployment which is used to help the lifecycle management of Harvester itself, it is different from the independently deployed **Rancher Manager** for multi-cluster management and more.
 
 :::
 
-The `cattle-cluster-agent-***` pod is the [direct connection between Rancher manager and Harvester cluster](https://docs.harvesterhci.io/v1.3/rancher/virtualization-management#importing-harvester-cluster), and this pod is monitored and managed by the `embedded rancher` in Harvester, scaling down this pod does not work. The `embedded rancher` will scale it up automatically.
+The `cattle-cluster-agent-***` pod is the [direct connection between Rancher Manager and Harvester cluster](https://docs.harvesterhci.io/v1.3/rancher/virtualization-management#importing-harvester-cluster), and this pod is monitored and managed by the `embedded Rancher` in Harvester, scaling down this pod does not work. The `embedded Rancher` will scale it up automatically.
 
 Run steps below to suspend the connection.
 
@@ -177,7 +177,7 @@ NAME      READY   UP-TO-DATE   AVAILABLE   AGE
 rancher   0/0     0            0           33d
 ```
 
-3. Make sure the rancher pods are gone.
+3. Make sure the `rancher-*` pods are gone.
 
 Check the `rancher-*` pods on `cattle-system` are gone, if any of them is stucking at `Terminating`, use `kubectl delete pod -n cattle-system rancher-pod-name --force` to delete it.
 
@@ -205,7 +205,7 @@ cattle-cluster-agent        0/0     0            0           23d
 
 Please note:
 
-1. From now on, this Harvester is `Unavailable` on the Rancher manager.
+1. From now on, this Harvester is `Unavailable` on the Rancher Manager.
 
 ![Unavailable](./imgs/harvester_unavailable_on_rancher.png)
 
@@ -451,7 +451,7 @@ The `etcd` forms a quorum and can tolerant the failure of one node.
 
 :::note
 
-If the `embedded rancher` was not scaled down before, this step can also be:
+If the `embedded Rancher` was not scaled down before, this step can also be:
 
 Check the Harvester UI is accessible and this [node on Harvester UI](https://docs.harvesterhci.io/v1.3/host/) is `Active`.
 
@@ -630,7 +630,7 @@ After the `rancher` deployment is ready, it will automatically scale up the `cat
 :::
 
 
-3. Check the virtualization management on the Rancher manager.
+3. Check the virtualization management on the Rancher Manager.
 
 The Harvester cluster continues to be `active` on the [Rancher Virtualization Management](https://docs.harvesterhci.io/v1.3/rancher/virtualization-management) .
 
@@ -648,13 +648,15 @@ Wait until they are `Running`.
 
 #### 5.2 Rancher Downstream Cluster Machines(VMs)
 
-After the Harvester cluster is re-connected to the `Rancher manager` successfully, the `Rancher manager` will handle the downstream K8s clusters' machines(vms) automatically. Wait until all the downstream clusters are ready.
+After the Harvester cluster is re-connected to the `Rancher Manager` successfully, the `Rancher Manager` will handle the downstream K8s clusters' machines(vms) automatically. Wait until all the downstream clusters are ready.
 
-If `Rancher manager` does not restart the machines(vms) automatically, you can start those VMs from the **Vitrual Machines** page on Harvester UI.
+See `Rancher Manager` [Access Downstream Clusters](https://documentation.suse.com/cloudnative/rancher-manager/latest/en/cluster-admin/manage-clusters/access-clusters/access-clusters.html#_clusters_in_rancher_ui) to monitor and operator the downstream clusters.
+
+If `Rancher Manager` does not restart the machines(vms) automatically, you can start those VMs from the **Vitrual Machines** page on Harvester UI.
 
 :::note
 
-This depends on the [auto-replace](https://ranchermanager.docs.rancher.com/reference-guides/cluster-configuration/rancher-server-configuration/rke2-cluster-configuration#auto-replace) and/or other options on `Rancher manager`.
+This depends on the [auto-replace](https://ranchermanager.docs.rancher.com/reference-guides/cluster-configuration/rancher-server-configuration/rke2-cluster-configuration#auto-replace) and/or other options on `Rancher Manager`.
 
 :::
 
