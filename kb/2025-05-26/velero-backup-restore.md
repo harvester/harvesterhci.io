@@ -1,6 +1,6 @@
 ---
 title: 'External CSI Storage Backup and Restore With Velero'
-description: 'This article demonstrates how to use Velero to backup and restore external CSI storage volumes in Harvester.'
+description: 'Learn how to back up and restore external CSI volumes in Harvester using Velero.'
 authors:
   - name: Ivan Sim
     title: Principal Software Engineer
@@ -14,12 +14,20 @@ Harvester 1.5 introduces support for the provisioning of virtual machine root vo
 
 This article demonstrates how to use [Velero 1.16.0](https://velero.io) to perform backup and restore of virtual machines in Harvester.
 
-In particular, it provides commands and manifests to:
+[Velero](https://velero.io/) is a Kubernetes-native backup and restore tool that:
 
-* backup virtual machines, their NFS CSI volumes and associated namespace-scoped configuration
-* export the backup artifacts to an AWS S3 bucket
-* restore to a different namespace on the same cluster
-* restore to a different cluster
+* Backs up Kubernetes resources (like PVCs, pods, services, etc.)
+* Supports persistent volume snapshotting (via CSI)
+* Can restore workloads to the same or a different cluster
+
+Velero enables users to perform scheduled and on-demand backups of virtual machines to external object storage providers such as S3, Azure Blob, or GCS, aligning with enterprise backup and disaster recovery practices.
+
+In particular, it provides commands and manifests for:
+
+* backing up virtual machines, the NFS CSI volumes, and associated namespace-scoped configuration
+* exporting the backup artifacts to an AWS S3 bucket
+* restoring to a different namespace on the same cluster
+* restoring to a different cluster
 
 :::note
 
@@ -33,7 +41,7 @@ The CSI NFS driver and Velero configuration and versions used in this example ar
 
 The examples provided are intended to backup and restore Linux virtual machine workloads. It is not suitable for backing up guest clusters provisioned via the Harvester Rancher integration.
 
-To backup and restore guest clusters like RKE2, please refer to the distro official documentation.
+To backup and restore guest clusters like RKE2, please refer to the distro [official documentation](https://docs.rke2.io/datastore/backup_restore).
 
 :::
 
@@ -43,7 +51,7 @@ Refer to the [Harvester documentation](https://docs.harvesterhci.io/v1.6/install
 
 The kubeconfig file of the cluster can be retrieved following the instructions [here](https://docs.harvesterhci.io/v1.6/faq/#how-can-i-access-the-kubeconfig-file-of-the-harvester-cluster).
 
-## Install And Configure Velero
+## Install and Configure Velero
 
 Download the [Velero CLI](https://velero.io/docs/v1.16/basic-install/#install-the-cli).
 
@@ -95,9 +103,9 @@ Configure the `velero` CLI to output the backup and restore status of CSI object
 velero client config set features=EnableCSI
 ```
 
-## Deploy NFS CSI And Server
+## Deploy the NFS CSI and Example Server
 
-Follow the instructions in the [NFS CSI documentation](https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/README.md) to set up the NFS CSI driver, its storage class and an example NFS server.
+Follow the instructions in the [NFS CSI documentation](https://github.com/kubernetes-csi/csi-driver-nfs/blob/master/deploy/example/README.md) to set up the NFS CSI driver, its storage class, and an example NFS server.
 
 The NFS CSI volume snapshotting capability must also be enabled following the instructions [here](https://github.com/kubernetes-csi/csi-driver-nfs/tree/master/deploy/example/snapshot).
 
@@ -136,7 +144,7 @@ NAME                DRIVER           DELETIONPOLICY   AGE
 csi-nfs-snapclass   nfs.csi.k8s.io   Delete           14d
 ```
 
-## Preparing The Virtual Machine And Image
+## Preparing the Virtual Machine and Image
 
 Refer to the Harvester documentation on how to perform the following steps using the NFS CSI storage class:
 
@@ -149,7 +157,7 @@ This example uses the [Ubuntu 24.04 raw image](https://cloud-images.ubuntu.com/m
 
 :::note
 
-For CSI snapshotting to work, the NFS volumes must have their `volumeMode` set to `Filesystem`.
+For CSI snapshotting to work, the NFS volumes must have the `volumeMode` set to `Filesystem`.
 
 :::
 
@@ -157,7 +165,7 @@ Access the virtual machine via SSH, and add some files to both the root and data
 
 The data volume needs to be partitioned, with a file system created and mounted before files can be written to it.
 
-## Backup The Source Namespace
+## Backup the Source Namespace
 
 Use the `velero` CLI to create a backup of the `demo-src` namespace:
 
@@ -204,7 +212,7 @@ velero restore create \
 
  * During the restore:
 
-   * The virtual machine's MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
+   * The virtual machine MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
    * The virtual machine image manifest is excluded as it is not needed in the new namespace. The restored virtual machine uses the original image.
 
 Confirm that the restore completed successfully:
@@ -265,7 +273,7 @@ After the backup completes, Velero removes the CSI snapshots from the storage si
 
 ### On The Target Cluster
 
-Install Velero, the NFS CSI and NFS server following the instructions from the [Deploy NFS CSI And Server](#deploy-nfs-csi-and-server) section.
+Install Velero, the NFS CSI and NFS server following the instructions from the [Deploy the NFS CSI and Example Server](#deploy-the-nfs-csi-and-example-server) section.
 
 Once Velero is configured to use the same backup location as the source cluster, it automatically discovers the available backups:
 
@@ -296,8 +304,6 @@ velero restore create \
 
 In this setup, CDI re-downloads the raw image from the original download URL.
 
-In a future enhancement, the image will be restored directly from the remote backup location.
-
 :::
 
 Restore the backup:
@@ -310,7 +316,7 @@ velero restore create \
 
  * During the restore:
 
-   * the virtual machine's MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
+   * the virtual machine MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
    * the virtual machine image manifest is excluded as it was already restored.
 
 During the restore, the `DataDownload` custom resources can be used to examine the progress of the operation:
