@@ -1,5 +1,5 @@
 ---
-title: 'External CSI Storage Backup/Restore With Velero'
+title: 'External CSI Storage Backup and Restore With Velero'
 description: 'This article demonstrates how to use Velero to backup and restore external CSI storage volumes in Harvester.'
 authors:
   - name: Ivan Sim
