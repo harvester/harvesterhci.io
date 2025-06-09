@@ -22,24 +22,24 @@ This article demonstrates how to use [Velero 1.16.0](https://velero.io) to perfo
 
 Velero enables users to perform scheduled and on-demand backups of virtual machines to external object storage providers such as S3, Azure Blob, or GCS, aligning with enterprise backup and disaster recovery practices.
 
-In particular, it provides commands and manifests for:
+In particular, this article provides commands and manifests to:
 
-* backing up virtual machines, the NFS CSI volumes, and associated namespace-scoped configuration
-* exporting the backup artifacts to an AWS S3 bucket
-* restoring to a different namespace on the same cluster
-* restoring to a different cluster
+* Back up virtual machines, the NFS CSI volumes, and associated namespace-scoped configuration
+* Export the backup artifacts to an AWS S3 bucket
+* Restore to a different namespace on the same cluster
+* Restore to a different cluster
 
 :::note
 
-The commands and manifests used in this article are tested with Harvester 1.6.0.
+The commands and manifests used in this article are tested with Harvester 1.5.1.
 
-The CSI NFS driver and Velero configuration and versions used in this example are for demonstration purposes only. Adjust them according to your environment and requirements.
+The CSI NFS driver and Velero configuration and versions used are for demonstration purposes only. Adjust them according to your environment and requirements.
 
 :::
 
 :::important
 
-The examples provided are intended to backup and restore Linux virtual machine workloads. It is not suitable for backing up guest clusters provisioned via the Harvester Rancher integration.
+The examples provided are intended to backup and restore Linux virtual machine workloads. It is not suitable for backing up guest clusters provisioned via the [Harvester Rancher integration](https://docs.harvesterhci.io/v1.5/rancher/rancher-integration).
 
 To backup and restore guest clusters like RKE2, please refer to the distro [official documentation](https://docs.rke2.io/datastore/backup_restore).
 
@@ -49,7 +49,7 @@ To backup and restore guest clusters like RKE2, please refer to the distro [offi
 
 Refer to the [Harvester documentation](https://docs.harvesterhci.io/v1.6/install/requirements) for installation requirements and options.
 
-The kubeconfig file of the cluster can be retrieved following the instructions [here](https://docs.harvesterhci.io/v1.6/faq/#how-can-i-access-the-kubeconfig-file-of-the-harvester-cluster).
+The kubeconfig file of the Harvester cluster can be retrieved following the instructions [here](https://docs.harvesterhci.io/v1.6/faq/#how-can-i-access-the-kubeconfig-file-of-the-harvester-cluster).
 
 ## Install and Configure Velero
 
@@ -146,24 +146,32 @@ csi-nfs-snapclass   nfs.csi.k8s.io   Delete           14d
 
 ## Preparing the Virtual Machine and Image
 
-Refer to the Harvester documentation on how to perform the following steps using the NFS CSI storage class:
+Create a custom namespace named `demo-src`:
 
- * [Create a virtual machine image](https://docs.harvesterhci.io/v1.6/advanced/csidriver#virtual-machine-image-creation)
- * [Create a virtual machine](https://docs.harvesterhci.io/v1.6/advanced/csidriver#virtual-machine-creation)
+```sh
+kubectl create ns demo-src
+```
 
-This example uses the [Ubuntu 24.04 raw image](https://cloud-images.ubuntu.com/minimal/releases/noble/) to create a virtual machine with NFS root and data volumes in the custom `demo-src` namespace:
+Follow the instructions in the [Image Management](https://docs.harvesterhci.io/v1.5/image/upload-image/#upload-images-via-url) documentation to upload the Ubuntu 24.04 raw image from https://cloud-images.ubuntu.com/minimal/releases/noble/ to Harvester.
 
+The storage class of the image must be set to `nfs-csi`, per the [Third-Party Storage Support](https://docs.harvesterhci.io/v1.5/advanced/csidriver#virtual-machine-image-creation) documentation.
+
+Confirm the virtual machine image is successfully uploaded to Harvester:
+
+![image](vm-image.png)
+
+To create a virtual machine with NFS root and data volumes, refer to the [third-party storage](https://docs.harvesterhci.io/v1.5/advanced/csidriver#virtual-machine-creation) documentation.
+
+For NFS CSI snapshot to work, the NFS data volume must have the `volumeMode` set to `Filesystem`:
 ![image](vm-create.png)
 
-:::note
+:::note optional
 
-For CSI snapshotting to work, the NFS volumes must have the `volumeMode` set to `Filesystem`.
-
-:::
-
-Access the virtual machine via SSH, and add some files to both the root and data volumes.
+Once the virtual machine is ready, access the virtual machine via SSH, and add some files to both the root and data volumes.
 
 The data volume needs to be partitioned, with a file system created and mounted before files can be written to it.
+
+:::
 
 ## Backup the Source Namespace
 
@@ -196,7 +204,11 @@ NAME                         STATUS      ERRORS   WARNINGS   CREATED            
 backup-demo-src-1747954979   Completed   0        0          2025-05-22 16:04:46 -0700 PDT   29d       default            <none>
 ```
 
-The `velero backup describe` and `velero backup logs` commands can be used to confirm the resources included in the backup.
+:::note Tips
+
+The `velero backup describe` and `velero backup logs` commands can be used to assess details of the backup including resources included, skipped, and any warnings or errors encountered during the backup process.
+
+:::
 
 ## Restore To A Different Namespace
 
@@ -230,9 +242,11 @@ Confirm that the virtual machine and its configuration are restored to the new `
 
 ![image](vm-restore.png)
 
-Access the new virtual machine via SSH to confirm that all the changes made on the volumes are also restored.
+:::note Tips
 
-The `velero restore describe` and `velero restore logs` commands provide more insights into the restore operation.
+The `velero restore describe` and `velero restore logs` commands provide more insights into the restore operation including the resources restored, skipped, and any warnings or errors encountered during the restore process.
+
+:::
 
 ## Restore To A Different Cluster
 
