@@ -14,6 +14,8 @@ Harvester 1.5 introduces support for the provisioning of virtual machine root vo
 
 This article demonstrates how to use [Velero 1.16.0](https://velero.io) to perform backup and restore of virtual machines in Harvester.
 
+The content does not ensure parity with the built-in [Longhorn-based backup and restore functionality](https://docs.harvesterhci.io/v1.5/vm/backup-restore/) of Harvester. Further enhancement for external CSI storage backup and restore is tracked at https://github.com/harvester/harvester/issues/8367.
+
 [Velero](https://velero.io/) is a Kubernetes-native backup and restore tool that:
 
 * Backs up Kubernetes resources (like PVCs, pods, services, etc.)
