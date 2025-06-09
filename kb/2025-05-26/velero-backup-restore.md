@@ -204,7 +204,7 @@ NAME                         STATUS      ERRORS   WARNINGS   CREATED            
 backup-demo-src-1747954979   Completed   0        0          2025-05-22 16:04:46 -0700 PDT   29d       default            <none>
 ```
 
-:::note Tips
+:::note tips
 
 The `velero backup describe` and `velero backup logs` commands can be used to assess details of the backup including resources included, skipped, and any warnings or errors encountered during the backup process.
 
@@ -242,7 +242,15 @@ Confirm that the virtual machine and its configuration are restored to the new `
 
 ![image](vm-restore.png)
 
-:::note Tips
+:::note important
+
+The Velero restore operation is dependent on the snapshot capability of the underlying CSI driver.
+
+Refer to the CSI driver documentation for its snapshot requirements and limitations.
+
+:::
+
+:::note tips
 
 The `velero restore describe` and `velero restore logs` commands provide more insights into the restore operation including the resources restored, skipped, and any warnings or errors encountered during the restore process.
 
@@ -306,34 +314,48 @@ Set the name of the backup to use:
 BACKUP_NAME=backup-full-demo-src-1748035987
 ```
 
-Restore the virtual machine image manifest to the `demo-src` namespace:
+Save the following restore modifier to a local file named `modifier-data-volumes.yaml`:
 
-```sh
-velero restore create \
-  --from-backup "${BACKUP_NAME}" \
-  --include-resources "virtualmachineimages.harvesterhci.io"
+```yaml
+cat <<EOF > modifier-data-volumes.yaml
+version: v1
+resourceModifierRules:
+- conditions:
+    groupResource: persistentvolumeclaims
+    matches:
+    - path: /metadata/annotations/harvesterhci.io~1volumeForVirtualMachine
+      value: "\"true\""
+  patches:
+  - operation: remove
+    path: /metadata/annotations/harvesterhci.io~1volumeForVirtualMachine
+EOF
 ```
 
-:::note
+This restore modifier removes the `harvesterhci.io/volumeForVirtualMachine` annotation from the virtual machine data volumes to ensure that the restoration do not conflict with the CDI volume import populator.
 
-In this setup, CDI re-downloads the raw image from the original download URL.
+Create the restore modifier:
 
-:::
+```sh
+kubectl -n velero create cm modifier-data-volumes --from-file=modifier-data-volumes.yaml
+```
 
-Restore the backup:
+Start the restore operation:
 
 ```sh
 velero restore create \
   --from-backup "${BACKUP_NAME}" \
+  --exclude-resources "virtualmachineimages.harvesterhci.io" \
+  --resource-modifier-configmap "modifier-data-volumes" \
   --labels "velero.kubevirt.io/clear-mac-address=true,velero.kubevirt.io/generate-new-firmware-uuid=true"
 ```
 
  * During the restore:
 
    * the virtual machine MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
-   * the virtual machine image manifest is excluded as it was already restored.
+   * the virtual machine image manifest is excluded because Velero restores the entire state of the virtual machine from the backup.
+   * the the `modifier-data-volumes` restore modifier is invoked to modify the virtual machine data volumes.
 
-During the restore, the `DataDownload` custom resources can be used to examine the progress of the operation:
+The `DataDownload` custom resources can be used to examine the progress of the operation:
 
 ```sh
 kubectl -n velero get datadownload
@@ -349,17 +371,17 @@ Confirm that the virtual machine and its configuration are restored to the `demo
 
 ![image](vm-migrate.png)
 
-Access the new virtual machine via SSH to confirm that all the changes made on the volumes are also restored.
-
-The `velero restore describe` and `velero restore logs` commands provide more insights into the restore operation.
-
 :::note
 
-Velero uses [Kopia](https://kopia.io/) as its default data mover. This [issue](https://github.com/kopia/kopia/issues/544#issuecomment-674536833) describes some of its limitations on advanced file system features such as setuid/gid, hardlinks, mount points, sockets, xattr, ACLs, etc.
+Velero uses [Kopia](https://kopia.io/) as its default data mover. This [issue](https://github.com/kopia/kopia/issues/544#issuecomment-674536833) describes some of its limitations on advanced file system features such as setuid/gid, hard links, mount points, sockets, xattr, ACLs, etc.
 
-Depending on your use cases, you can configure custom data movers using Velero's `--data-mover` option. For more information, see the Velero's [documentation](https://velero.io/docs/v1.16/csi-snapshot-data-movement/#customized-data-movers).
+Velero provides the `--data-mover` option to configure custom data movers to satisfy different use cases. For more information, see the Velero's [documentation](https://velero.io/docs/v1.16/csi-snapshot-data-movement/#customized-data-movers).
 
 :::
+
+## Restore Virtual Machine Image
+
+The restoration of virtual machine image is not fully supported yet. The enhancement is tracked at https://github.com/harvester/harvester/issues/8367.
 
 ## Using Longhorn Volumes
 
