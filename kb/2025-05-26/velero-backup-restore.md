@@ -14,22 +14,14 @@ Harvester 1.5 introduces support for the provisioning of virtual machine root vo
 
 This article demonstrates how to use [Velero 1.16.0](https://velero.io) to perform backup and restore of virtual machines in Harvester.
 
-The content does not ensure parity with the built-in [Longhorn-based backup and restore functionality](https://docs.harvesterhci.io/v1.5/vm/backup-restore/) of Harvester. Further enhancement for external CSI storage backup and restore is tracked at https://github.com/harvester/harvester/issues/8367.
+It goes through commands and manifests to:
 
-[Velero](https://velero.io/) is a Kubernetes-native backup and restore tool that:
-
-* Backs up Kubernetes resources (like PVCs, pods, services, etc.)
-* Supports persistent volume snapshotting (via CSI)
-* Can restore workloads to the same or a different cluster
-
-Velero enables users to perform scheduled and on-demand backups of virtual machines to external object storage providers such as S3, Azure Blob, or GCS, aligning with enterprise backup and disaster recovery practices.
-
-In particular, this article provides commands and manifests to:
-
-* Back up virtual machines, the NFS CSI volumes, and associated namespace-scoped configuration
+* Back up virtual machines in a namespace, their NFS CSI volumes, and associated namespace-scoped configuration
 * Export the backup artifacts to an AWS S3 bucket
 * Restore to a different namespace on the same cluster
 * Restore to a different cluster
+
+Velero is a Kubernetes-native backup and restore tool that enables users to perform scheduled and on-demand backups of virtual machines to external object storage providers such as S3, Azure Blob, or GCS, aligning with enterprise backup and disaster recovery practices.
 
 :::note
 
@@ -135,7 +127,7 @@ NAME      PROVISIONER      RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANS
 nfs-csi   nfs.csi.k8s.io   Delete          Immediate           true                   14d
 ```
 
-Similarly, the default NFS CSI volume snapshot class is named `csi-nfs-snapclass`:
+Confirm that the default NFS CSI volume snapshot class `csi-nfs-snapclass` is also installed:
 
 ```sh
 kubectl get volumesnapshotclass csi-nfs-snapclass
@@ -162,14 +154,14 @@ Confirm the virtual machine image is successfully uploaded to Harvester:
 
 ![image](vm-image.png)
 
-To create a virtual machine with NFS root and data volumes, refer to the [third-party storage](https://docs.harvesterhci.io/v1.5/advanced/csidriver#virtual-machine-creation) documentation.
+Follow the instructions in the [third-party storage](https://docs.harvesterhci.io/v1.5/advanced/csidriver#virtual-machine-creation) documentation to create a virtual machine with NFS root and data volumes, using the image uploaded in the previous step.
 
 For NFS CSI snapshot to work, the NFS data volume must have the `volumeMode` set to `Filesystem`:
 ![image](vm-create.png)
 
 :::note optional
 
-Once the virtual machine is ready, access the virtual machine via SSH, and add some files to both the root and data volumes.
+For testing purposes, once the virtual machine is ready, access it via SSH and add some files to both the root and data volumes.
 
 The data volume needs to be partitioned, with a file system created and mounted before files can be written to it.
 
@@ -177,23 +169,31 @@ The data volume needs to be partitioned, with a file system created and mounted 
 
 ## Backup the Source Namespace
 
-Use the `velero` CLI to create a backup of the `demo-src` namespace:
+Use the `velero` CLI to create a backup of the `demo-src` namespace using Velero's built-in data mover:
 
 ```sh
 BACKUP_NAME=backup-demo-src-`date "+%s"`
 
-velero backup create "${BACKUP_NAME}" --include-namespaces demo-src
+velero backup create "${BACKUP_NAME}" \
+  --include-namespaces demo-src \
+  --snapshot-move-data
 ```
 
-This creates a backup containing namespace-scoped resources like the virtual machine, its volumes, image and other associated configuration.
+:::info
 
-:::important
-
-Velero only uploads Kubernetes objects configuration to the remote backup location, not the data in the CSI snapshots. For more information, refer to the [Velero CSI documentation](https://velero.io/docs/v1.15/csi/#how-it-works---overview).
-
-See also section on [Restore To A Different Cluster](#restore-to-a-different-cluster) below.
+For more information on Velero's data mover, see its documentation on [CSI data snapshot movement capability](https://velero.io/docs/v1.16/csi-snapshot-data-movement/).
 
 :::
+
+This creates a backup of the `demo-src` namespace containing resources like the virtual machine created earlier, its volumes, secrets and other associated configuration.
+
+Depending on the size of the virtual machine and its volumes, the backup may take a while to complete.
+
+The `DataUpload` custom resources provide insights into the backup progress:
+
+```sh
+kubectl -n velero get datauploads -l velero.io/backup-name="${BACKUP_NAME}"
+```
 
 Confirm that the backup completed successfully:
 
@@ -206,6 +206,8 @@ NAME                         STATUS      ERRORS   WARNINGS   CREATED            
 backup-demo-src-1747954979   Completed   0        0          2025-05-22 16:04:46 -0700 PDT   29d       default            <none>
 ```
 
+After the backup completes, Velero removes the CSI snapshots from the storage side to free up the snapshot data space.
+
 :::note tips
 
 The `velero backup describe` and `velero backup logs` commands can be used to assess details of the backup including resources included, skipped, and any warnings or errors encountered during the backup process.
@@ -214,107 +216,7 @@ The `velero backup describe` and `velero backup logs` commands can be used to as
 
 ## Restore To A Different Namespace
 
-This section describes how to restore the backup from the `demo-src` namespace to a new namespace named `demo-dst`:
-
-```sh
-velero restore create \
-  --from-backup "${BACKUP_NAME}" \
-  --namespace-mappings "demo-src:demo-dst" \
-  --exclude-resources "virtualmachineimages.harvesterhci.io" \
-  --labels "velero.kubevirt.io/clear-mac-address=true,velero.kubevirt.io/generate-new-firmware-uuid=true"
-```
-
- * During the restore:
-
-   * The virtual machine MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
-   * The virtual machine image manifest is excluded as it is not needed in the new namespace. The restored virtual machine uses the original image.
-
-Confirm that the restore completed successfully:
-
-```sh
-velero restore get
-```
-
-```sh
-NAME                                        BACKUP                       STATUS      STARTED                         COMPLETED                       ERRORS   WARNINGS   CREATED                         SELECTOR
-backup-demo-src-1747954979-20250522164015   backup-demo-src-1747954979   Completed   2025-05-22 16:40:15 -0700 PDT   2025-05-22 16:40:49 -0700 PDT   0        6          2025-05-22 16:40:15 -0700 PDT   <none>
-```
-
-Confirm that the virtual machine and its configuration are restored to the new `demo-dst` namespace:
-
-![image](vm-restore.png)
-
-:::note important
-
-The Velero restore operation is dependent on the snapshot capability of the underlying CSI driver.
-
-Refer to the CSI driver documentation for its snapshot requirements and limitations.
-
-:::
-
-:::note tips
-
-The `velero restore describe` and `velero restore logs` commands provide more insights into the restore operation including the resources restored, skipped, and any warnings or errors encountered during the restore process.
-
-:::
-
-## Restore To A Different Cluster
-
-This section extends the above scenario to demonstrate the steps to restore the backup to a different Harvester cluster using Velero's [CSI data snapshot movement capability](https://velero.io/docs/v1.16/csi-snapshot-data-movement/).
-
-### On The Source Cluster
-
-Perform a full backup of the `demo-src` namespace using Velero's built-in data mover:
-
-```sh
-BACKUP_NAME=backup-full-demo-src-`date "+%s"`
-
-velero backup create "${BACKUP_NAME}" \
-  --include-namespaces demo-src \
-  --snapshot-move-data
-```
-
-Depending on the size of the virtual machine and its volumes, the backup may take a while to complete.
-
-The `DataUpload` custom resources provide insights into the backup progress:
-
-```sh
-kubectl -n velero get datauploads -l velero.io/backup-name="${BACKUP_NAME}"
-```
-
-Wait for the backup to complete, and confirm that it is successful:
-
-```sh
-velero backup get "${BACKUP_NAME}"
-```
-
-```sh
-NAME                              STATUS      ERRORS   WARNINGS   CREATED                         EXPIRES   STORAGE LOCATION   SELECTOR
-backup-full-demo-src-1748035987   Completed   0        0          2025-05-23 11:31:06 -0700 PDT   29d       default            <none>
-```
-
-After the backup completes, Velero removes the CSI snapshots from the storage side to free up the snapshot data space.
-
-### On The Target Cluster
-
-Install Velero, the NFS CSI and NFS server following the instructions from the [Deploy the NFS CSI and Example Server](#deploy-the-nfs-csi-and-example-server) section.
-
-Once Velero is configured to use the same backup location as the source cluster, it automatically discovers the available backups:
-
-```sh
-velero backup get
-```
-
-```sh
-NAME                              STATUS      ERRORS   WARNINGS   CREATED                         EXPIRES   STORAGE LOCATION   SELECTOR
-backup-full-demo-src-1748035987   Completed   0        0          2025-05-23 11:31:06 -0700 PDT   29d       default            <none>
-```
-
-Set the name of the backup to use:
-
-```sh
-BACKUP_NAME=backup-full-demo-src-1748035987
-```
+This section describes how to restore the backup from the `demo-src` namespace to a new namespace named `demo-dst`.
 
 Save the following restore modifier to a local file named `modifier-data-volumes.yaml`:
 
@@ -341,11 +243,18 @@ Create the restore modifier:
 kubectl -n velero create cm modifier-data-volumes --from-file=modifier-data-volumes.yaml
 ```
 
+Assign the backup name to a shell variable:
+
+```sh
+BACKUP_NAME=backup-demo-src-1747954979
+```
+
 Start the restore operation:
 
 ```sh
 velero restore create \
   --from-backup "${BACKUP_NAME}" \
+  --namespace-mappings "demo-src:demo-dst" \
   --exclude-resources "virtualmachineimages.harvesterhci.io" \
   --resource-modifier-configmap "modifier-data-volumes" \
   --labels "velero.kubevirt.io/clear-mac-address=true,velero.kubevirt.io/generate-new-firmware-uuid=true"
@@ -353,25 +262,33 @@ velero restore create \
 
  * During the restore:
 
-   * the virtual machine MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
+   * The virtual machine MAC address and firmware UUID are reset to avoid potential conflicts with existing virtual machines.
    * the virtual machine image manifest is excluded because Velero restores the entire state of the virtual machine from the backup.
-   * the the `modifier-data-volumes` restore modifier is invoked to modify the virtual machine data volumes.
+   * the `modifier-data-volumes` restore modifier is invoked to modify the virtual machine data volumes metadata to prevent conflicts with the CDI volume import populator.
 
-The `DataDownload` custom resources can be used to examine the progress of the operation:
+While the restore operation is still in-progress, the `DataDownload` custom resources can be used to examine the progress of the operation:
 
 ```sh
-kubectl -n velero get datadownload
+RESTORE_NAME=backup-demo-src-1747954979-20250522164015
+
+kubectl -n velero get datadownload -l velero.io/restore-name="${RESTORE_NAME}"
+```
+
+Confirm that the restore completed successfully:
+
+```sh
+velero restore get
 ```
 
 ```sh
-NAME                                                   STATUS      STARTED   BYTES DONE   TOTAL BYTES   STORAGE LOCATION   AGE     NODE
-backup-full-demo-src-1748035987-20250527125953-7hqzt   Completed   8m37s     3758096384   3758096384    default            8m39s   isim-dev-restored
-backup-full-demo-src-1748035987-20250527125953-cgl2k   Completed   5m36s     5073010688   5073010688    default            8m39s   isim-dev-restored
+NAME                                        BACKUP                       STATUS      STARTED                         COMPLETED                       ERRORS   WARNINGS   CREATED                         SELECTOR
+backup-demo-src-1747954979-20250522164015   backup-demo-src-1747954979   Completed   2025-05-22 16:40:15 -0700 PDT   2025-05-22 16:40:49 -0700 PDT   0        6          2025-05-22 16:40:15 -0700 PDT   <none>
 ```
 
-Confirm that the virtual machine and its configuration are restored to the `demo-src` namespace:
 
-![image](vm-migrate.png)
+Verify that the virtual machine and its configuration are restored to the new `demo-dst` namespace:
+
+![image](vm-restore.png)
 
 :::note
 
@@ -381,16 +298,51 @@ Velero provides the `--data-mover` option to configure custom data movers to sat
 
 :::
 
-## Restore Virtual Machine Image
+:::note tips
 
-The restoration of virtual machine image is not fully supported yet. The enhancement is tracked at https://github.com/harvester/harvester/issues/8367.
+The `velero restore describe` and `velero restore logs` commands provide more insights into the restore operation including the resources restored, skipped, and any warnings or errors encountered during the restore process.
 
-## Using Longhorn Volumes
+:::
 
-To backup and restore Longhorn volumes, label the Longhorn volume snapshot class `longhorn` as follows:
+## Restore To A Different Cluster
+
+This section extends the above scenario to demonstrate the steps to restore the backup to a different Harvester cluster.
+
+On the target cluster, install Velero, and set up the NFS CSI and NFS server following the instructions from the [Deploy the NFS CSI and Example Server](#deploy-the-nfs-csi-and-example-server) section.
+
+Once Velero is configured to use the same backup location as the source cluster, it automatically discovers the available backups:
+
+```sh
+velero backup get
+```
+
+```sh
+NAME                         STATUS      ERRORS   WARNINGS   CREATED                         EXPIRES   STORAGE LOCATION   SELECTOR
+backup-demo-src-1747954979   Completed   0        0          2025-05-22 16:04:46 -0700 PDT   29d       default            <none>
+```
+
+Follow the steps in the [Restore To A Different Namespace](#restore-to-a-different-namespace) section to restore the backup on the target cluster.
+
+Remove the `--namespace-mappings` option to set the restored namespace to `demo-src` on the target cluster.
+
+Confirm that the virtual machine and its configuration are restored to the `demo-src` namespace:
+
+![image](vm-migrate.png)
+
+## Select Longhorn Volume Snapshot Class
+
+To perform Velero backup and restore of virtual machines with Longhorn volumes, label the Longhorn volume snapshot class `longhorn` as follows:
 
 ```sh
 kubectl label volumesnapshotclass longhorn velero.io/csi-volumesnapshot-class
 ```
 
-This informs Velero to use the correct snapshot class when backing up and restoring Longhorn volumes.
+This helps Velero to find the correct Longhorn snapshot class to use during backup and restore.
+
+## Limitations
+
+Enhancements related to the limitations described in this section are tracked at https://github.com/harvester/harvester/issues/8367.
+
+* By default, Velero only supports [resource filtering](https://velero.io/docs/v1.16/resource-filtering/) by resource groups and labels. In order to backup/restore a single instance of virtual machine, custom labels must be applied to the virtual machine, and its virtual machine instance, pod, data volumes, persistent volumes claim, persistent volumes and `cloudinit` secret resources. It's recommended to backup the entire namespace and perform resource filtering during restore to ensure that backup contains all the dependency resources required by the virtual machine.
+
+* The restoration of virtual machine image is not fully supported yet.
