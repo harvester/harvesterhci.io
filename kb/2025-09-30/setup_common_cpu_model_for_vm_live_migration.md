@@ -1,5 +1,5 @@
 ---
-title: Setup a common CPU model for virtual machine migration
+title: Setting up a common CPU model for virtual machine migration
 description: 'How to set up a common CPU model for virtual machine migration'
 slug: setup_common_cpu_model_for_vm_live_migration
 authors:
