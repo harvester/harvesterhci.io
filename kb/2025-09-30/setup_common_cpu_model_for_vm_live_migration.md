@@ -13,9 +13,15 @@ hide_table_of_contents: false
 
 ## Problem Description
 
-Although Harvester allows you to perform live migration, it sometimes fails due to mismatched CPU features and models. Let's examine an example.
+For Harvester to successfully migrate a virtual machine from one node to another, the origin and target nodes must have compatible CPU models and features.
 
-When a virtual machine is migrated to another node, the following key-value pairs are added under `spec.nodeSelector` in the POD spec.
+If the CPU model of a virtual machine isn't specified, Harvester assigns it the default `host-model` property so that the virtual machine has the CPU model closest to the one that are used on the hosting node.
+
+This default configuration may cause virtual machine migration to fail due to unschedulable `virt-launcher` pod, if the CPU models and features on the origin and target nodes do not match.
+
+Let's examine an example.
+
+When a virtual machine is first migrated to another node with the `SierraForest` CPU model, the following key-value pairs are added to the `spec.nodeSelector` property in the POD spec.
 
 ```yaml
 spec:
@@ -25,7 +31,9 @@ spec:
     cpu-feature.node.kubevirt.io/vme: "true"
 ```
 
-After the first migration, if you migrate the virtual machine again, it will still use the above `nodeSelector` in the POD spec. Migration may fail if another node doesn't have the corresponding features or model. For example:
+The above `nodeSelector` configuration is retained in subsequent migrations, which may fail if the new target node node doesn't have the corresponding features or model.
+
+For example, compare the CPU model and feature labels added by KubeVirt to the following two nodes:
 
 ```yaml
 # Node A
@@ -44,9 +52,9 @@ This virtual machine will fail to migrate to node B due to the missing `fpu` fea
 
 ## How to Set Up a Common CPU Model
 
-In Harvester, we use the default CPU model, which is `host-model`. Using the default CPU model results in the above consequences. However, we can actually set up a customized CPU model in the virtual machine spec to make it migrate successfully.
+You can define a custom CPU model to ensure that the `spec.nodeSelector` configuration in the POD spec is assigned a compatible CPU model common to all the nodes in the cluster.
 
-When setting up a customized CPU model, it will have different key-value pairs under `spec.nodeSelector` in the POD spec. Let's examine this example.
+Let's examine this example.
 
 We have the following node information: 
 
