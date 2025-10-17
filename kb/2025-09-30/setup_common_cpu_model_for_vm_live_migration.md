@@ -15,9 +15,9 @@ hide_table_of_contents: false
 
 For Harvester to successfully migrate a virtual machine from one node to another, the origin and target nodes must have compatible CPU models and features.
 
-If the CPU model of a virtual machine isn't specified, Harvester assigns it the default `host-model` property so that the virtual machine has the CPU model closest to the one that are used on the hosting node.
+If the CPU model of a virtual machine isn't specified, Harvester assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one that are used on the hosting node.
 
-This default configuration may cause virtual machine migration to fail due to unschedulable `virt-launcher` pod, if the CPU models and features on the origin and target nodes do not match.
+KubeVirt automatically [adjusts the node selectors](https://kubevirt.io/user-guide/compute/virtual_hardware/#labeling-nodes-with-cpu-models-cpu-features-and-machine-types) of the associated `virt-launcher` pod based on this configuration. If the CPU models and features of the origin and target nodes do not match, the virtual migration live migration may fail.
 
 Let's examine an example.
 
@@ -31,7 +31,7 @@ spec:
     cpu-feature.node.kubevirt.io/vme: "true"
 ```
 
-The above `nodeSelector` configuration is retained in subsequent migrations, which may fail if the new target node node doesn't have the corresponding features or model.
+The above `nodeSelector` configuration is retained in subsequent migrations, which may fail if the new target node doesn't have the corresponding features or model.
 
 For example, compare the CPU model and feature labels added by KubeVirt to the following two nodes:
 
@@ -71,7 +71,7 @@ labels:
   cpu-feature.node.kubevirt.io/vme: "true"
 ```
 
-If we set up `IvyBridge` as our CPU model in the virtual machine spec, KubeVirt only adds `cpu-model.node.kubevirt.io/xxx` under `spec.nodeSelector` in the POD spec and skip adding `cpu-model-migration.node.kubevirt.io/xxx` and features.
+If we set up `IvyBridge` as our CPU model in the virtual machine spec, KubeVirt only adds `cpu-model.node.kubevirt.io/IvyBridge` under `spec.nodeSelector` in the POD spec.
 
 ```yaml
 # Virtual Machine Spec
@@ -88,7 +88,7 @@ spec:
     cpu-model.node.kubevirt.io/IvyBridge: "true"
 ```
 
-With this configuration, your virtual machine can be migrated to any nodes that have the label `cpu-model.node.kubevirt.io/IvyBridge`. You don't need to worry about mismatched features or `cpu-model-migration.node.kubevirt.io/xxx` labels.
+With this configuration, your virtual machine can be migrated to any nodes that have the label `cpu-model.node.kubevirt.io/IvyBridge`.
 
 ## Set Up Cluster-Wide Configuration
 
