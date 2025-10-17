@@ -13,15 +13,15 @@ hide_table_of_contents: false
 
 ## Problem Description
 
-For Harvester to successfully migrate a virtual machine from one node to another, the origin and target nodes must have compatible CPU models and features.
+For Harvester to successfully migrate a virtual machine from one node to another, the source and target nodes must have compatible CPU models and features.
 
-If the CPU model of a virtual machine isn't specified, Harvester assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one that are used on the hosting node.
+If the CPU model of a virtual machine isn't specified, Harvester assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one used on the host node.
 
-KubeVirt automatically [adjusts the node selectors](https://kubevirt.io/user-guide/compute/virtual_hardware/#labeling-nodes-with-cpu-models-cpu-features-and-machine-types) of the associated `virt-launcher` pod based on this configuration. If the CPU models and features of the origin and target nodes do not match, the virtual migration live migration may fail.
+KubeVirt automatically [adjusts the node selectors](https://kubevirt.io/user-guide/compute/virtual_hardware/#labeling-nodes-with-cpu-models-cpu-features-and-machine-types) of the associated `virt-launcher` Pod based on this configuration. If the CPU models and features of the source and target nodes do not match, the live migration may fail.
 
 Let's examine an example.
 
-When a virtual machine is first migrated to another node with the `SierraForest` CPU model, the following key-value pairs are added to the `spec.nodeSelector` property in the POD spec.
+When a virtual machine is first migrated to another node with the `SierraForest` CPU model, the following key-value pairs are added to the `spec.nodeSelector` field in the Pod spec.
 
 ```yaml
 spec:
@@ -31,7 +31,7 @@ spec:
     cpu-feature.node.kubevirt.io/vme: "true"
 ```
 
-The above `nodeSelector` configuration is retained in subsequent migrations, which may fail if the new target node doesn't have the corresponding features or model.
+The above `nodeSelector` configuration is retained for subsequent migrations, which may fail if the new target node doesn't have the corresponding features or model.
 
 For example, compare the CPU model and feature labels added by KubeVirt to the following two nodes:
 
@@ -48,13 +48,13 @@ labels:
   cpu-feature.node.kubevirt.io/vme: "true"
 ```
 
-This virtual machine will fail to migrate to node B due to the missing `fpu` feature. However, if the virtual machine doesn't actually require this feature, this failure can be frustrating. Therefore, setting up a common CPU model can resolve this issue.
+This virtual machine will fail to migrate to Node B due to the missing `fpu` feature. However, if the virtual machine doesn't actually require this feature, this can be frustrating. Therefore, setting up a common CPU model can resolve this issue.
 
 ## How to Set Up a Common CPU Model
 
-You can define a custom CPU model to ensure that the `spec.nodeSelector` configuration in the POD spec is assigned a compatible CPU model common to all the nodes in the cluster.
+You can define a custom CPU model to ensure that the `spec.nodeSelector` configuration in the Pod spec is assigned a CPU model that is compatible and common to all nodes in the cluster.
 
-Let's examine this example.
+Consider this example.
 
 We have the following node information: 
 
@@ -71,7 +71,7 @@ labels:
   cpu-feature.node.kubevirt.io/vme: "true"
 ```
 
-If we set up `IvyBridge` as our CPU model in the virtual machine spec, KubeVirt only adds `cpu-model.node.kubevirt.io/IvyBridge` under `spec.nodeSelector` in the POD spec.
+If we set up `IvyBridge` as our CPU model in the virtual machine spec, KubeVirt only adds `cpu-model.node.kubevirt.io/IvyBridge` under `spec.nodeSelector` in the Pod spec.
 
 ```yaml
 # Virtual Machine Spec
@@ -82,17 +82,17 @@ spec:
         cpu:
           model: IvyBridge
 
-# POD spec
+# Pod spec
 spec:
   nodeSelector:
     cpu-model.node.kubevirt.io/IvyBridge: "true"
 ```
 
-With this configuration, your virtual machine can be migrated to any nodes that have the label `cpu-model.node.kubevirt.io/IvyBridge`.
+With this configuration, your virtual machine can be migrated to any node that has the label `cpu-model.node.kubevirt.io/IvyBridge`.
 
 ## Set Up Cluster-Wide Configuration
 
-If your virtual machines only run on a specific CPU model, you can set up a cluster-wide CPU model in the `kubevirt` resource.
+If your virtual machines run only on a specific CPU model, you can set up a cluster-wide CPU model in the `kubevirt` resource.
 
 You can edit it with `kubectl edit kubevirt kubevirt -n harvester-system`, then add the CPU model you want in the following spec:
 
@@ -102,10 +102,10 @@ spec:
     cpuModel: IvyBridge
 ```
 
-Then, when a new virtual machine starts or an existing virtual machine restarts, it will apply the cluster-wide setting. The system follows these priorities when using CPU models if you configure them in both locations:
+Then, when a new virtual machine starts or an existing virtual machine restarts, the cluster-wide setting will be applied. The system follows these priorities when using CPU models if you configure them in both locations:
 
-1. CPU model in virtual machine spec.
-2. CPU model in kubevirt spec.
+1. CPU model in the virtual machine spec.
+2. CPU model in the KubeVirt spec.
 
 
 ## References
