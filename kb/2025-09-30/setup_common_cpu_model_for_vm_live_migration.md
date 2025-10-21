@@ -15,7 +15,7 @@ hide_table_of_contents: false
 
 For Harvester to successfully migrate a virtual machine from one node to another, the source and target nodes must have compatible CPU models and features.
 
-If the CPU model of a virtual machine isn't specified, Harvester assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one used on the host node.
+If the CPU model of a virtual machine isn't specified, KubeVirt assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one used on the host node.
 
 KubeVirt automatically [adjusts the node selectors](https://kubevirt.io/user-guide/compute/virtual_hardware/#labeling-nodes-with-cpu-models-cpu-features-and-machine-types) of the associated `virt-launcher` Pod based on this configuration. If the CPU models and features of the source and target nodes do not match, the live migration may fail.
 
