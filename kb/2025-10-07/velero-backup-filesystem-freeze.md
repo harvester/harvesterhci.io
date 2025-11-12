@@ -93,7 +93,7 @@ spec:
         pre.hook.backup.velero.io/on-error: Fail
         pre.hook.backup.velero.io/timeout: 30s
         
-        post.hook.backup.velero.io/command: '["/usr/bin/virt-freezer", "--unfreeze", "--namespace", "[VM Namespace]", "--name", "[VM Name]"]'
+        post.hook.backup.velero.io/command: '["/usr/bin/virt-freezer", "--unfreeze", "--namespace", "<VM Namespace>", "--name", "<VM Name>"]'
         post.hook.backup.velero.io/container: compute
         post.hook.backup.velero.io/timeout: 30s
     spec:
