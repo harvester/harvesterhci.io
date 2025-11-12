@@ -88,7 +88,7 @@ spec:
     metadata:
       annotations:
         # These annotations will be applied to the virt-launcher pod
-        pre.hook.backup.velero.io/command: '["/usr/bin/virt-freezer", "--freeze", "--namespace", "[VM Namespace]", "--name", "[VM Name]"'
+        pre.hook.backup.velero.io/command: '["/usr/bin/virt-freezer", "--freeze", "--namespace", "<VM Namespace>", "--name", "<VM Name>"']'
         pre.hook.backup.velero.io/container: compute
         pre.hook.backup.velero.io/on-error: Fail
         pre.hook.backup.velero.io/timeout: 30s
