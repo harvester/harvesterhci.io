@@ -46,7 +46,7 @@ To confirm that your VM supports filesystem freeze operations:
 1. Access the virtual machine's virt-launcher `compute` container:
 
    ```bash
-   POD=$(kubectl get pods -n default \
+   POD=$(kubectl get pods -n <VM Namespace> \
      -l vm.kubevirt.io/name=<VM Name> \
      -o jsonpath='{.items[0].metadata.name}')
    kubectl exec -it $POD -n default -c compute -- bash
