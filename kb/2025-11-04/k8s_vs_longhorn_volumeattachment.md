@@ -258,7 +258,7 @@ Longhorn uses **two different VolumeAttachment resources** for different purpose
 
 **Kubernetes VolumeAttachment** (`storage.k8s.io/v1`) follows the standard CSI specification and is created **only** when Pods are scheduled to nodes. It represents Kubernetes' official attachment intent and is managed by K8s Attach/Detach Controller and CSI External-Attacher.
 
-**Longhorn VolumeAttachment** (`longhorn.io/v1beta2`) extends beyond CSI to support Longhorn's advanced features. It's created for **multiple scenarios** including Pod workloads, snapshots, backups, clones, and manual operations. It uses a ticket-based system to coordinate concurrent attachment requests and is managed collaboratively by multiple Longhorn controllers.
+**Longhorn VolumeAttachment** (`longhorn.io/v1beta2`) extends beyond CSI to support Longhorn's advanced features. It's created for **multiple scenarios**, including Pod workloads, snapshots, backups, clones, and manual operations. It uses a ticket-based system to coordinate concurrent attachment requests and is managed collaboratively by multiple Longhorn controllers.
 
 **Why both are needed:** K8s VolumeAttachment ensures CSI compliance with the Kubernetes ecosystem, while Longhorn VolumeAttachment enables automation for background operations without manual intervention. Importantly, not all Longhorn operations trigger K8s VolumeAttachment—for example, creating a VolumeSnapshot only creates a Longhorn VolumeAttachment ticket (`snapshot-controller`), not a K8s VolumeAttachment.
 
