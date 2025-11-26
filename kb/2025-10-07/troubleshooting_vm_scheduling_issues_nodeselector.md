@@ -19,15 +19,21 @@ For example, a VM might have a `nodeSelector` requiring a specific CPU feature (
 
 This article describes how to resolve this issue using two different approaches.
 
-## Solution 1: Reboot the VM
+## Solution 1: Reboot the VM to Clean nodeSelector of the Pod
 
 If the `nodeSelector` was automatically added by KubeVirt (for instance, during a previous migration or initial start), rebooting the VM will clear these dynamic selectors.
 
 Once the VM is rebooted, the restrictive `nodeSelector` is removed, allowing the VM to be scheduled on any available node.
 
-To ensure the VM can migrate to other nodes more easily in the future without encountering similar issues, refer to [Setting up a common CPU model for virtual machine migration](../2025-09-30/setup_common_cpu_model_for_vm_live_migration.md).
+## Solution 2: Reboot and Set Up a Common CPU Model (Prevent KubeVirt from Adding CPU Features)
 
-## Solution 2: Modify Node Labels (No Reboot Required)
+After the rebooting, you can refer to [Set up a common CPU model for virtual machine migration](../2025-09-30/setup_common_cpu_model_for_vm_live_migration.md). 
+
+After setting up a CPU model in the VM spec, KubeVirt won't add the CPU feature into the nodeSelector of the POD. 
+
+If you're creating a fresh VM, we also recommend this way if you have live migration requirement.
+
+## Solution 3: Modify Node Labels (No Reboot Required)
 
 If rebooting the VM is not an option, you can manually manipulate the target node's labels to satisfy the scheduling requirements.
 
@@ -56,13 +62,13 @@ If the VM requires specific labels that the node is missing, you can manually ad
 
 This temporarily "tricks" the scheduler into seeing the node as compatible, allowing the VM to live migrate there.
 
-## Solution 3: Remove Node Labels (To Prevent Future Constraints)
+## Solution 4: Remove Node Labels (to Prevent Future Constraints)
 
 If you want to ensure that the VM does not acquire specific `nodeSelector` constraints after live migration, you can remove the [relevant CPU labels](#kubevirt-node-labels) from the target node.
 
 **Prerequisite:** You must apply the `node-labeller.kubevirt.io/skip-node="true"` annotation to the target node as described in **Solution 2, Step 1**.
 
-This method works **only if the VM's Pod does not currently have a specific `nodeSelector` containing the labels listed in [References](#references)**. Otherwise, you reboot the VM to clear the constraints.
+This method works **only if the VM's Pod does not currently have a specific `nodeSelector` containing the labels listed in [References](#references)**. Otherwise, you must reboot the VM to clear the constraints.
 
 1. Check if the Pod has a `nodeSelector`:
 
@@ -76,7 +82,7 @@ This method works **only if the VM's Pod does not currently have a specific `nod
 
 ## Limitations
 
-If you choose **Solution 2**, be aware that this is a manual override.
+If you choose **Solution 3**, be aware that this is a manual override.
 
 If you add a new node to the cluster in the future that lacks the required feature, and you wish to migrate the VM to that new node, you must repeat the process:
 1. Add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the new node.
