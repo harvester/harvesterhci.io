@@ -15,23 +15,21 @@ hide_table_of_contents: false
 
 When a virtual machine (VM) cannot be live migrated to a target node because of `nodeSelector` constraints, it often indicates a mismatch between the VM's requirements and the node's capabilities.
 
-For example, a VM might have a `nodeSelector` requiring a specific CPU feature (e.g., `cpu-feature.node.kubevirt.io/fpu: "true"`), but the target node lacks this label. This prevents the scheduler from migrating the VM to that node.
+For example, a VM might have a `nodeSelector` requiring a specific CPU feature (e.g., `cpu-feature.node.kubevirt.io/fpu: "true"`), but the target node lacks this label. This mismatch can happen when the `host-model` CPU models and features computed by KubeVirt change over time. This prevents the scheduler from migrating the VM to that node.
 
 This article describes how to resolve this issue using four different approaches.
 
-## Solution 1: Reboot the VM to Clean nodeSelector of the Pod
+## Solution 1: Reboot the VM to clear the nodeSelector of the Pod
 
-If the `nodeSelector` was automatically added by KubeVirt (for instance, during a previous migration or initial start), rebooting the VM will clear these dynamic selectors.
+If the `nodeSelector` was automatically added by KubeVirt from previous live migration, rebooting the VM will clear these dynamic selectors.
 
 Once the VM is rebooted, the restrictive `nodeSelector` is removed, allowing the VM to be scheduled on any available node.
 
 ## Solution 2: Reboot and Set Up a Common CPU Model (Prevent KubeVirt from Adding CPU Features)
 
-After rebooting, you can refer to [Set up a common CPU model for virtual machine migration](../2025-09-30/setup_common_cpu_model_for_vm_live_migration.md).
+You can also override the KubeVirt's default `host-model` CPU configuration by [setting up a common CPU model for virtual machine migration](../2025-09-30/setup_common_cpu_model_for_vm_live_migration.md). The common CPU model is applied to the VM as its domain CPU, and to the pod as its `nodeSelector` configuration.
 
-After setting up a CPU model in the VM spec, KubeVirt won't add the CPU feature into the nodeSelector of the Pod. 
-
-If you're creating a fresh VM, we also recommend this approach if you have live migration requirements.
+For environments that can tolerate virtual machine restarts, this is the recommended approach.
 
 ## Solution 3: Modify Node Labels (No Reboot Required)
 
@@ -61,6 +59,10 @@ kubectl label node <node-name> <key>=<value>
 
 This temporarily "tricks" the scheduler into seeing the node as compatible, allowing the VM to live migrate there.
 
+If you add a new node to the cluster in the future that lacks the required feature, and you wish to migrate the VM to that new node, you must repeat the process:
+1. Add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the new node.
+2. Manually add the required labels.
+
 ## Solution 4: Remove Node Labels (to Prevent Future Constraints)
 
 If you want to ensure that the VM does not acquire specific `nodeSelector` constraints after live migration, you can remove the [relevant CPU labels](#kubevirt-node-labels) from the target node.
@@ -79,19 +81,11 @@ kubectl get pod <pod-name> -o yaml | grep nodeSelector -A 5 -B 5
 
 By doing this, the Pod will not acquire new `nodeSelector` constraints upon migration, allowing it to be freely migrated to other nodes in the future. However, we cannot guarantee the live migration will succeed in this case.
 
-## Limitations
-
-If you choose **Solution 3**, be aware that this is a manual override.
-
-If you add a new node to the cluster in the future that lacks the required feature, and you wish to migrate the VM to that new node, you must repeat the process:
-1. Add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the new node.
-2. Manually add the required labels.
-
 ## References
 
 ### KubeVirt Node Labels
 
-The `node-labeller.kubevirt.io/skip-node="true"` annotation prevents updates to the following labels:
+The following is the list of labels managed by the KubeVirt CPU node labeller:
 
 - `cpu-feature.node.kubevirt.io/*`
 - `cpu-model-migration.node.kubevirt.io/*`
