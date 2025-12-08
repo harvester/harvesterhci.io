@@ -41,14 +41,9 @@ tcpdump -xx -i <interface-name>
 
 ### GRO/GSO offload
 
-GRO (Generic Receive Offload) and GSO (Generic Segmentation Offload) are kernel-level software offloading mechanisms designed to optimize network performance.
+Generic Receive Offload (GRO) and Generic Segmentation Offload (GSO) are kernel-level software offloading mechanisms designed to optimize network performance. GRO aggregates multiple small incoming packets into larger ones before passing them to the network stack. GSO performs the opposite on transmission, splitting large packets into smaller frames before sending them to the NIC.
 
-GRO aggregates multiple small incoming packets into larger ones before passing them to the network stack.
-
-GSO performs the opposite on transmission, splitting large packets into smaller frames before sending them to the NIC.
-
-
-While these features generally enhance performance, in this case they interfered with the normal TCP segmentation process. This caused inefficient packet segmentation and an excessive number of small fragments, degrading overall network performance.
+While these features are typically used to enhance performance, in this specific scenario, they interfered with the normal TCP segmentation process. This interference led to inefficient packet segmentation and the creation of an excessive number of small fragments, which ultimately degraded overall network performance.
 
 When GRO/GSO were disabled, the Linux network stack reverted to relying on standard transport-level segmentation methods such as TSO (TCP Segmentation Offload) and LRO (Large Receive Offload). These mechanisms maintained efficient packet aggregation at different layers, resulting in properly sized packets being handled by the kernel, which restored expected network performance.
 
