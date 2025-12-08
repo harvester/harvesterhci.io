@@ -1,5 +1,5 @@
 ---
-title: Harvester VM Network Slowness when Bare Metal servers have Broadcom-57508-NetExtreme NIC – GRO/GSO Offload Issue
+title: VM Network Slowness Due to GRO and GSO Offloading Issue
 description: 'Reason for VM Network slowness and how to fix it by disabling GRO/GSO offload caused by some specific NICs'
 slug: disable_gro_gso_offload
 authors:
@@ -80,9 +80,6 @@ The NetXtreme-E BCM57508 NICs may experience suboptimal interaction with GRO and
                 - /usr/sbin/ethtool -K <interface-name> gro off
                 - /usr/sbin/ethtool -K <interface-name> gso off
     ```
-
-```
-interface-name is the name of the physical interface on the host connected to the VMs.
 
 ## Verification
 
