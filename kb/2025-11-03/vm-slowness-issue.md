@@ -86,9 +86,9 @@ interface-name is the name of the physical interface on the host connected to th
 
 ## Verification
 
-- Perform apt-get update or curl from a guest VM and throughput should now be normal (utilizing most of the link capacity).
-- Test VM-to-VM file transfers across nodes using scp and transfers complete at expected speed.
-- Confirm no packet drops or errors using:
-  ```
-  ip -s link show <interface-name>
-  ```
+- Run `apt-get update` or a `curl` command from a guest virtual machine. The download throughput should be normal (utilizing most of the link capacity).
+- Transfer files between virtual machines running on different nodes using `scp`. The file transfers should be completed at the expected speed.
+- Verify that no packets are dropped and no errors are reported using the following command:
+    ```
+    ip -s link show <interface-name>
+    ```
