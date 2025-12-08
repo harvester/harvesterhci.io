@@ -45,9 +45,9 @@ Generic Receive Offload (GRO) and Generic Segmentation Offload (GSO) are kernel-
 
 While these features are typically used to enhance performance, in this specific scenario, they interfered with the normal TCP segmentation process. This interference led to inefficient packet segmentation and the creation of an excessive number of small fragments, which ultimately degraded overall network performance.
 
-When GRO/GSO were disabled, the Linux network stack reverted to relying on standard transport-level segmentation methods such as TSO (TCP Segmentation Offload) and LRO (Large Receive Offload). These mechanisms maintained efficient packet aggregation at different layers, resulting in properly sized packets being handled by the kernel, which restored expected network performance.
+When GRO and GSO were disabled, the Linux network stack automatically reverted to using standard transport-layer segmentation methods, specifically TCP Segmentation Offload (TSO) and Large Receive Offload (LRO). These mechanisms maintained efficient packet aggregation and segmentation at the appropriate layers, ensuring properly sized packets were presented to the kernel, which successfully restored expected network performance.
 
-BCM57508 NetXtreme-E NICs may not interact optimally with GRO/GSO due to a broadcom driver bug. In such cases, enabling these offloads can lead to suboptimal packetization behavior,producing many small packets rather than fewer large ones—ultimately reducing throughput.
+The NetXtreme-E BCM57508 NICs may experience suboptimal interaction with GRO and GSO due to a Broadcom driver bug. Enabling these offload mechanisms led to inefficient packetization, producing many small packets instead of fewer large ones, which ultimately reduced network throughput.
 
 ## Solution
 
