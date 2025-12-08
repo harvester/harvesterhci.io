@@ -21,9 +21,7 @@ In the testing environment, guest virtual machines experienced severely degraded
 
 ### Environment
 
-- Harvester cluster with Dell Servers using BCM57508 NetXtreme-E NICs.
-- VM and management traffic shared the same management cluster network.
-- Physical NICs were 100 Gbps interfaces.
+The issue was observed in a Harvester cluster hosted on Dell servers using Broadcom NetXtreme-E Series BCM57508 NICs (100 Gbps). `mgmt`, the built-in cluster network, was used for both management and virtual machine traffic.
 
 ## Cause
 
