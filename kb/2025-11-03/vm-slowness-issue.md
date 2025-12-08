@@ -11,7 +11,7 @@ tags: [vm network, performance]
 hide_table_of_contents: false
 ---
 
-Guest VMs running on a Harvester cluster experienced very slow network throughput across nodes. Disabling Generic Receive Offload (GRO) and Generic Segmentation Offload (GSO) on the Harvester host interfaces resolved the issue.
+When guest virtual machines running on Harvester nodes experience very slow network throughput, disabling Generic Receive Offload (GRO) and Generic Segmentation Offload (GSO) on the host interfaces may resolve the issue.
 
 ## Problem
 
