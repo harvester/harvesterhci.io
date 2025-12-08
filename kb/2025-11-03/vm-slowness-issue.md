@@ -56,19 +56,15 @@ BCM57508 NetXtreme-E NICs may not interact optimally with GRO/GSO due to a broad
 
 ## Solution
 
-Option 1: The setting does not persist across reboots.
+- Option 1: Disable GRO and GSO on the affected Harvester host interfaces. This change does not persist across reboots.
 
-Disable GRO and GSO on the affected Harvester host interfaces.
-
-```
-# Check current offload settings
-/usr/sbin/ethtool -k <interface-name>
-
-# Disable GRO and GSO
-/usr/sbin/ethtool -K <interface-name> gro off
-/usr/sbin/ethtool -K <interface-name> gso off
-
-```
+    ```
+    # Check current offload settings
+    /usr/sbin/ethtool -k <interface-name>
+    # Disable GRO and GSO
+    /usr/sbin/ethtool -K <interface-name> gro off
+    /usr/sbin/ethtool -K <interface-name> gso off
+    ```
 
 Option 2: The setting persists across reboots.
 
