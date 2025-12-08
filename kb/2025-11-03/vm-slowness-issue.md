@@ -27,9 +27,11 @@ The issue was observed in a Harvester cluster hosted on Dell servers using Broad
 
 ### Root Cause
 
-Harvester relies on Linux’s bridge-based virtual networking to connect guest VMs to physical networks.
+Harvester relies on Linux’s bridge-based virtual networking to connect guest virtual machines to physical networks.
 
-The BCM57508 NetXtreme-E NICs were connected to leaf switches that were transmitting Jumbo Frames. These frames should typically be segmented to around ~1450 bytes before reaching the Harvester host kernel when MTU is configured with default value of 1500. However, the packets arriving at the kernel were fragmented into much smaller sizes than expected. This resulted in the kernel having to process a significantly higher number of packets, increasing CPU overhead and causing reduced download throughput.Packet captures collected using the command below confirmed that the packets were of smaller size:
+The NetXtreme-E BCM57508 NICs were connected to leaf switches configured to transmit jumbo frames. When the default MTU of `1500` is used, these frames should ideally be segmented to approximately 1450 bytes before reaching the Harvester host kernel. However, the packets actually arriving at the kernel were fragmented into unexpectedly small sizes. This forced the kernel to process a significantly higher volume of packets, leading to increased CPU overhead and reduced download throughput.
+
+Packets captures collected using the following command confirmed the unexpectedly small size of the incoming packets.
 
 ```
 tcpdump -xx -i <interface-name>
