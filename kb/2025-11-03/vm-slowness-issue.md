@@ -61,24 +61,25 @@ The NetXtreme-E BCM57508 NICs may experience suboptimal interaction with GRO and
     /usr/sbin/ethtool -K <interface-name> gso off
     ```
 
-Option 2: The setting persists across reboots.
+- Option 2: Apply the following cloudinit resource and reboot the nodes. This change persists across reboots.
 
-Apply the following cloudinit resource and reboot the nodes.
+    Replace `<interface-name>` with the name of the physical interface the virtual machines are connected to.
 
-```
-apiVersion: node.harvesterhci.io/v1beta1
-kind: CloudInit
-metadata:
-  name: disable-offloads
-spec:
-  matchSelector: {}
-  filename: 99_disable_offloads.yaml
-  contents: |
-    stages:
-        network:
+    ```    
+    apiVersion: node.harvesterhci.io/v1beta1
+    kind: CloudInit
+    metadata:
+      name: disable-offloads
+    spec:
+      matchSelector: {}
+      filename: 99_disable_offloads.yaml
+      contents: |
+        stages:
+          network:
             - commands:
-                - /usr/sbin/ethtool -K <interface-name>> gro off
-                - /usr/sbin/ethtool -K <interface-name>> gso off
+                - /usr/sbin/ethtool -K <interface-name> gro off
+                - /usr/sbin/ethtool -K <interface-name> gso off
+    ```
 
 ```
 interface-name is the name of the physical interface on the host connected to the VMs.
