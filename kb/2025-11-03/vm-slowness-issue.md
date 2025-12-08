@@ -17,9 +17,7 @@ When guest virtual machines running on Harvester nodes experience very slow netw
 
 ### Symptoms
 
-- Guest VMs exhibited very slow download and transfer speeds (as low as 100 bps).
-- apt-get update, curl, and scp between VMs across nodes were extremely slow.
-- Performance was normal between VMs running on the same node.
+In the testing environment, guest virtual machines experienced severely degraded download and transfer speeds, dropping as low as 100 bps. This extreme slowdown was particularly evident when `apt-get update`, `curl`, and `scp` were used to transfer data between virtual machines running on different nodes. In contrast, performance remained normal when the virtual machines were hosted on the same node.
 
 ### Environment
 
