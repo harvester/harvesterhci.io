@@ -11,81 +11,89 @@ tags: [harvester, virtual machine, VM, scheduling, nodeSelector, troubleshooting
 hide_table_of_contents: false
 ---
 
-## Problem Description
+## Issue
 
-When a virtual machine (VM) cannot be live migrated to a target node because of `nodeSelector` constraints, it often indicates a mismatch between the VM's requirements and the node's capabilities.
+Node selector constraints can prevent the scheduler from live-migrating a virtual machine to a target node. This often indicates a mismatch between the virtual machine's requirements and the node's capabilities.
 
-For example, a VM might have a `nodeSelector` requiring a specific CPU feature (e.g., `cpu-feature.node.kubevirt.io/fpu: "true"`), but the target node lacks this label. This mismatch can happen when the `host-model` CPU models and features computed by KubeVirt change over time. This prevents the scheduler from migrating the VM to that node.
+A node selector may require a specific CPU feature, but the target node lacks the corresponding label (for example, `cpu-feature.node.kubevirt.io/fpu: "true"`). This mismatch can occur when the `host-model` CPU models and features computed by KubeVirt change over time.
 
-This article describes how to resolve this issue using four different approaches.
+## Solutions
 
-## Solution 1: Reboot the VM to clear the nodeSelector of the Pod
+You can resolve this issue using four different approaches.
 
-If the `nodeSelector` was automatically added by KubeVirt from previous live migration, rebooting the VM will clear these dynamic selectors.
+- Reboot the virtual machine.
 
-Once the VM is rebooted, the restrictive `nodeSelector` is removed, allowing the VM to be scheduled on any available node.
+    KubeVirt automatically adds node selectors (during a previous migration or initial start) that can restrict scheduling. You can clear these node selectors by rebooting the virtual machine.
 
-## Solution 2: Reboot and Set Up a Common CPU Model (Prevent KubeVirt from Adding CPU Features)
+- Reboot the virtual machine and set up a common CPU model.
 
-You can also override the KubeVirt's default `host-model` CPU configuration by [setting up a common CPU model for virtual machine migration](../2025-09-30/setup_common_cpu_model_for_vm_live_migration.md). The common CPU model is applied to the VM as its domain CPU, and to the pod as its `nodeSelector` configuration.
+    You can override KubeVirt's default `host-model` CPU configuration by [setting up a common CPU model for virtual machine migration](../2025-09-30/setup_common_cpu_model_for_vm_live_migration.md). The model is applied to the virtual machine as its domain CPU, and to the pod as its node selector configuration.
 
-For environments that can tolerate virtual machine restarts, this is the recommended approach.
+    This is the recommended approach for environments that can tolerate restarting of virtual machines.
 
-## Solution 3: Modify Node Labels (No Reboot Required)
+- Modify the node labels.
 
-If rebooting the VM is not an option, you can manually manipulate the target node's labels to satisfy the scheduling requirements.
+    If rebooting the virtual machine is not an option, you can manually manipulate the target node's labels to satisfy the scheduling requirements.
 
-### Step 1: Prevent Automatic Label Updates
+    1. Add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the target node.
 
-First, add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the target node.
+        This annotation, which persists even after upgrades, prevents KubeVirt's `node-labeller` from automatically adding or removing CPU-related labels on this node.
 
-```bash
-kubectl annotate node <node-name> node-labeller.kubevirt.io/skip-node="true"
-```
+        ```bash
+        kubectl annotate node <node-name> node-labeller.kubevirt.io/skip-node="true"
+        ```
+        
+        :::info important
 
-This annotation prevents KubeVirt's node-labeller from automatically adding or removing CPU-related labels on this node. Note that this annotation persists even after upgrades.
+        The annotation itself does not affect the pod's node selector. It only controls the presence of specific CPU-related labels on the node, which the node selector checks against. For more information, see the [References](#references) section.
 
-**Important:** The annotation itself does not affect the Pod's `nodeSelector`. It only controls the presence of specific CPU-related labels on the node (see [References](#references)), which the `nodeSelector` checks against.
+        :::
 
-### Step 2: Add Missing Labels
+    1. Identify labels that are missing from the virtual machine's node selector and add them to the target node.
 
-If the VM requires specific labels that the node is missing, you can manually add them to the target node.
+        You can add the missing labels using the following command:
 
-1. Identify the missing labels from the VM's `nodeSelector`.
-2. Add these labels to the target node:
-```bash
-kubectl label node <node-name> <key>=<value>
-```
+        ```bash
+        kubectl label node <node-name> <key>=<value>
+        ```
 
-This temporarily "tricks" the scheduler into seeing the node as compatible, allowing the VM to live migrate there.
+        This circumvents the standard scheduling restrictions, allowing the virtual machine to migrate to the target node.
 
-If you add a new node to the cluster in the future that lacks the required feature, and you wish to migrate the VM to that new node, you must repeat the process:
-1. Add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the new node.
-2. Manually add the required labels.
+    If a new node that lacks the required features is added to the cluster, you must repeat these steps to allow the virtual machine to live-migrate to that node.
 
-## Solution 4: Remove Node Labels (to Prevent Future Constraints)
+- Remove the node labels.
 
-If you want to ensure that the VM does not acquire specific `nodeSelector` constraints after live migration, you can remove the [relevant CPU labels](#kubevirt-node-labels) from the target node.
+    If you want to ensure that the virtual machine does not acquire specific node selector constraints after live migration, you can remove the [relevant CPU labels](#kubevirt-node-labels) from the target node.
 
-**Prerequisite:** You must apply the `node-labeller.kubevirt.io/skip-node="true"` annotation to the target node as described in **Solution 3, Step 1**.
+    1. Add the `node-labeller.kubevirt.io/skip-node="true"` annotation to the target node.
 
-This method works **only if the VM's Pod does not currently have a specific `nodeSelector` containing the labels listed in [References](#references)**. Otherwise, you must reboot the VM to clear the constraints.
+        This annotation, which persists even after upgrades, prevents KubeVirt's `node-labeller` from automatically adding or removing CPU-related labels on this node.
 
-1. Check if the Pod has a `nodeSelector`:
+        ```bash
+        kubectl annotate node <node-name> node-labeller.kubevirt.io/skip-node="true"
+        ```
 
-```bash
-kubectl get pod <pod-name> -o yaml | grep nodeSelector -A 5 -B 5
-```
+        :::info important
 
-2. If no such `nodeSelector` is present, you can safely remove the relevant CPU labels from the node. These labels are listed [in the reference](#kubevirt-node-labels).
+        This method works only if the virtual machine's pod does not have an existing node selector that contains the labels listed in the [References](#references) section. Otherwise, you must reboot the virtual machine to clear the constraints.
 
-By doing this, the Pod will not acquire new `nodeSelector` constraints upon migration, allowing it to be freely migrated to other nodes in the future. However, we cannot guarantee the live migration will succeed in this case.
+        :::
+
+    1. Check if the pod has a node selector.
+
+        ```bash
+        kubectl get pod <pod-name> -o yaml | grep nodeSelector -A 5 -B 5
+        ```
+
+    1. If no node selector exists, remove the relevant [CPU labels](#kubevirt-node-labels) from the node.
+
+        Performing this action prevents the pod from acquiring new node selector constraints, thus enabling its future migration to other nodes. However, the successful outcome of that migration is not guaranteed.
 
 ## References
 
 ### KubeVirt Node Labels
 
-The following is the list of labels managed by the KubeVirt CPU node labeller:
+The KubeVirt CPU node-labeller manages the following labels:
 
 - `cpu-feature.node.kubevirt.io/*`
 - `cpu-model-migration.node.kubevirt.io/*`
