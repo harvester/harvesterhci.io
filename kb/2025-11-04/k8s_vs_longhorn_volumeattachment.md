@@ -261,7 +261,7 @@ metadata:
   creationTimestamp: "2025-12-10T04:19:42Z"
   finalizers:
   - longhorn.io
-  generation: 4
+  generation: 3
   labels:
     longhornvolume: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
   name: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
@@ -271,10 +271,18 @@ metadata:
     kind: Volume
     name: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
     uid: 7cd2ed46-194f-4528-83f7-bbaa5945e7e3
-  resourceVersion: "2736781"
+  resourceVersion: "2736440"
   uid: b2492681-8fcb-4330-9ec6-496afa93e96b
 spec:
   attachmentTickets:
+    csi-5852f2d48d96311bb582eeeaad0e38361031d502899416c71cea10795748a84b:
+      generation: 0
+      id: csi-5852f2d48d96311bb582eeeaad0e38361031d502899416c71cea10795748a84b
+      nodeID: harvester-node-2
+      parameters:
+        disableFrontend: "false"
+        lastAttachedBy: ""
+      type: csi-attacher
     csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d:
       generation: 0
       id: csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d
