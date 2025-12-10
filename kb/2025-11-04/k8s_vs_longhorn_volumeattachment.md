@@ -139,7 +139,7 @@ Understanding when each VolumeAttachment is created or modified is crucial for t
    - **Expansion Controller** - when expanding volume size
    - And other Longhorn controllers based on their specific operational needs
 
-### Example1: VolumeSnapshot Creation (Longhorn VolumeAttachment Only)
+### Example 1: VolumeSnapshot Creation (Longhorn VolumeAttachment Only)
 
 **Important**: VolumeSnapshot operations use **only Longhorn VolumeAttachment** without involving Kubernetes VolumeAttachment. This demonstrates that Longhorn VolumeAttachment can operate independently for internal operations.
 
