@@ -2,7 +2,7 @@
 
 When working with Longhorn, you may encounter two different VolumeAttachment resources with similar names: **Kubernetes VolumeAttachment** (`storage.k8s.io/v1`) and **Longhorn VolumeAttachment** (`longhorn.io/v1beta2`). This often causes confusion about why both exist, when each is created, whether they always appear together, and which one to check when troubleshooting. This document clarifies their distinct roles, shows how they work together (and when they don't), and provides real-world examples to help you identify attachment sources and effectively troubleshoot volume attachment issues.
 
-> **Recommended Reading**: For additional context, see the official documentation at https://longhorn.io/docs/1.10.0/advanced-resources/volumeattachment/
+> **Recommended Reading**: For additional context, see the official documentation at https://longhorn.io/docs/latest/advanced-resources/volumeattachment/
 
 ---
 
