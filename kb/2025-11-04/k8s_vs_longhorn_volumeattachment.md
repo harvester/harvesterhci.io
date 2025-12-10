@@ -139,7 +139,7 @@ Understanding when each VolumeAttachment is created or modified is crucial for t
    - **Expansion Controller** - when expanding volume size
    - And other Longhorn controllers based on their specific operational needs
 
-### Example: VolumeSnapshot Creation (Longhorn VolumeAttachment Only)
+### Example1: VolumeSnapshot Creation (Longhorn VolumeAttachment Only)
 
 **Important**: VolumeSnapshot operations use **only Longhorn VolumeAttachment** without involving Kubernetes VolumeAttachment. This demonstrates that Longhorn VolumeAttachment can operate independently for internal operations.
 
@@ -249,6 +249,119 @@ status:
 - Unlike `csi-attacher` tickets (triggered by K8s), this ticket is created purely by Longhorn
 - The ticket is **temporary** - it appears during snapshot creation and disappears when complete
 - No corresponding Kubernetes VolumeAttachment exists for this operation
+
+### Example2: VM Migration
+
+During VM migration, Harvester have two virt-launcher pods for the same VM: the original pod on the source node and a new pod on the target node. In the following example, we migrate a VM from harvester-node-2 to harvester-node-0.
+
+```yaml
+apiVersion: longhorn.io/v1beta2
+kind: VolumeAttachment
+metadata:
+  creationTimestamp: "2025-12-10T04:19:42Z"
+  finalizers:
+  - longhorn.io
+  generation: 4
+  labels:
+    longhornvolume: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+  name: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+  namespace: longhorn-system
+  ownerReferences:
+  - apiVersion: longhorn.io/v1beta2
+    kind: Volume
+    name: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+    uid: 7cd2ed46-194f-4528-83f7-bbaa5945e7e3
+  resourceVersion: "2736781"
+  uid: b2492681-8fcb-4330-9ec6-496afa93e96b
+spec:
+  attachmentTickets:
+    csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d:
+      generation: 0
+      id: csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d
+      nodeID: harvester-node-0
+      parameters:
+        disableFrontend: "false"
+        lastAttachedBy: ""
+      type: csi-attacher
+  volume: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+status:
+  attachmentTicketStatuses:
+    csi-5852f2d48d96311bb582eeeaad0e38361031d502899416c71cea10795748a84b:
+      conditions:
+      - lastProbeTime: ""
+        lastTransitionTime: "2025-12-10T04:19:49Z"
+        message: ""
+        reason: ""
+        status: "True"
+        type: Satisfied
+      generation: 0
+      id: csi-5852f2d48d96311bb582eeeaad0e38361031d502899416c71cea10795748a84b
+      satisfied: true
+    csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d:
+      conditions:
+      - lastProbeTime: ""
+        lastTransitionTime: "2025-12-10T04:21:00Z"
+        message: The migrating attachment ticket is satisfied
+        reason: ""
+        status: "True"
+        type: Satisfied
+      generation: 0
+      id: csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d
+      satisfied: true
+```
+
+**After Migration Completes** (ticket removed):
+```yaml
+apiVersion: longhorn.io/v1beta2
+kind: VolumeAttachment
+metadata:
+  creationTimestamp: "2025-12-10T04:19:42Z"
+  finalizers:
+  - longhorn.io
+  generation: 4
+  labels:
+    longhornvolume: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+  name: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+  namespace: longhorn-system
+  ownerReferences:
+  - apiVersion: longhorn.io/v1beta2
+    kind: Volume
+    name: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+    uid: 7cd2ed46-194f-4528-83f7-bbaa5945e7e3
+  resourceVersion: "2736824"
+  uid: b2492681-8fcb-4330-9ec6-496afa93e96b
+spec:
+  attachmentTickets:
+    csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d:
+      generation: 0
+      id: csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d
+      nodeID: harvester-node-0
+      parameters:
+        disableFrontend: "false"
+        lastAttachedBy: ""
+      type: csi-attacher
+  volume: pvc-0dc9e1f0-4932-4567-aa1e-e70b570058da
+status:
+  attachmentTicketStatuses:
+    csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d:
+      conditions:
+      - lastProbeTime: ""
+        lastTransitionTime: "2025-12-10T04:21:00Z"
+        message: ""
+        reason: ""
+        status: "True"
+        type: Satisfied
+      generation: 0
+      id: csi-f080d69495b619fad93621ff3d57201793952e422304cceac8807e975ccf795d
+      satisfied: true
+```
+
+**Key Observations**:
+- **Two CSI attachment tickets coexist**: One pointing to the source node (harvester-node-2) and another to the target node (harvester-node-0)
+- **Both tickets are `csi-attacher` type**: Indicating they were both triggered by Kubernetes VolumeAttachment through the CSI flow
+- **Both tickets have `satisfied: true` status**: This demonstrates Longhorn's support for attaching the same volume to multiple nodes simultaneously (RWX-like behavior for migration)
+- **Target node ticket has special message**: "The migrating attachment ticket is satisfied" explicitly identifies this as a migration scenario
+- **Multi-attach is temporary**: This dual-attachment state only exists during VM migration; the source node's ticket will be removed after migration completes
 
 ---
 
