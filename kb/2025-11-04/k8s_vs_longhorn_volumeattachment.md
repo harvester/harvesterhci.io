@@ -172,7 +172,7 @@ Each ticket type has an assigned priority level that determines selection order 
 When the volume is detached, the ticket with the highest priority is selected for attachment. If multiple tickets share the same priority, the first one (sorted by ID) is chosen.
 
 :::note
-For ReadWriteMany (RWX) volumes, `CSIAttacher` tickets are ignored during ticket selection and detachment decisions. Only the `ShareManagerController` ticket is considered, as it manages the centralized sharing mechanism for RWX access. Individual CSI attacher tickets from Pods are summarized and handled by the Share Manager, not directly by the VolumeAttachment Controller.
+For ReadWriteMany (RWX) Filesystem mode volumes, `CSIAttacher` tickets are ignored during ticket selection and detachment decisions. Only the `ShareManagerController` ticket is considered, as it manages the centralized sharing mechanism for RWX access. Individual CSI attacher tickets from Pods are summarized and handled by the Share Manager, not directly by the VolumeAttachment Controller.
 :::
 
 ### Interruption Mechanism
