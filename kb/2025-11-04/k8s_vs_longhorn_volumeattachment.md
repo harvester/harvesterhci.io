@@ -130,18 +130,105 @@ Understanding when each VolumeAttachment is created or modified is crucial for t
    - Represents Kubernetes' intent to attach the volume
 
 2. **Longhorn VolumeAttachment Ticket Addition**: Triggered by various Longhorn components based on operation needs:
-   - **CSI Plugin** - when CSI ControllerPublishVolume is called
-   - **Snapshot Controller** - when creating snapshots of detached volumes
-   - **Backup Controller** - when backing up volumes
-   - **UI/API** - when users manually attach volumes via Longhorn UI
-   - **Clone Controller** - when managing source volume during clone
-   - **Restore Controller** - when restoring data from backups
-   - **Expansion Controller** - when expanding volume size
-   - And other Longhorn controllers based on their specific operational needs
+   - `CSIAttacher` - when CSI ControllerPublishVolume is called
+   - `SnapshotController` - when creating snapshots of volumes
+   - `BackupController` - when backing up volumes
+   - `LonghornAPI` - when users manually attach volumes via Longhorn UI
+   - `VolumeCloneController` - when managing source volume during clone
+   - `VolumeRestoreController` - when restoring data from backups
+   - `VolumeExpansionController` - when expanding volume size
+   - `ShareManagerController` - for RWX volume sharing
+   - `SalvageController` - for volume salvage operations
+
+---
+
+## Attachment Ticket Priority and Coordination
+
+When multiple operations require volume attachment simultaneously, Longhorn uses a **ticket-based priority system** to coordinate access intelligently. This ensures critical operations take precedence while allowing background tasks to coexist when possible.
+
+### How Priority Works
+
+Each ticket type has an assigned priority level that determines selection order when the volume is detached:
+
+- **Priority 2000** (Highest): 
+  - `VolumeRestoreController`
+  - `VolumeExpansionController`
+- **Priority 1000**: 
+  - `LonghornAPI`
+- **Priority 900**: 
+  - `CSIAttacher`
+  - `ShareManagerController`
+  - `SalvageController`
+- **Priority 800** (Lowest): 
+  - `BackupController`
+  - `SnapshotController`
+  - `VolumeCloneController`
+  - `VolumeEvictionController`
+
+When the volume is detached, the ticket with the highest priority is selected for attachment. If multiple tickets share the same priority, the first one (sorted by ID) is chosen.
+
+:::note
+For ReadWriteMany (RWX) volumes, `CSIAttacher` tickets are ignored during ticket selection and detachment decisions. Only the `ShareManagerController` ticket is considered, as it manages the centralized sharing mechanism for RWX access. Individual CSI attacher tickets from Pods are summarized and handled by the Share Manager, not directly by the VolumeAttachment Controller.
+:::
+
+### Interruption Mechanism
+
+Priority levels alone don't tell the complete story. Longhorn also implements an interruption mechanism to handle cases where request arrives while the volume is already attached to a different node.
+
+**Interruptible operations (can be interrupted)**:
+- `BackupController`
+- `SnapshotController`
+- `VolumeCloneController` - clone operations, but only when the volume is in `VolumeCloneStateCopyCompletedAwaitingHealthy` state
+
+:::note
+The `VolumeCloneController` is only interruptible in a specific state. During the data copy phase, clone operations cannot be interrupted. Interruption is only allowed after the copy completes and the volume is waiting to become healthy, preventing data corruption during active copy operations.
+:::
+
+**Workload operations (can trigger interruption)**:
+- `CSIAttacher` - Pod workloads requiring the volume on a different node
+- `LonghornAPI` - manual attachment requests via UI/API
+- `ShareManagerController` - RWX volume sharing operations
+
+The interruption only occurs when:
+1. The volume's currently attached node has only interruptible tickets
+2. A different node has a workload ticket requesting the volume
+
+:::note
+Interruption is based on **ticket type classification**, not priority numbers. Priority numbers only affect the selection order during the attachment phase when the volume is detached.
+:::
+
+This design ensures background operations never block workload rescheduling, while protecting active workloads from being interrupted by other background tasks.
+
+### Real-World Scenarios
+
+**Scenario 1: Backup During Active Pod Usage**
+- Pod is running on node-A with a `CSIAttacher` ticket
+- `BackupController` creates a ticket for node-A (same node)
+- Both tickets coexist peacefully - backup runs alongside the Pod
+- CSI attachment and backup execution use the engine on the same node, avoiding a node transition.
+
+**Scenario 2: Backup Interrupted by Pod Workload**  
+- `BackupController` is running on node-A (only ticket present)
+- A Pod requiring this volume is scheduled to node-B, `CSIAttacher` creates a ticket for node-B
+- VolumeAttachment Controller detects: interruptible ticket on node-A, workload ticket on node-B
+- Volume detaches from node-A (backup interrupted), attaches to node-B (csi attacher)
+- Backup will retry later automatically
+
+**Scenario 3: Detached Volume Snapshot**
+- Volume is detached, `SnapshotController` creates a ticket
+- Volume attaches temporarily for snapshot creation
+- After snapshot completes, ticket is removed
+- Volume auto-detaches if no other tickets exist
+
+---
+
+## Usage Examples
+
+The following examples demonstrate how VolumeAttachment resources behave in common scenarios. Each example shows the complete YAML resource state at different stages, helping you understand what to look for when troubleshooting or monitoring Longhorn operations.
 
 ### Example 1: VolumeSnapshot Creation (Longhorn VolumeAttachment Only)
 
-**Important**: VolumeSnapshot operations use **only Longhorn VolumeAttachment** without involving Kubernetes VolumeAttachment. This demonstrates that Longhorn VolumeAttachment can operate independently for internal operations.
+VolumeSnapshot operations use **only Longhorn VolumeAttachment** without involving Kubernetes VolumeAttachment. This demonstrates that Longhorn VolumeAttachment can operate independently for internal operations.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
