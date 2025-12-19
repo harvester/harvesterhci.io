@@ -343,7 +343,7 @@ status:
 
 ### Example 2: VM Migration
 
-During VM migration, Harvester has two virt-launcher pods for the same VM: the original pod on the source node and a new pod on the target node. In the following example, we migrate a VM from harvester-node-2 to harvester-node-0.
+During VM migration, Harvester has two virt-launcher pods for the same VM: the original pod on the source node and a new pod on the target node. This multi-attach capability is enabled for **RWX (ReadWriteMany) block mode volumes when the StorageClass has `migratable: true` parameter**, which allows Longhorn to support live VM migration. In the following example, we migrate a VM from harvester-node-2 to harvester-node-0.
 
 ```yaml
 apiVersion: longhorn.io/v1beta2
