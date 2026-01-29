@@ -96,7 +96,12 @@ const config = {
               className: 'navbar__icon navbar__suse',
             },
           ],
-      },
+        },
+          {
+            label: 'Enterprise',
+            href: `https://www.suse.com/products/rancher/virtualization/`,
+            position: 'right',
+          },
       ],
     },
     colorMode: {
