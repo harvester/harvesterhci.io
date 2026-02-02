@@ -214,7 +214,7 @@ The procedure is as follows.
 
       ```yaml
       stages:
-         default:
+         initramfs:
          - name: "Setup multipathd"
             systemctl:
                enable:
