@@ -117,7 +117,7 @@ When selecting a CPU model, the goal is to choose the highest common denominator
 
 Below are practical examples for common enterprise hardware combinations.
 
-For a cluster that mixes Cascade Lake and Sapphire Rapids, the recommended CPU model is `Cascadelake-Server`. Sapphire Rapids processors are backward compatible with Cascade Lake instructions, making Cascadelake-Server the highest common denominator between these two generations.
+For a cluster that mixes Cascade Lake and Sapphire Rapids, the recommended CPU model is `Cascadelake-Server`. Sapphire Rapids processors are backward compatible with Cascade Lake instructions, making `Cascadelake-Server` the highest common denominator between these two generations.
 
 For a cluster that mixes Skylake and Cascade Lake nodes, the appropriate model is `Skylake-Server`. This is the common ground between both generations. Cascade Lake includes additional AVX-512 optimizations, but using Skylake ensures compatibility across the entire cluster.
 
