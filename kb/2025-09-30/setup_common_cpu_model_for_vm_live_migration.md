@@ -113,7 +113,7 @@ For mixed environments, an explicit CPU model should always be used.
 
 ## Choosing a CPU Model for Live Migration
 
-When selecting a CPU model, the goal is to choose the Highest Common Denominator, this means the most modern CPU architecture that every node in the cluster supports. Pick a model supported by all nodes in your cluster, including the oldest CPU generation. Use a server-grade model that provides a reasonable set of capabilities (e.g., vector instructions, security features) without tying VMs to host-specific features. Use the same model on all VMs that need live migration.
+When selecting a CPU model, the goal is to choose the highest common denominator. This means the most modern CPU architecture that every node in the cluster supports. Pick a model supported by all nodes in your cluster, including the oldest CPU generation. Use a server-grade model that provides a reasonable set of capabilities (e.g., vector instructions, security features) without tying VMs to host-specific features. Use the same model on all VMs that need live migration.
 
 Below are practical examples for common enterprise hardware combinations.
 
