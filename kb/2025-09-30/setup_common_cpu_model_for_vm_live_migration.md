@@ -19,6 +19,10 @@ hide_table_of_contents: false
 
 For Harvester to successfully migrate a virtual machine from one node to another, the source and target nodes must have compatible CPU models and features.
 
+Harvester uses KubeVirt / QEMU / libvirt to manage and run virtual machines. When a VM starts, libvirt exposes a specific CPU feature set to the guest operating system. Live migration requires this CPU feature set to be identical on both source and target nodes.
+
+Different CPU generations support different instruction sets and feature flags. If those differ, the live migration will be blocked to avoid instability or incorrect execution on the target node.
+
 If the CPU model of a virtual machine isn't specified, KubeVirt assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one used on the host node.
 
 KubeVirt automatically [adjusts the node selectors](https://kubevirt.io/user-guide/compute/virtual_hardware/#labeling-nodes-with-cpu-models-cpu-features-and-machine-types) of the associated `virt-launcher` Pod based on this configuration. If the CPU models and features of the source and target nodes do not match, the live migration may fail.
@@ -57,12 +61,6 @@ This virtual machine will fail to migrate to Node B due to the missing `fpu` fea
 ## How to Set Up a Common CPU Model
 
 You can define a custom CPU model to ensure that the `spec.nodeSelector` configuration in the Pod spec is assigned a CPU model that is compatible and common to all nodes in the cluster.
-
-Harvester uses KubeVirt / QEMU / libvirt to manage and run virtual machines. When a VM starts, it exposes a specific CPU feature set to the guest operating system. Live migration requires this CPU feature set to be identical on both source and target nodes.
-
-Different CPU generations support different instruction sets and feature flags. If those differ, the live migration will be blocked to avoid instability or incorrect execution on the target node.
-
-Newer versions of Harvester (1.6.x and later) enforce CPU compatibility more strictly than earlier releases, which is why migrations that previously worked may now fail between CPUs with differing features.
 
 Consider this example.
 
