@@ -26,6 +26,20 @@ These vulnerabilities affect specific versions of the RKE2 ingress-nginx control
 
 :::
 
+:::info important
+
+Harvester does not utilize the ingress-nginx controller custom error backend. Therefore, it is not affected by [CVE-2026-24513](https://github.com/kubernetes/kubernetes/issues/136679).
+
+:::
+
+:::info important
+
+Currently, no mitigation is available for [CVE-2026-24514](https://github.com/kubernetes/kubernetes/issues/136680). An upgrade to Harvester 1.7.1 is required.
+
+For more information on its CVSS score, see <https://www.first.org/cvss/calculator/3.1#CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H>
+
+:::
+
 You can confirm the version of the RKE2 ingress-nginx pods by running this command on your Harvester cluster:
 
 ```sh
@@ -71,7 +85,7 @@ EOF
 
 :::info
 
-This policy is a cluster-scoped resources that requires the proper administrator RBAC permissions to create.
+This policy is a cluster-scoped resource that requires the proper administrator RBAC permissions to create.
 
 :::
 
@@ -88,16 +102,6 @@ kubectl delete validatingadmissionpolicy ingress-nginx-annotation-validation
 
 kubectl delete validatingadmissionpolicybinding ingress-nginx-annotation-validation
 ```
-
-Harvester does not utilize the ingress-nginx controller custom error backend. Therefore, it is not affected by [CVE-2026-24513](https://github.com/kubernetes/kubernetes/issues/136679).
-
-:::info important
-
-Currently, no mitigation is available for [CVE-2026-24514](https://github.com/kubernetes/kubernetes/issues/136680). An upgrade to Harvester 1.7.1 is required.
-
-For more information on its CVSS score, see <https://www.first.org/cvss/calculator/3.1#CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H>
-
-:::
 
 ## References
 
