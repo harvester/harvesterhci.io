@@ -7,6 +7,10 @@ authors:
     title: Senior Software Engineer
     url: https://github.com/Yu-Jack
     image_url: https://github.com/Yu-Jack.png
+  - name: Samuel Vasconcelos
+    title: Software Engineer
+    url: https://github.com/susesamu
+    image_url: https://github.com/susesamu.png
 tags: [harvester, virtual machine, VM, live migration, policy, strategy, configuration]
 hide_table_of_contents: false
 ---
@@ -14,6 +18,10 @@ hide_table_of_contents: false
 ## Problem Description
 
 For Harvester to successfully migrate a virtual machine from one node to another, the source and target nodes must have compatible CPU models and features.
+
+Harvester uses KubeVirt / QEMU / libvirt to manage and run virtual machines. When a VM starts, libvirt exposes a specific CPU feature set to the guest operating system. Live migration requires this CPU feature set to be identical on both source and target nodes.
+
+Different CPU generations support different instruction sets and feature flags. If those differ, the live migration will be blocked to avoid instability or incorrect execution on the target node.
 
 If the CPU model of a virtual machine isn't specified, KubeVirt assigns it the default `host-model` configuration so that the virtual machine has the CPU model closest to the one used on the host node.
 
@@ -90,6 +98,29 @@ spec:
 
 With this configuration, your virtual machine can be migrated to any node that has the label `cpu-model.node.kubevirt.io/IvyBridge`.
 
+## Understanding CPU Model Options in Harvester
+
+Harvester allows the CPU model to be defined in the VM specification.
+
+If `host-passthrough` is used, the VM exposes the exact host CPU to the guest. This provides maximum performance but completely prevents migration across different CPU generations.
+
+If `host-model` is used, the VM derives a CPU model based on the host’s capabilities. This works only when all nodes expose identical CPU features. In mixed clusters, this setting commonly causes migration failures.
+
+If an explicit CPU model is defined, the VM exposes a named CPU architecture defined by QEMU. This is the recommended approach for clusters that may contain different CPU generations.
+For mixed environments, an explicit CPU model should always be used.
+
+## Choosing a CPU Model for Live Migration
+
+When selecting a CPU model, the goal is to choose the highest common denominator. This means the most modern CPU architecture that every node in the cluster supports. Pick a model supported by all nodes in your cluster, including the oldest CPU generation. Use a server-grade model that provides a reasonable set of capabilities (e.g., vector instructions, security features) without tying VMs to host-specific features. Use the same model on all VMs that need live migration.
+
+Below are practical examples for common enterprise hardware combinations.
+
+For a cluster that mixes Cascade Lake and Sapphire Rapids, the recommended CPU model is `Cascadelake-Server`. Sapphire Rapids processors are backward compatible with Cascade Lake instructions, making `Cascadelake-Server` the highest common denominator between these two generations.
+
+For a cluster that mixes Skylake and Cascade Lake nodes, the appropriate model is `Skylake-Server`. This is the common ground between both generations. Cascade Lake includes additional AVX-512 optimizations, but using Skylake ensures compatibility across the entire cluster.
+
+If your cluster contains Broadwell nodes along with anything newer, the safest baseline is `Broadwell`. Broadwell serves as a stable and widely supported baseline for older enterprise hardware. Any newer CPUs will support it.
+
 ## Set Up Cluster-Wide Configuration
 
 If your virtual machines run only on a specific CPU model, you can set up a cluster-wide CPU model in the `kubevirt` resource.
@@ -107,7 +138,7 @@ Then, when a new virtual machine starts or an existing virtual machine restarts,
 1. CPU model in the virtual machine spec.
 2. CPU model in the KubeVirt spec.
 
-
 ## References
 
 - [CPU Model Matching](https://docs.harvesterhci.io/v1.6/vm/live-migration/#cpu-model-matching)
+- [QEMU / KVM CPU model configuration](https://www.qemu.org/docs/master/system/qemu-cpu-models.html)
