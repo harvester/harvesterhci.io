@@ -26,7 +26,7 @@ const config = {
                     sidebarPath: require.resolve("./sidebars.js"),
                     // Please change this to your repo.
                     editUrl:
-                        "https://github.com/harvester/harvesterhci.io/edit/main/static/",
+                        "https://github.com/harvester/harvesterhci.io/edit/main/",
                 },
                 theme: {
                     customCss: require.resolve("./src/css/custom.css"),
