@@ -1,3 +1,16 @@
+---
+title: Kubernetes VolumeAttachment vs Longhorn VolumeAttachment
+description: 'Understand the differences between Kubernetes VolumeAttachment (storage.k8s.io/v1) and Longhorn VolumeAttachment (longhorn.io/v1beta2), how they work together, and how to troubleshoot volume attachment issues'
+slug: k8s-vs-longhorn-volumeattachment
+authors:
+  - name: Cooper Tseng
+    title: Senior Software Engineer
+    url: https://github.com/brandboat
+    image_url: https://github.com/brandboat.png
+tags: [kubernetes, longhorn, volumeattachment, storage]
+hide_table_of_contents: false
+---
+
 # Kubernetes VolumeAttachment vs Longhorn VolumeAttachment
 
 When working with Longhorn, you may encounter two different VolumeAttachment resources with similar names: **Kubernetes VolumeAttachment** (`storage.k8s.io/v1`) and **Longhorn VolumeAttachment** (`longhorn.io/v1beta2`). This often causes confusion about why both exist, when each is created, whether they always appear together, and which one to check when troubleshooting. This document clarifies their distinct roles, shows how they work together (and when they don't), and provides real-world examples to help you identify attachment sources and effectively troubleshoot volume attachment issues.
