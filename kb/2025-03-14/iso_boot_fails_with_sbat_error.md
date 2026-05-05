@@ -4,7 +4,7 @@ description: 'How to work around "Verifying shim SBAT data failed: Security Poli
 slug: iso_boot_fails_with_sbat_errror
 authors:
   - name: Tim Serong
-    title: Master Software Engineer
+    title: Principal Software Engineer
     url: https://github.com/tserong
     image_url: https://github.com/tserong.png
 tags: [installation, operating system, secure boot]
