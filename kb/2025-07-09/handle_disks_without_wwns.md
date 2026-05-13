@@ -4,7 +4,7 @@ description: 'How to add extra disks to Harvester when they have no WWN and thus
 slug: handle_disks_without_wwns
 authors:
   - name: Tim Serong
-    title: Master Software Engineer
+    title: Principal Software Engineer
     url: https://github.com/tserong
     image_url: https://github.com/tserong.png
 tags: [storage, disk]
