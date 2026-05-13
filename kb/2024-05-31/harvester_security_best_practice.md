@@ -13,7 +13,7 @@ hide_table_of_contents: false
 
 ## User-Provided Credentials on Harvester
 
-When [installing a Harvester cluster](https://docs.harvesterhci.io/v1.2/install/index#installation-steps), you are asked to provide the following credential related information:
+When [installing a Harvester cluster](https://docs.harvesterhci.io/latest/install/index#installation-steps), you are asked to provide the following credential related information:
 
 - Cluster token of the first node that is added to the cluster. Other nodes must use this token to join the cluster.
 
@@ -29,7 +29,7 @@ You may plan to change them from time to time, the following paragraphs describe
 
 #### Cluster Token on Nodes Joining an Existing Cluster
 
-When a node is unable to join a cluster because of a cluster token error, perform the recommended [troubleshooting steps](https://docs.harvesterhci.io/v1.2/troubleshooting/index/#modifying-cluster-token-on-agent-nodes).
+When a node is unable to join a cluster because of a cluster token error, perform the recommended [troubleshooting steps](https://docs.harvesterhci.io/latest/troubleshooting/index/#modifying-cluster-token-on-agent-nodes).
 
 #### Cluster Token (RKE2 Token Rotation)
 
@@ -72,15 +72,15 @@ Do not attempt to rotate the RKE2 token on your cluster before Harvester announc
 
 ### Password of the Default User `rancher`
 
-This process is node-specific. You must change the [password of the default user](https://docs.harvesterhci.io/v1.2/install/update-harvester-configuration/#password-of-user-rancher) on each node even if the same password is used on all Harvester nodes.
+This process is node-specific. You must change the [password of the default user](https://docs.harvesterhci.io/latest/install/update-harvester-configuration/#password-of-user-rancher) on each node even if the same password is used on all Harvester nodes.
 
 ### SSH keys
 
-You must log into a Harvester node using the default user account `rancher` to change the [SSH keys](https://docs.harvesterhci.io/v1.2/install/update-harvester-configuration#ssh-keys-of-user-rancher).
+You must log into a Harvester node using the default user account `rancher` to change the [SSH keys](https://docs.harvesterhci.io/latest/install/update-harvester-configuration#ssh-keys-of-user-rancher).
 
 ### HTTP Proxy
 
-After a Harvester cluster is installed, you can use the Harvester UI to change the [HTTP proxy](https://docs.harvesterhci.io/v1.2/advanced/index#http-proxy).
+After a Harvester cluster is installed, you can use the Harvester UI to change the [HTTP proxy](https://docs.harvesterhci.io/latest/advanced/index#http-proxy).
 
 Alternatively, you can use `kubectl` or the rest API against the URI `/harvesterhci.io.setting/http-proxy`.
 
@@ -165,16 +165,16 @@ See the article [Renew Harvester Cloud Credentials](https://harvesterhci.io/kb/r
 
 ### `additional-ca`
 
-See the [documentation](https://docs.harvesterhci.io/v1.2/advanced/index#additional-ca) for this setting.
+See the [documentation](https://docs.harvesterhci.io/latest/advanced/index#additional-ca) for this setting.
 
 ### `ssl-certificates`
 
-See the [documentation](https://docs.harvesterhci.io/v1.2/advanced/index#ssl-certificates) for this setting.
+See the [documentation](https://docs.harvesterhci.io/latest/advanced/index#ssl-certificates) for this setting.
 
 ### `ssl-parameters`
 
-See the [documentation](https://docs.harvesterhci.io/v1.2/advanced/index#ssl-parameters) for this setting.
+See the [documentation](https://docs.harvesterhci.io/latest/advanced/index#ssl-parameters) for this setting.
 
 ### `containerd-registry`
 
-See the [documentation](https://docs.harvesterhci.io/v1.2/advanced/index#containerd-registry) for this setting.
+See the [documentation](https://docs.harvesterhci.io/latest/advanced/index#containerd-registry) for this setting.
