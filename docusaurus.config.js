@@ -21,13 +21,7 @@ const config = {
         [
             'classic',
             ({
-                docs: {
-                    routeBasePath: '/',
-                    sidebarPath: require.resolve("./sidebars.js"),
-                    // Please change this to your repo.
-                    editUrl:
-                        "https://github.com/harvester/harvesterhci.io/edit/main/static/",
-                },
+                docs: false, // Docs disabled - using KB only
                 theme: {
                     customCss: require.resolve("./src/css/custom.css"),
                 },
