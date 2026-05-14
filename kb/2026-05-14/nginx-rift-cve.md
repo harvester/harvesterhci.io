@@ -89,7 +89,11 @@ This policy is a cluster-scoped resource that requires the proper administrator 
 
 :::
 
-This validating policy rejects any ingress resources that contain the `nginx.ingress.kubernetes.io/rewrite-target` annotation with a value that contains `?`.
+:::info important
+
+This validating policy prevents the inclusion of the vulnerable annotation configuration in new and existing ingress resources. However, it cannot detect or block any vulnerable ingress resources that already exist in the cluster. Therefore, it is important to follow the instructions described above to also identify and update any existing vulnerable ingress resources.
+
+:::
 
 The policy can be removed once you upgrade to Harvester 1.7.2, 1.8.1 or newer:
 
