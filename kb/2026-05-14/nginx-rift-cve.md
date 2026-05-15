@@ -19,7 +19,7 @@ This article provides information and mitigation steps for the following vulnera
 
 :::info important
 
-These vulnerabilities affect RKE2 ingress-nginx controller v1.14.5 and earlier. All Harvester versions that use this controller (including 1.5.2 and earlier, 1.6.1 and earlier, 1.7.0 and earlier, and 1.8.0) are therefore affected.
+These vulnerabilities affect RKE2 ingress-nginx controller v1.14.5 and earlier. All Harvester versions that use this controller (including 1.5.2 and earlier, 1.6.1 and earlier, 1.7.1 and earlier, and 1.8.0) are therefore affected.
 
 **2026-05-15: Until Harvester 1.7.2 and 1.8.1 are released with the fixes, apply the mitigation steps below to secure your clusters.**
 
