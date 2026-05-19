@@ -136,16 +136,29 @@ The procedure is as follows.
 
       ```yaml
       cat <<EOF> /tmp/backend.yaml
-      version: 1
-      backendName: default_backend_san
-      storageDriverName: <<ontap-san-economy or ontap-san>>
-      managementLIF: <<ADMIN_IPADDRESS>>  ## Often the same as the storage UI IP address
-      dataLIF: <<DATA_IPADDRESS>>  ## IP assigned to the iSCSI-only SVM
-      svm: <<SVM_NAME>>
-      username: <<ONTAP storage admin user>>
-      password: <<password>>
-      labels:
-      name: default_backend_san
+      apiVersion: v1
+      kind: Secret
+      metadata:
+         name: backend-ontap-nas-secret
+         namespace: trident
+      type: Opaque
+      stringData:
+         username: <<ONTAP storage admin user>>
+         password: <<password>>
+      ---
+      apiVersion: trident.netapp.io/v1
+      kind: TridentBackendConfig
+      metadata:
+         name: default-backend-san
+         namespace: trident
+      spec:
+         storageDriverName: <<ontap-san-economy or ontap-san>>
+         managementLIF: <<ADMIN_IPADDRESS>>  ## Often the same as the storage UI IP address
+         dataLIF: <<DATA_IPADDRESS>>  ## IP assigned to the iSCSI-only SVM
+         backendName: default_backend_san
+         svm: <<SVM_NAME>>
+         credentials:
+            name: backend-ontap-nas-secret
       EOF
       ```
 
@@ -155,9 +168,17 @@ The procedure is as follows.
    1. Create the backend
 
       ```shell
-      ./tridentctl create backend -f /tmp/backend.yaml -n trident
+      kubectl apply -f /tmp/backend.yaml -n trident
       ```
-   * A successful completion of the command will result in an output similar to the following:
+
+   2. You can verify the status of the backend at any time with:
+
+      ```shell
+      ./tridentctl get backend -n trident
+      ```
+
+     * You should see an output similar to below
+
       ```text
       +------------------------+----------------+--------------------------------------+--------+---------+
       |          NAME          | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
@@ -166,13 +187,6 @@ The procedure is as follows.
       +------------------------+----------------+--------------------------------------+--------+---------+
       ```
 
-   1. You can verify the status of the backend at any time with:
-
-      ```shell
-      ./tridentctl get backend -n trident
-      ```
-
-     * You should see an output similar to the output for a successful backend creation.
 
 1. Define a StorageClass and SnapshotClass.
 
@@ -198,13 +212,13 @@ The procedure is as follows.
       ```
     Select the correct value for the backendType in this file before applying.
 
-   1. Apply the definitions:
+   2. Apply the definitions:
 
       ```shell
       kubectl apply -f /tmp/storage.yaml
       ```
 
-1. Enable multipathd
+2. Enable multipathd
 
    The following is required to enable multipathd.
    This must be done on every node of the Harvester cluster, using root access.
@@ -223,7 +237,7 @@ The procedure is as follows.
                - multipathd
       ```
 
-   1. Configure `multipathd` to exclude pathnames used by Longhorn.
+   2. Configure `multipathd` to exclude pathnames used by Longhorn.
 
       This part is a little tricky.  `multipathd` will automatically discover
       device names matching a certain pattern, and attempt to set up multipathing on them.
@@ -284,7 +298,7 @@ The procedure is as follows.
 
        Remember, this has to be done on every node.
 
-   1. Enable multipathd.
+   3. Enable multipathd.
 
     Adding the above files to `/oem` will take effect on the next reboot of the node; `multipathd` can be enabled immediately without rebooting the node using the following commands:
 
