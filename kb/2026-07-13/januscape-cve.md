@@ -24,15 +24,15 @@ On July 6, 2026, researcher Hyunwoo Kim (@v4bel) publicly disclosed Januscape, a
 
 All supported versions of Harvester are affected, including 1.6.1 and earlier, 1.7.2 and earlier, and 1.8.1 and earlier.
 
-Januscape is the latest in a series of Linux kernel privilege-escalation vulnerabilities that required a patch and a reboot on affected hosts.
+Januscape is the latest in a series of Linux kernel privilege-escalation vulnerabilities that required a patch and a reboot of the affected hosts.
 
 SUSE is working on fixing this issue. Meanwhile, apply the mitigation steps described in this article to protect your clusters.
 
 :::
 
-The mitigation steps involved disabling the nested virtualization feature of the KVM kernel module on your Harvester hosts.
+The mitigation steps involves disabling the nested virtualization feature of the KVM kernel module on your Harvester hosts.
 
-:::info note
+:::note
 
 Nested virtualization is not supported on virtual machines running on Harvester. Disabling this feature will not affect the functionality of your Harvester cluster.
 
@@ -61,13 +61,13 @@ spec:
   filename: 99-disabled-nested-virtualization
   contents: |
     stages:
-        initramfs:
-        - name: "disable nested virtualization in kvm modules"
-          files:
-            - path: "/etc/modprobe.d/99-disabled-nested-virtualization.conf"
-              content: |
-                options kvm_amd nested=0
-                options kvm_intel nested=0
+      initramfs:
+      - name: "disable nested virtualization in kvm modules"
+        files:
+        - path: "/etc/modprobe.d/99-disabled-nested-virtualization.conf"
+          content: |
+            options kvm_amd nested=0
+            options kvm_intel nested=0
 ```
 
 Once the configuration is applied, reboot your Harvester hosts for the changes to take effect.
@@ -78,13 +78,13 @@ Do not disable the KVM kernel module on your Harvester hosts, as it is required 
 
 :::
 
-Once you upgraded to a fixed version of Harvester, you can re-enable the nested virtualization feature by deleting the `CloudInit` configuration and rebooting your Harvester hosts:
+Once you have upgraded to a fixed version of Harvester, you can re-enable the nested virtualization feature by deleting the `CloudInit` configuration and rebooting your Harvester hosts:
 
 ```sh
 kubectl delete cloudinit disabled-nested-virtualization
 ```
 
-References:
+## References
 
 * <https://support.scc.suse.com/s/kb/Security-Vulnerability-x86-64-kvm-Guest-to-Host-escape-aka-Januscape-CVE-2026-53359>
 * <https://www.suse.com/security/cve/CVE-2026-53359.html>
