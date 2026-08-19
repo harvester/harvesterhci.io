@@ -19,11 +19,6 @@ hide_table_of_contents: false
 
 :::
 
-
-A Harvester cluster is booted and managed under the hood using RKE2 and Rancher. In this architecture, the Cluster API (`capi`) `machine` object acts as the functional bridge connecting the underlying Kubernetes `node` object with Rancher's management controller. 
-
-Because of this tightly coupled multi-layer architecture, removing a node in Harvester is more complex than in a standard Kubernetes cluster. Beyond draining workloads and removing the Kubernetes `node` object, you must follow specific RKE2 uninitialization scripts to tear down node-level infrastructure services and explicitly delete the Cluster API `machine` object so Rancher ceases management and reconciliation loops for the host.
-
 ## Cluster Baseline
 
 Before initiating any node removal, verify that the cluster state is healthy and that all active Kubernetes `node` objects align 1:1 with their corresponding Cluster API `machine` objects. If any stale or redundant `machine` objects exist from previous failed deployments, delete them before proceeding.
@@ -44,11 +39,9 @@ fleet-local   custom-2b108e6cb5d9   local     harv21                       True 
 fleet-local   custom-d9d1ba8f7563   local     harv31                       True    True                     Running   51m
 ```
 
-Record the machine object name `custom-2b108e6cb5d9`.
-
 :::important
 
-**2-Node Cluster**: In this 2-node sample environment (`harv21` + `harv31`), `harv31` is the sole control-plane and etcd node. You CANNOT delete harv31. Removing the only control-plane node will instantly collapse the Kubernetes API server and permanently break cluster quorum. In a 2-node setup, only worker nodes (like harv21) can be safely decommissioned.
+**2-Node Cluster**: In this 2-node sample environment (`harv21` + `harv31`), `harv31` is the sole control-plane and etcd node. You **CANNOT** delete harv31. Removing the only control-plane node will instantly collapse the Kubernetes API server and permanently break cluster quorum. In a 2-node setup, only worker nodes (like harv21) can be safely decommissioned.
 
 **Single-Node Cluster**: Needless to say, you cannot delete the only node from a single-node cluster. Removing the node destroys the entire cluster control plane and storage layer simultaneously.
 
@@ -85,7 +78,9 @@ If the target node to be removed holds the `control-plane` / `etcd` role, perfor
         endpoint status --cluster -w table
     ```
 
-    ![etcd-endpoint-status](./imgs/node-removal-etcd-endpoint-status.png)
+    The following example output displays the endpoint status for a three-node control plane cluster:
+
+    ![etcd-endpoint-status](./imgs/node-removal-etcd-endpoint-status-1.png)
 
     Locate the target node by its IP address in the ENDPOINT column and evaluate the following:
 
@@ -187,10 +182,10 @@ If the cluster exhibits degraded storage, abnormal pods, or resource saturation 
 :::warning
 
 1. **Target Node Only (`harv21`):**
-    The script `/opt/rke2/bin/rke2-uninstall.sh` **MUST ONLY BE RUN DIRECTLY ON THE TARGET NODE BEING REMOVED (`harv21`)**. Running this on `harv31` or another active control node will destroy that node's local cluster services.
+    The uninstall script `/opt/rke2/bin/rke2-uninstall.sh` **MUST ONLY BE RUN DIRECTLY ON THE TARGET NODE BEING REMOVED (`harv21`)**. Running this on `harv31` or another active control node will destroy that node's local cluster services.
 
 1. **Immediate Destruction (No Confirmation Prompt):**
-    The `/opt/rke2/bin/rke2-uninstall.sh` script **does NOT ask for double confirmation or prompt `y/n`** before execution. Once invoked, it immediately stops services and tears down the node environment. Double-check your active hostname (`hostname`) before pressing Enter.
+    The uninstall script `/opt/rke2/bin/rke2-uninstall.sh` **does NOT ask for double confirmation or prompt `y/n`** before execution. Once invoked, it immediately stops services and tears down the node environment. Double-check your active hostname (`hostname`) before pressing Enter.
 
 :::
 
@@ -242,42 +237,11 @@ Once the script finishes, verify that RKE2 services and virtual interfaces have 
 
 1. Check Harvester UI.
 
-    The hosts `harv21` shows a warning message `Node is draining due to kubelet/node not ready`, as the `kubelet` on it had been gone.
-
-    ![node-warning](./imgs/node-removal-after-uninstall.png)
-
-
-## Remove the Machine Object
-
-Before deleting the Kubernetes `node` object, you **must** delete its associated Cluster API (`capi`) `machine` object first. Otherwise, Rancher's controller will detect a state mismatch and automatically recreate the `node` object in an attempt to reconcile the cluster.
-
-As an expected result of the uninstallation script, the `machine` object for `harv21` now reflects `Unknown` in the `READY` column and `False` under `AVAILABLE`. Run the following steps to delete it:
-
-1.  **Verify the machine state across namespaces:**
-    ```bash
-    harv31:/home/rancher # kubectl get machine -A
-    NAMESPACE     NAME                  CLUSTER   NODE NAME   FAILURE DOMAIN   READY     AVAILABLE   UP-TO-DATE   PHASE     AGE   VERSION
-    fleet-local   custom-2b108e6cb5d9   local     harv21                       Unknown   False                    Running   30m   
-    fleet-local   custom-d9d1ba8f7563   local     harv31                       True      True                     Running   66m   
-    ```
-
-1.  **Delete the CAPI machine object:**
-    ```bash
-    harv31:/home/rancher # kubectl delete machine -n fleet-local custom-2b108e6cb5d9
-    machine.cluster.x-k8s.io "custom-2b108e6cb5d9" deleted from fleet-local namespace
-    ```
-
-1.  **Confirm successful machine object deletion:**
-    ```bash
-    harv31:/home/rancher # kubectl get machine -A
-    NAMESPACE     NAME                  CLUSTER   NODE NAME   FAILURE DOMAIN   READY   AVAILABLE   UP-TO-DATE   PHASE     AGE   VERSION
-    fleet-local   custom-d9d1ba8f7563   local     harv31                       True    True                     Running   66m   
-    ```
-
+    The host `harv21` displays a red **Maintenance** status with the warning message `Kubelet stopped posting node status`.
 
 ## Remove the Node Object
 
-Deleting the `machine` object disassociates the node from Rancher's management layer. To complete the `node` removal from the cluster, you must explicitly delete the Kubernetes `node` object using one of the following methods:
+To complete the `node` removal from the cluster, you must explicitly delete the Kubernetes `node` object using one of the following methods:
 
 **Option A: Via Harvester UI (Recommended)**
 
@@ -308,6 +272,60 @@ If the deleted node still appears as a stale entry record in the Harvester UI, f
 :::
 
 ![new-cluster-ready](./imgs/node-removal-after-ready-again.png)
+
+
+### Known Issue 1: Node stuck in "Draining" state during removal
+
+**Symptom**
+
+During node deletion, the host status on the UI normally shows `Kubelet stopped posting node status`.
+
+![node-removal-normally-uninstalled](./imgs/node-removal-normally-uninstalled.png)
+
+If the UI displays `Node is draining due to kubelet/node not ready`, or toggles between `Kubelet stopped posting node status` and `Node is draining due to kubelet/node not ready` for more than 5 minutes without removing the host, you have encountered a known issue. Refer to the [Node Draining Workaround Guide](https://docs.harvesterhci.io/v1.8/host/#8-known-issue-node-stuck-in-draining-state-during-removal) for resolution steps.
+
+![node-removal-node-draining](./imgs/node-removal-node-draining.png)
+
+### Known Issue 2: Longhorn node resource persists after host removal
+
+**Symptom**
+
+After a node is removed from the Harvester cluster, its corresponding Longhorn node resource (`nodes.longhorn.io`) may persist in the `longhorn-system` namespace.
+
+When you attempt to manually delete the resource, the Longhorn admission webhook blocks the deletion with an error:
+
+```sh
+$ kubectl get nodes.longhorn -n longhorn-system
+NAMESPACE         NAME     READY   ALLOWSCHEDULING   SCHEDULABLE   AGE
+longhorn-system   harv21   False   true              False         13d
+longhorn-system   harv31   True    true              True          13d
+
+$ kubectl delete nodes.longhorn -n longhorn-system harv21
+The request is invalid: : could not delete node harv21 with node ready condition is False, reason is KubernetesNodeGone, node schedulable true, and 0 replica, 0 engine running on it
+
+```
+
+Attempts to force-delete the object by manually removing its finalizers (`metadata.finalizers`)` will also fail, as the admission webhook continues to intercept and reject the update request.
+
+Furthermore, if you re-add the host to the cluster using the same node name while this stale object remains, Longhorn may report that the node's disks are not ready or fail to provision storage pools for the newly added node.
+
+**Cause**
+
+Longhorn's validation webhook prevents node resource deletion while allowScheduling is set to true (even if the underlying Kubernetes node is gone and no replicas or engines are running on it).
+
+**Workaround**
+
+1. Disable scheduling on the stale Longhorn node by setting allowScheduling to false:
+
+    ```sh
+    $ kubectl patch nodes.longhorn.io harv21 -n longhorn-system --type=merge -p '{"spec":{"allowScheduling":false}}'
+    ```
+
+1. Delete the Longhorn node resource:
+
+    ```sh
+    $ kubectl delete nodes.longhorn.io harv21 -n longhorn-system
+    ```
 
 
 ## Post-Removal Disk Cleanup
