@@ -14,6 +14,30 @@ You can integrate Harvester with the DNS servers that already exist in your envi
 
 This procedure was tested with **Harvester v1.9.0**, **ExternalDNS v0.15.0**, **BIND 9.20**, and **PowerDNS Authoritative Server 4.9**. The guest cluster load balancer example was tested with an RKE2 v1.36.5 guest cluster that uses the Harvester cloud provider v0.2.8.
 
+## User Stories
+
+- An infrastructure team runs application VMs behind Harvester load balancers. Application owners want to reach each application by a name in the corporate DNS zone (for example, `web.vm.example.com`) instead of an IP address. The DNS record must be created when the load balancer is created and removed when the load balancer is deleted, without a manual request to the DNS team. The VMs must also resolve internal names by using the corporate DNS servers.
+
+- A platform team runs RKE2 guest clusters on Harvester. Developers expose applications with `LoadBalancer` services and want each service to be resolvable by name in the corporate DNS zone as soon as it receives an IP address.
+
+## Architecture
+
+The following diagram shows the components involved and which party manages each component.
+
+![DNS integration architecture](dns-integration-architecture.svg)
+
+Harvester and your existing infrastructure have the following responsibilities:
+
+| Component | Managed by | Responsibility |
+| --- | --- | --- |
+| VM load balancers and their `LoadBalancer` services | Harvester | Assigns an IP address from an IP pool or from DHCP, and records it in the service status |
+| Managed DHCP add-on and Kube-OVN DHCP | Harvester (configured by you) | Sends the DNS servers and search domains that you configure to VMs |
+| Harvester cloud provider in guest clusters | Harvester | Creates a Harvester load balancer for each `LoadBalancer` service in the guest cluster |
+| ExternalDNS | You | Watches services and creates and deletes the DNS records that it owns. You deploy, configure, and upgrade it. |
+| DNS server, zones, and TSIG keys | You | Serves the zones, accepts dynamic updates from ExternalDNS, and answers queries from VMs and clients |
+
+ExternalDNS is a third-party component that is not installed or managed by Harvester. ExternalDNS is available in the [SUSE Application Collection](https://apps.rancher.io/applications/external-dns). You can run ExternalDNS in the Harvester cluster or outside it, provided that it can read services from the Harvester Kubernetes API. When ExternalDNS runs outside the cluster, a service account with read-only access to services is sufficient.
+
 ## DNS Integration Options
 
 The following table outlines the available options:
@@ -35,6 +59,12 @@ VMs obtain DNS settings from the network configuration that they receive. You ca
 - **Kube-OVN DHCP**: Specify the DNS server in the `dhcpV4Options` field of the subnet (for example, `dns_server=10.0.0.53`). For more information, see [Virtual Private Cloud (VPC)](https://docs.harvesterhci.io/v1.9/networking/kubeovn-vpc).
 
 - **External DHCP server or static configuration**: Configure the DNS settings on your DHCP server, or specify the DNS servers in the cloud-init network data when you create the VM.
+
+### Limitations
+
+- Harvester does not automatically create DNS records for the IP addresses of individual VMs. You can use ExternalDNS to publish DNS records only for load balancers.
+
+- The Managed DHCP add-on does not send the hostname option (option 12) and does not process the client FQDN option (option 81). Consequently, DHCP-based dynamic DNS updates are not supported for VMs that obtain IP addresses from Managed DHCP.
 
 ## Publish DNS Records for VM Load Balancers
 
@@ -123,7 +153,6 @@ The examples in this section use the following settings:
 :::note
 
 - ExternalDNS uses TXT records to track the DNS records that it manages. If multiple clusters write to the same zone, specify a unique `--txt-owner-id` value for each cluster.
-- When `--policy` is set to `upsert-only`, ExternalDNS does not delete DNS records. To delete records when the corresponding load balancers are deleted, set `--policy` to `sync`. In both modes, ExternalDNS only modifies the records that it manages, and does not change records that were created by other means.
 - To manage reverse (PTR) records, add the `--rfc2136-create-ptr` flag, add the reverse zone to both the `--rfc2136-zone` and `--domain-filter` flags (for example, `--rfc2136-zone=100.168.192.in-addr.arpa` and `--domain-filter=100.168.192.in-addr.arpa`), and ensure that the TSIG key is allowed to update the reverse zone.
 
 :::
@@ -138,6 +167,18 @@ Example:
 kubectl annotate service <load-balancer-name> --namespace <namespace> \
   external-dns.alpha.kubernetes.io/hostname=web.vm.example.com
 ```
+
+### DNS Record Lifecycle
+
+ExternalDNS manages the DNS records of each load balancer according to the value of the `--policy` flag:
+
+| Event | `--policy=upsert-only` | `--policy=sync` |
+| --- | --- | --- |
+| A load balancer is created and receives an IP address | ExternalDNS creates the A record and its TXT ownership record. If PTR management is enabled, it also creates the PTR record. | Same as `upsert-only` |
+| The `external-dns.alpha.kubernetes.io/hostname` annotation is added to the service | ExternalDNS creates a record for the annotated hostname. The record with the name generated by `--fqdn-template` remains in the zone. | ExternalDNS creates a record for the annotated hostname and deletes the record with the name generated by `--fqdn-template`. |
+| A load balancer is deleted | The records remain in the zone. | ExternalDNS deletes the A, TXT, and PTR records. |
+
+In both modes, ExternalDNS only modifies the records that it owns, and does not change records that were created by other means.
 
 ## Publish DNS Records for Guest Cluster Load Balancers
 
@@ -157,11 +198,3 @@ ExternalDNS includes integrations (providers) for a wide range of DNS servers. T
 | PowerDNS | `pdns` | API key |
 
 For a complete list of providers, including public cloud DNS services, see the [ExternalDNS documentation](https://kubernetes-sigs.github.io/external-dns/).
-
-## Limitations
-
-- Harvester does not automatically create DNS records for the IP addresses of individual VMs. You can use ExternalDNS to publish DNS records only for load balancers.
-
-- The Managed DHCP add-on does not send the hostname option (option 12) and does not process the client FQDN option (option 81). Consequently, DHCP-based dynamic DNS updates are not supported for VMs that obtain IP addresses from Managed DHCP.
-
-- ExternalDNS is a third-party component that is not installed or managed by Harvester. ExternalDNS is available in the [SUSE Application Collection](https://apps.rancher.io/applications/external-dns).
