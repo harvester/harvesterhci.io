@@ -121,6 +121,10 @@ For a cluster that mixes Skylake and Cascade Lake nodes, the appropriate model i
 
 If your cluster contains Broadwell nodes along with anything newer, the safest baseline is `Broadwell`. Broadwell serves as a stable and widely supported baseline for older enterprise hardware. Any newer CPUs will support it.
 
+### CVE-2019-11135: TSX Asynchronous Abort
+
+Some CPU models (such as `Cascadelake-Server`) may stop working after an upgrade because of the mitigation for CVE-2019-11135. For details and the resolution, see [CVE-2019-11135: TSX Asynchronous Abort](../2026-10-19/cve_2019_11135_tsx_async_abort.md).
+
 ## Set Up Cluster-Wide Configuration
 
 If your virtual machines run only on a specific CPU model, you can set up a cluster-wide CPU model in the `kubevirt` resource.
@@ -142,3 +146,4 @@ Then, when a new virtual machine starts or an existing virtual machine restarts,
 
 - [CPU Model Matching](https://docs.harvesterhci.io/v1.6/vm/live-migration/#cpu-model-matching)
 - [QEMU / KVM CPU model configuration](https://www.qemu.org/docs/master/system/qemu-cpu-models.html)
+- [CVE-2019-11135 - TSX Asynchronous Abort (Red Hat)](https://access.redhat.com/articles/tsx-asynchronousabort)
