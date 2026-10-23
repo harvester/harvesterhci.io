@@ -90,6 +90,7 @@ kubectl delete cloudinit emudhra-blocklist
 
 ## References
 
+- https://support.scc.suse.com/s/kb/Security-Vulnerability-Compromised-SSL-Root-CA-eMudhra-CVE-2026-114406-CVE-2026-111943-CVE-2026-113399 
 - https://emudhra.we-have-a-problem.com/
 - https://bugzilla.mozilla.org/show_bug.cgi?id=2083449
 - https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/
