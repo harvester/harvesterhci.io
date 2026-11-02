@@ -47,7 +47,7 @@ const config = {
                     className: "navbar__docs",
                 },
                 {
-                    href: "https://www.suse.com/c/?s=harvester",
+                    href: "https://www.suse.com/blog/?filter-product=suse-virtualization",
                     position: "right",
                     label: "Blog",
                     className: "navbar__blog",
