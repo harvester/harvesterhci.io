@@ -19,7 +19,7 @@ NetApp storage is added alongside Longhorn; it does not replace it. You can use 
 - **NVMe/TCP** (`ontap-san`, `sanType: nvme`)
 - **Fibre Channel** (`ontap-san`, `sanType: fcp`)
 
-This procedure was tested with **Harvester v1.9.0** and **Trident 26.06.1** (Helm chart `100.2606.1`), using ONTAP 9.16.1. With NFS, iSCSI and NVMe/TCP, the following worked on NetApp-backed volumes: booting VMs, live migration, online volume expansion, and Harvester VM snapshots. Trident also supports Fibre Channel, and the multipath configuration below covers FC LUNs. However, FC was **not tested** for this article.
+This procedure was tested with **Harvester v1.9.0** and **Trident 26.06.1** (Helm chart `100.2606.1`), using ONTAP 9.16.1. With NFS, iSCSI and NVMe/TCP, the following worked on NetApp-backed volumes: booting VMs, live migration, online volume expansion (after allowing it in a Harvester setting, see step 7), and Harvester VM snapshots. Trident also supports Fibre Channel, and the multipath configuration below covers FC LUNs. However, FC was **not tested** for this article.
 
 :::note
 This article replaces an earlier version (August 2023) written for Harvester v1.2.0 and Trident v23.07. The main changes:
@@ -415,7 +415,24 @@ The resulting entry in the setting's JSON value is:
 }
 ```
 
-## 7. Use it
+## 7. Allow online volume expansion
+
+By default, Harvester's `csi-online-expand-validation` setting only allows `driver.longhorn.io` to expand a volume while it's attached to a running VM. Expanding a volume on any other provisioner, including `csi.trident.netapp.io`, while a VM is running fails with `PVC_EXPAND: pvc <namespace>/<name> is not online expandable with its provider`, even though Trident and ONTAP support it.
+
+1. In the Harvester UI, go to **Advanced > Settings**, find **csi-online-expand-validation**, and select **⋮ > Edit Setting**.
+1. Click **Add**, select `csi.trident.netapp.io` as the provisioner, and set its value to `True`.
+1. Save.
+
+The same change from the command line, keeping the existing `driver.longhorn.io` entry (the setting replaces its whole value, it does not merge per provisioner):
+
+```shell
+kubectl patch settings.harvesterhci.io csi-online-expand-validation --type merge \
+  -p '{"value":"{\"driver.longhorn.io\":true,\"csi.trident.netapp.io\":true}"}'
+```
+
+With the setting updated, expanding the PVC of a running VM's disk resizes it live: no VM restart needed.
+
+## 8. Use it
 
 The new StorageClasses now appear when you create a volume, a VM image or a VM in the Harvester UI. A quick check:
 
@@ -429,6 +446,7 @@ The new StorageClasses now appear when you create a volume, a VM image or a VM i
 - **Deleted volumes still use space on ONTAP.** ONTAP keeps deleted volumes in the volume recovery queue for 12 hours. While a deleted FlexClone (such as a VM disk cloned from an image) sits in the queue, its parent snapshot stays busy, so the parent volume and its `VolumeSnapshot` can't be deleted. To free them immediately, run on ONTAP: `set -privilege advanced; volume recovery-queue purge-all -vserver <svm name>`.
 - **`multipath -ll` lists local disks.** `multipathd` was started without the NetApp-only configuration. Put `98-netapp.conf` in place, flush the unused maps with `multipath -F`, and restart `multipathd`.
 - **iSCSI volumes fail to stage with `no devices present yet`.** Check for duplicate initiator names across nodes, and for a stale IQN in Trident (see step 1).
+- **Expanding a volume on a running VM fails with `PVC_EXPAND: ... is not online expandable with its provider`.** Add `csi.trident.netapp.io` to the `csi-online-expand-validation` setting (see step 7).
 
 ## References
 
